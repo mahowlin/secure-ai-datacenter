@@ -1,0 +1,303 @@
+# Copyright (c) 2026 Cisco and/or its affiliates.
+# Licensed under the Cisco Sample Code License, Version 1.1
+# See LICENSE in the project root.
+
+name: Orchestrate Destroy
+
+# PLATFORM 1.0 Destroy Workflow
+#
+# Complete cluster teardown:
+# 1. OpenShift undeploy (removes kubeconfig)
+# 2. UCS Delete (removes config from server AND Intersight)
+#
+# For multiple clusters, run this workflow multiple times.
+
+on:
+  workflow_dispatch:
+    inputs:
+      cluster:
+        description: "Cluster to destroy"
+        required: true
+        type: choice
+        options:
+          - ai-pod-1
+          - ai-pod-2
+          - ai-pod-3
+          - ai-pod-4
+      confirm_destroy:
+        description: "Type cluster name to confirm (e.g., ai-pod-3)"
+        required: true
+        type: string
+      target_ref:
+        description: "Target repo ref (branch/tag/sha)"
+        required: false
+        type: string
+        default: "main"
+
+# Prevent concurrent operations on the same cluster
+concurrency:
+  group: "cluster-${{ inputs.cluster }}"
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ secrets.WORKFLOW_TRIGGER_TOKEN }}
+  TARGET_REPO: mahowlin/saif-ai-pod
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Safe confirmation check - no shell expansion
+    if: inputs.cluster == inputs.confirm_destroy
+    outputs:
+      request_id: ${{ steps.setup.outputs.request_id }}
+    steps:
+      - name: Setup
+        id: setup
+        run: |
+          REQUEST_ID=$(uuidgen)
+          echo "request_id=$REQUEST_ID" >> $GITHUB_OUTPUT
+          echo "Generated request_id: $REQUEST_ID"
+          echo "✅ Destruction confirmed for ${{ inputs.cluster }}"
+
+      - name: Validate GitHub token
+        run: |
+          if ! gh auth status &>/dev/null; then
+            echo "::error::WORKFLOW_TRIGGER_TOKEN is invalid or missing"
+            exit 1
+          fi
+          echo "✅ GitHub token valid"
+
+      - name: Check sub-repo workflows exist
+        run: |
+          echo "Checking $TARGET_REPO workflows..."
+          gh workflow view openshift-undeploy.yaml --repo $TARGET_REPO &>/dev/null || { echo "::error::openshift-undeploy.yaml not found"; exit 1; }
+          gh workflow view ucs-pipeline.yaml --repo $TARGET_REPO &>/dev/null || { echo "::error::ucs-pipeline.yaml not found"; exit 1; }
+          echo "✅ Sub-repo workflows accessible"
+
+      - name: Generate summary
+        run: |
+          echo "## ⚠️ Orchestrate Destroy: ${{ inputs.cluster }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Parameter | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Cluster | ${{ inputs.cluster }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Confirmed | ${{ inputs.confirm_destroy }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Target Ref | ${{ inputs.target_ref }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Request ID | ${{ steps.setup.outputs.request_id }} |" >> $GITHUB_STEP_SUMMARY
+
+  confirmation-failed:
+    name: "Confirmation Failed"
+    runs-on: ubuntu-latest
+    if: inputs.cluster != inputs.confirm_destroy
+    steps:
+      - name: Report Failure
+        run: |
+          echo "::error::Confirmation mismatch. Selected: '${{ inputs.cluster }}', Confirmed: '${{ inputs.confirm_destroy }}'"
+          echo "## ❌ Confirmation Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "You must type the exact cluster name to confirm destruction." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Selected:** ${{ inputs.cluster }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Typed:** ${{ inputs.confirm_destroy }}" >> $GITHUB_STEP_SUMMARY
+          exit 1
+
+  undeploy:
+    name: "Undeploy OpenShift"
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      REQUEST_ID: ${{ needs.validate.outputs.request_id }}
+    steps:
+      - name: Trigger OpenShift Undeploy
+        run: |
+          echo "Triggering OpenShift undeploy for ${{ inputs.cluster }} (request_id: $REQUEST_ID)..."
+          for attempt in 1 2 3 4 5; do
+            if gh workflow run openshift-undeploy.yaml \
+              --repo $TARGET_REPO \
+              --ref "${{ inputs.target_ref }}" \
+              -f cluster_name="${{ inputs.cluster }}" \
+              -f confirm_destroy="${{ inputs.cluster }}" \
+              -f clean_kubeconfig=true \
+              -f request_id="$REQUEST_ID" 2>&1; then
+              echo "✅ Workflow triggered successfully"
+              break
+            fi
+            if [ $attempt -eq 5 ]; then echo "::error::Failed to trigger workflow after 5 attempts"; exit 1; fi
+            echo "  Trigger failed (attempt $attempt/5), retrying in $((attempt * 10))s..."
+            sleep $((attempt * 10))
+          done
+
+      - name: Wait for OpenShift Undeploy
+        run: |
+          echo "Waiting for workflow to start..."
+          sleep 60
+
+          for i in {1..30}; do
+            RUN_ID=$(gh run list \
+              --repo $TARGET_REPO \
+              --workflow openshift-undeploy.yaml \
+              --limit 10 \
+              --json databaseId,displayTitle,status,event \
+              --jq ".[] | select(.displayTitle | contains(\"rid=$REQUEST_ID\")) | select(.event == \"workflow_dispatch\") | .databaseId" | head -1)
+
+            if [ -n "$RUN_ID" ]; then
+              echo "Found run $RUN_ID"
+              break
+            fi
+            echo "Run not found yet, waiting... ($i/30)"
+            sleep 10
+          done
+
+          if [ -z "$RUN_ID" ]; then
+            echo "::error::Could not find triggered undeploy run with request_id $REQUEST_ID"
+            exit 1
+          fi
+
+          # Poll run status every 60s with retry logic
+          echo "Polling run $RUN_ID every 60s..."
+          CONSECUTIVE_FAILURES=0
+          MAX_RETRIES=5
+          while true; do
+            RESULT=$(gh run view "$RUN_ID" --repo "$TARGET_REPO" --json status,conclusion 2>&1) || {
+              CONSECUTIVE_FAILURES=$((CONSECUTIVE_FAILURES + 1))
+              if [ $CONSECUTIVE_FAILURES -ge $MAX_RETRIES ]; then
+                echo "::error::Failed to query run status after $MAX_RETRIES consecutive failures: $RESULT"
+                exit 1
+              fi
+              BACKOFF=$((CONSECUTIVE_FAILURES * 60))
+              echo "  API error (attempt $CONSECUTIVE_FAILURES/$MAX_RETRIES), retrying in ${BACKOFF}s..."
+              sleep $BACKOFF
+              continue
+            }
+            CONSECUTIVE_FAILURES=0
+            STATUS=$(echo "$RESULT" | jq -r '.status')
+            CONCLUSION=$(echo "$RESULT" | jq -r '.conclusion')
+            echo "  Run $RUN_ID: status=$STATUS conclusion=$CONCLUSION"
+            if [ "$STATUS" = "completed" ]; then
+              if [ "$CONCLUSION" = "success" ]; then
+                echo "✅ Run $RUN_ID completed successfully"
+                break
+              else
+                echo "::error::Run $RUN_ID failed (conclusion: $CONCLUSION)"
+                echo "Details: https://github.com/$TARGET_REPO/actions/runs/$RUN_ID"
+                exit 1
+              fi
+            fi
+            sleep 60
+          done
+
+  delete:
+    name: "Delete UCS"
+    needs: [validate, undeploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      REQUEST_ID: ${{ needs.validate.outputs.request_id }}
+    steps:
+      - name: Trigger UCS Delete
+        run: |
+          PROFILE="saif-${{ inputs.cluster }}"
+          echo "Triggering UCS Delete for $PROFILE (request_id: $REQUEST_ID)..."
+          for attempt in 1 2 3 4 5; do
+            if gh workflow run ucs-pipeline.yaml \
+              --repo $TARGET_REPO \
+              --ref "${{ inputs.target_ref }}" \
+              -f operation="Delete - Remove from server AND Intersight" \
+              -f server_target="$PROFILE" \
+              -f confirm_delete="$PROFILE" \
+              -f request_id="$REQUEST_ID" 2>&1; then
+              echo "✅ Workflow triggered successfully"
+              break
+            fi
+            if [ $attempt -eq 5 ]; then echo "::error::Failed to trigger workflow after 5 attempts"; exit 1; fi
+            echo "  Trigger failed (attempt $attempt/5), retrying in $((attempt * 10))s..."
+            sleep $((attempt * 10))
+          done
+
+      - name: Wait for UCS Delete
+        run: |
+          echo "Waiting for workflow to start..."
+          sleep 60
+
+          for i in {1..30}; do
+            RUN_ID=$(gh run list \
+              --repo $TARGET_REPO \
+              --workflow ucs-pipeline.yaml \
+              --limit 10 \
+              --json databaseId,displayTitle,status,event \
+              --jq ".[] | select(.displayTitle | contains(\"rid=$REQUEST_ID\")) | select(.event == \"workflow_dispatch\") | .databaseId" | head -1)
+
+            if [ -n "$RUN_ID" ]; then
+              echo "Found run $RUN_ID"
+              break
+            fi
+            echo "Run not found yet, waiting... ($i/30)"
+            sleep 10
+          done
+
+          if [ -z "$RUN_ID" ]; then
+            echo "::error::Could not find triggered UCS delete run with request_id $REQUEST_ID"
+            exit 1
+          fi
+
+          # Poll run status every 60s with retry logic
+          echo "Polling run $RUN_ID every 60s..."
+          CONSECUTIVE_FAILURES=0
+          MAX_RETRIES=5
+          while true; do
+            RESULT=$(gh run view "$RUN_ID" --repo "$TARGET_REPO" --json status,conclusion 2>&1) || {
+              CONSECUTIVE_FAILURES=$((CONSECUTIVE_FAILURES + 1))
+              if [ $CONSECUTIVE_FAILURES -ge $MAX_RETRIES ]; then
+                echo "::error::Failed to query run status after $MAX_RETRIES consecutive failures: $RESULT"
+                exit 1
+              fi
+              BACKOFF=$((CONSECUTIVE_FAILURES * 60))
+              echo "  API error (attempt $CONSECUTIVE_FAILURES/$MAX_RETRIES), retrying in ${BACKOFF}s..."
+              sleep $BACKOFF
+              continue
+            }
+            CONSECUTIVE_FAILURES=0
+            STATUS=$(echo "$RESULT" | jq -r '.status')
+            CONCLUSION=$(echo "$RESULT" | jq -r '.conclusion')
+            echo "  Run $RUN_ID: status=$STATUS conclusion=$CONCLUSION"
+            if [ "$STATUS" = "completed" ]; then
+              if [ "$CONCLUSION" = "success" ]; then
+                echo "✅ Run $RUN_ID completed successfully"
+                break
+              else
+                echo "::error::Run $RUN_ID failed (conclusion: $CONCLUSION)"
+                echo "Details: https://github.com/$TARGET_REPO/actions/runs/$RUN_ID"
+                exit 1
+              fi
+            fi
+            sleep 60
+          done
+
+  summary:
+    name: Summary
+    needs: [validate, undeploy, delete]
+    if: always() && needs.validate.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "## Destroy Summary: ${{ inputs.cluster }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Stage | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Validate | ${{ needs.validate.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Undeploy OCP | ${{ needs.undeploy.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Delete UCS | ${{ needs.delete.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Request ID:** ${{ needs.validate.outputs.request_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "${{ needs.delete.result }}" == "success" ]; then
+            echo "✅ **${{ inputs.cluster }} destroyed successfully**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ **Destroy incomplete - check failed stages**" >> $GITHUB_STEP_SUMMARY
+          fi

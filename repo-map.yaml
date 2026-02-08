@@ -1,0 +1,42 @@
+# Copyright (c) 2026 Cisco and/or its affiliates.
+# Licensed under the Cisco Sample Code License, Version 1.1
+# See LICENSE in the project root.
+
+# SAIF Platform Repository Map
+#
+# Maps repositories to their key files and workflows.
+# Used by orchestration workflows to understand cross-repo dependencies.
+
+repos:
+  saif-platform:
+    orchestration:
+      release: ".github/workflows/orchestrate-release.yaml"
+      destroy: ".github/workflows/orchestrate-destroy.yaml"
+    docs:
+      sbom: "platform-release.yaml"
+
+  saif-ai-pod:
+    day0:
+      ucs_pipeline: ".github/workflows/ucs-pipeline.yaml"
+      ucs_profiles: "ucs/data/example/"
+    day1:
+      # openshift-pipeline includes post-install when post_install=true
+      openshift_pipeline: ".github/workflows/openshift-pipeline.yaml"
+      openshift_undeploy: ".github/workflows/openshift-undeploy.yaml"
+      openshift_test: ".github/workflows/openshift-test.yaml"
+      cluster_mappings: "openshift/cluster-mappings.yaml"
+
+  saif-sys-admin:
+    mirroring:
+      sync_images: ".github/workflows/sync-images.yaml"
+      idms_dir: "mirror/idms/"
+
+  saif-gitops:
+    gitops:
+      apps: "apps/"
+      clusters: "clusters/"
+      gitops_sync: ".github/workflows/gitops-sync.yaml"
+      sealed_secrets_sync: ".github/workflows/sealed-secrets-sync.yaml"
+    day2:
+      workload_test: ".github/workflows/workload-test.yaml"
+

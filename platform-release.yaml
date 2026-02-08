@@ -1,0 +1,234 @@
+# Copyright (c) 2026 Cisco and/or its affiliates.
+# Licensed under the Cisco Sample Code License, Version 1.1
+# See LICENSE in the project root.
+
+# SAIF Platform 1.0 - Software Bill of Materials (SBOM)
+#
+# This file defines the complete platform release organized by component type.
+# All versions are pinned for reproducible deployments.
+
+version: "1.0.0"
+release_date: "2026-02-02"
+description: "SAIF Platform 1.0 - Secure AI Factory with NVIDIA"
+
+# =============================================================================
+# CISCO COMPUTE (UCS)
+# =============================================================================
+cisco_compute:
+  ucs_server_bundle: "5.4(0.250106)"
+  fabric_interconnect_bundle: "4.3(5.250033)"
+
+# =============================================================================
+# RED HAT / OS / KUBERNETES
+# =============================================================================
+redhat:
+  openshift:
+    major: "4"
+    minor: "19"
+    version: "4.19.0"
+    installer: "agent-based"
+  kubernetes: "1.32"
+  rhel: "9.6"
+  rhcos: "419.96.202501071851-0"
+  operators:
+    openshift-gitops:
+      version: "1.19.1"
+      channel: "latest"
+    lvms-operator:
+      version: "4.19"
+      channel: "stable-4.19"
+
+# =============================================================================
+# ISOVALENT ENTERPRISE PLATFORM
+# =============================================================================
+isovalent:
+  cilium:
+    version: "1.18"
+    image: "quay.io/isovalent/cilium:1.18.0"
+  cilium_operator:
+    version: "1.18"
+    image: "quay.io/isovalent/operator:1.18.0"
+  clife:
+    version: "1.18"
+    image: "quay.io/isovalent/clife:1.18.0"
+  hubble_timescape:
+    version: "1.18"
+  tetragon:
+    version: "1.18"
+    operator_index: "quay.io/isovalent/tetragon-operator-index:v0.0.1"
+
+# =============================================================================
+# NVIDIA
+# =============================================================================
+nvidia:
+  gpu_operator:
+    version: "v25.10"
+    channel: "v25.10"
+  nfd_operator:
+    version: "4.19"
+    channel: "stable"
+  nim_operator:
+    version: "v3.0.2"
+    image: "nvcr.io/nvidia/k8s-nim-operator:v3.0.2"
+  ai_models:
+    llm_model:
+      version: "1.0.0"
+      image: "nvcr.io/nim/your-org/your-model:1.0.0"
+      parameters: "8B"
+
+# =============================================================================
+# OBSERVABILITY
+# =============================================================================
+observability:
+  splunk_otel:
+    version: "0.118.0"
+    image: "quay.io/signalfx/splunk-otel-collector:0.118.0"
+  vector:
+    version: "0.51.0"
+    image: "timberio/vector:0.51.0-distroless-libc"
+  clickhouse:
+    version: "24.8"
+    operator: "altinity/clickhouse-operator:0.24.0"
+
+# =============================================================================
+# PLATFORM APPS
+# =============================================================================
+platform_apps:
+  sealed_secrets:
+    version: "0.27.3"
+    image: "bitnami/sealed-secrets-controller:0.27.3"
+  argocd:
+    version: "2.14"
+    managed_by: "openshift-gitops operator"
+
+# =============================================================================
+# PLATFORM INFRASTRUCTURE
+# =============================================================================
+infrastructure:
+  registry:
+    host: "registry.example.com"
+    port: 5000
+    ip: "10.0.0.10"
+  file_server:
+    host: "10.0.0.10"
+    port: 8080
+    purpose: "ISO hosting for vMedia boot"
+  runner_vm:
+    host: "10.0.0.10"
+    runners: 3
+    image: "ghcr.io/mahowlin/github-actions-container"
+
+# =============================================================================
+# GIT REPOSITORIES
+# =============================================================================
+repos:
+  saif-platform:
+    url: "https://github.com/mahowlin/saif-platform"
+    role: "Orchestrator + SBOM"
+    workflows:
+      - orchestrate-release.yaml
+
+  saif-ai-pod:
+    url: "https://github.com/mahowlin/saif-ai-pod"
+    ref: "27fc8ed"
+    role: "Day 0 (UCS) + Day 1 (OCP)"
+    workflows:
+      - ucs-pipeline.yaml
+      - openshift-pipeline.yaml
+
+  saif-sys-admin:
+    url: "https://github.com/mahowlin/saif-sys-admin"
+    ref: "239c05a"
+    role: "Image mirroring, IDMS generation"
+    workflows:
+      - sync-images.yaml
+
+  saif-gitops:
+    url: "https://github.com/mahowlin/saif-gitops"
+    ref: "22598cc"
+    role: "Day 2 GitOps workloads"
+    workflows:
+      - sealed-secrets-sync.yaml
+
+# =============================================================================
+# HARDWARE INVENTORY
+# =============================================================================
+clusters:
+  ai-pod-1:
+    server_profile: "saif-ai-pod-1"
+    ip: "10.0.1.101"
+    gpu: "NVIDIA L40S"
+    tiers: [tier1, tier2, tier3, tier4, tier5]
+
+  ai-pod-2:
+    server_profile: "saif-ai-pod-2"
+    ip: "10.0.1.102"
+    gpu: "NVIDIA L40S"
+    tiers: [tier1, tier2, tier3, tier4, tier5]
+
+  ai-pod-3:
+    server_profile: "saif-ai-pod-3"
+    ip: "10.0.1.103"
+    gpu: null
+    tiers: [tier1, tier2, tier4, tier5]
+
+  ai-pod-4:
+    server_profile: "saif-ai-pod-4"
+    ip: "10.0.1.104"
+    gpu: null
+    tiers: [tier1, tier2, tier4, tier5]
+
+# =============================================================================
+# CREDENTIALS MAP (references only - no secrets)
+# =============================================================================
+credentials:
+  # Orchestration secrets
+  WORKFLOW_TRIGGER_TOKEN:
+    repo: saif-platform
+    purpose: "GitHub PAT with workflow trigger permissions for cross-repo orchestration"
+
+  # Day 1 secrets (saif-ai-pod)
+  ARGO_GIT_TOKEN:
+    repo: saif-ai-pod
+    purpose: "GitHub PAT for ArgoCD to access saif-gitops"
+  KUBECONFIG_REPO_TOKEN:
+    repo: saif-ai-pod
+    purpose: "GitHub PAT to commit kubeconfigs to kubeconfig storage repo"
+  SSH_PRIVATE_KEY:
+    repo: saif-ai-pod
+    purpose: "SSH key to retrieve kubeconfig from cluster nodes"
+  SEALED_SECRETS_CERT:
+    repo: saif-ai-pod
+    purpose: "Public certificate for sealing secrets (base64 encoded)"
+  SEALED_SECRETS_KEY:
+    repo: saif-ai-pod
+    purpose: "Private key for Day 1 injection into clusters (base64 encoded)"
+
+  # Day 2 secrets (saif-gitops) - used by sealed-secrets-sync
+  NVIDIA_NGC_API_KEY:
+    repo: saif-gitops
+    purpose: "NGC API key for NIM model downloads"
+  SPLUNK_ACCESS_TOKEN:
+    repo: saif-gitops
+    purpose: "Splunk Observability Cloud access token"
+  HUBBLE_CLICKHOUSE_PASSWORD:
+    repo: saif-gitops
+    purpose: "ClickHouse password for Hubble Timescape storage"
+  HUBBLE_PUSH_API_PASSWORD:
+    repo: saif-gitops
+    purpose: "Push API password for Vector to Hubble Timescape"
+  INTERSIGHT_API_KEY_ID:
+    repo: saif-gitops
+    purpose: "Intersight API key ID for OTEL collector"
+  INTERSIGHT_SECRET_KEY:
+    repo: saif-gitops
+    purpose: "Intersight API secret key (PEM format) for OTEL collector"
+
+# =============================================================================
+# RELEASE NOTES
+# =============================================================================
+notes:
+  - "Initial PLATFORM 1.0 release"
+  - "Full Day 0 → Day 1 → Day 2 automation"
+  - "Sealed Secrets key injection automated in post-install"
+  - "Orchestrator triggers UCS and OCP pipelines in sequence"
