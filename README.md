@@ -20,48 +20,39 @@ The composition brings together the following vendor technologies. Exact version
 
 Upstream building blocks include **HyperShift**, **KubeVirt**, **Argo CD**, **Cilium/Hubble** and the **NAC-ACI module from netascode**. The [integration catalogue](docs/INTEGRATIONS.md) explains their joins; the [repository handoff map](repo-map.yaml) identifies where each generated configuration is consumed.
 
-## Work through the repo
+## Configure and render
 
-**Input YAML → resolve, validate and render → files in this checkout**
+### 1. Choose the starting configuration
 
-1. **Choose an example and edit its inputs.** Start with the examples below. Define the cluster and hosts in [data/clusters/](data/clusters/), networks in [data/networks/](data/networks/), common services in [data/defaults/](data/defaults/), and software in [platform-release.yaml](platform-release.yaml).
-2. **Validate and render the selection.** Use [AGENTS.md](AGENTS.md) to prepare the toolchain, then follow the [standalone procedure](docs/architectures/COMPACT_BAREMETAL_INSTALL.md) or [integrated renderer sequence](agents/integrated.md). The [scripts/](scripts/) resolve references, check the selected inputs and generate the target configuration.
-3. **Inspect what was produced.** Open [generated/repos/](generated/repos/) to see each destination's actual files. Check their contents and [artifact hashes](agents/generated-artifacts.md) before delivering them.
+| Composition | Starting inputs |
+|---|---|
+| Bare-metal OpenShift with Isovalent CNI | [Minimal three-server example](examples/standalone/) |
+| Management OpenShift with storage, virtualization and MCE/HyperShift | [Management cluster](data/clusters/example-management/cluster.yaml) |
+| Nested tenant control planes and KubeVirt workers | [Tenant definitions](data/clusters/example-management/hcpclusters/) beneath the management cluster |
+| Single-node OpenShift | [SNO cluster](data/clusters/example-sno/cluster.yaml) |
 
-These three steps are this repository’s contained purpose. Continue with the [downstream handoff](#place-generated-files-in-downstream-repositories) to put the reviewed files into the repositories that execute them. The sections below expand the input and rendering steps. The [detailed composition model](docs/COMPOSITION_MODEL.md) is a reference for tracing how selected inputs combine and why a particular output was generated.
+ACI, UCS, image mirroring and the hosted image cache are selected integrations. Supply your site inputs and runtime prerequisites for the chosen configuration.
 
-## Choose your starting inputs
-
-A cluster input selects named networks, a release and platform capabilities. Pick the maintained input closest to your deployment:
-
-| Composition | Starting inputs | What it assembles |
-|---|---|---|
-| Standalone compact OpenShift | [Minimal three-server example](examples/standalone/) | Bare-metal OpenShift with Isovalent CNI, using your existing network and installation services |
-| Integrated management platform | [Management cluster](data/clusters/example-management/cluster.yaml) | Compact OpenShift, shared storage, virtualization, MCE/HyperShift, management services and selected network integrations |
-| Hosted tenant clusters | [Tenant definitions](data/clusters/example-management/hcpclusters/) beneath the management cluster | Tenant control-plane pods, KubeVirt worker pools and their selected storage, network and service configuration |
-| Single-node OpenShift | [SNO cluster](data/clusters/example-sno/cluster.yaml) | A one-server composition with its selected installation and hardware inputs |
-
-ACI, UCS, image mirroring and the hosted image cache are selected integrations. The examples describe intended configuration; site-specific inputs and runtime prerequisites still need to be supplied.
-
-## Define the shared inputs
-
-Keep site choices in maintained inputs so installation, networking and application configuration use the same definitions.
+### 2. Edit the shared inputs
 
 | Input | Controls |
 |---|---|
-| [Cluster inputs](data/clusters/) | Cluster identity, host inventory, parent/tenant relationships and enabled capabilities |
+| [Cluster inputs](data/clusters/) | Hosts, management/tenant relationships and enabled capabilities |
 | [Network catalogue](data/networks/example-federal.yaml) | VLANs, prefixes, gateways, BGP peers, VIPs and address pools |
 | [Shared defaults](data/defaults/example.yaml) | DNS, time, registries, GitOps destinations and common policy |
-| [Release selection](platform-release.yaml) | Compatible software choices and exact image/archive references |
-| [Templates](templates/) and [schemas](schemas/) | Generated file shapes and input constraints |
+| [Release selection](platform-release.yaml) | Software versions and exact image/archive references |
 
-Use the [installation input reference](docs/architectures/INSTALL_INPUT_REFERENCE.md) for the concrete fields. The [composition model](docs/COMPOSITION_MODEL.md#trace-one-change) traces a tenant worker-count change through its parent lifecycle policy into the generated NodePool.
+The [installation input reference](docs/architectures/INSTALL_INPUT_REFERENCE.md) explains the fields. The [composition model](docs/COMPOSITION_MODEL.md#trace-one-change) traces how inputs combine, including a tenant worker-count change through its parent lifecycle policy.
+
+### 3. Validate, render and review
+
+Prepare the toolchain using [AGENTS.md](AGENTS.md), then follow the [standalone procedure](docs/architectures/COMPACT_BAREMETAL_INSTALL.md) or [integrated renderer sequence](agents/integrated.md). Review the generated files under [generated/repos/](generated/repos/) and verify their [artifact hashes](agents/generated-artifacts.md). [Schemas](schemas/) constrain the inputs; [templates](templates/) define the output shapes.
 
 ## Place generated files in downstream repositories
 
 The generated tree already mirrors each destination repository. **Remove the `generated/repos/<repository>/` prefix and keep the rest of the path.** For example, a generated Compute file under `generated/repos/secure-ai-compute/data/openshift/…` goes under `data/openshift/…` in your Compute checkout.
 
-Copy or import the reviewed generated files into those matching paths, inspect the downstream diff and verify the [artifact manifest and file ownership](agents/generated-artifacts.md). The [repository map](repo-map.yaml) defines the complete handoff. The paired links below show actual generated files here and their corresponding downstream examples:
+Import the reviewed files into the matching paths and inspect the downstream diff. The [artifact manifest](agents/generated-artifacts.md) defines file ownership and checksums. These pairs show the local output and its downstream example:
 
 | Configuration | Generated locally in this repo | Corresponding downstream example |
 |---|---|---|
@@ -73,18 +64,9 @@ Copy or import the reviewed generated files into those matching paths, inspect t
 | Selected cluster root | [kustomization.yaml](generated/repos/secure-ai-gitops/clusters/example-management/kustomization.yaml) | **GitOps:** [clusters/example-management/kustomization.yaml](https://github.com/mahowlin/secure-ai-gitops/blob/main/clusters/example-management/kustomization.yaml) |
 | Nested tenant definition | [hostedcluster.yaml](generated/repos/secure-ai-gitops/apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/hostedcluster.yaml) | **GitOps:** [hosted-cluster-lifecycle example](https://github.com/mahowlin/secure-ai-gitops/blob/main/apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/hostedcluster.yaml) |
 
-The same layout applies to the remaining generated files. Edit maintained inputs and regenerate to change them; preserve the downstream repository's independently maintained code and private runtime material during import.
+Regenerate shared configuration from its maintained inputs. Preserve independently maintained downstream code and private runtime files during import.
 
 [![Datacenter renders files locally; the reviewed files are placed in Fabric, Compute and GitOps, whose pipelines/controllers execute them. Airgap supplies services and images.](docs/diagrams/repository-handoffs.svg)](docs/diagrams/repository-handoffs.svg)
-
-### Execution continues downstream
-
-- **[Fabric](https://github.com/mahowlin/secure-ai-fabric):** the NAC-ACI/Terraform pipeline consumes the imported YAML and applies the selected ACI configuration.
-- **[Compute](https://github.com/mahowlin/secure-ai-compute):** UCS/Intersight and OpenShift pipelines consume the hardware/install inputs, provision the selected servers and build/boot their Agent ISO. ISO generation is also available independently.
-- **[GitOps](https://github.com/mahowlin/secure-ai-gitops):** Argo CD reads the imported cluster roots and overlays; Kubernetes operators/controllers realize the management and tenant resources.
-- **[Airgap](https://github.com/mahowlin/secure-ai-airgap):** supplies the shared services, images and verified external inputs used by those stages.
-
-The [integrated renderer sequence](agents/integrated.md) and [standalone procedure](docs/architectures/COMPACT_BAREMETAL_INSTALL.md) describe how to produce these files. Their destination owners handle transport, credentials, provider state, deployment and runtime health.
 
 ## Scope and license
 
