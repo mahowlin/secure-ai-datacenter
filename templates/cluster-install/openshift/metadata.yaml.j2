@@ -1,0 +1,75 @@
+{# OCP metadata.yaml — deploy pipeline metadata for saif-ai-pod
+   Rendered by render-ocp.py from ResolvedOCPCluster + ResolvedDefaults
+
+   Template variables:
+     cluster   — ResolvedOCPCluster
+     defaults  — ResolvedDefaults
+#}
+clusterName: {{ cluster.name }}
+mode: {{ cluster.mode }}
+releaseRef: {{ cluster.release_ref }}
+{% if cluster.current_release_ref %}currentReleaseRef: {{ cluster.current_release_ref }}
+{% endif %}{% if cluster.target_release_ref %}targetReleaseRef: {{ cluster.target_release_ref }}
+{% endif %}ocpVersion: {{ cluster.ocp_version }}
+networkType: {{ cluster.network_type }}
+hardwareInventory: {{ cluster.inventory_mode }}
+registryTrustPolicy: {{ cluster.registry_trust_policy }}
+imageDelivery:
+  mode: {{ cluster.image_delivery_mode }}
+  scopes: {{ cluster.image_delivery_scopes | tojson }}
+  registry: {{ defaults.registry_url | tojson }}
+platformServices:
+{% if defaults.registry_url %}
+  registry: {{ defaults.registry_url | tojson }}
+  registryTrustPolicy: {{ cluster.registry_trust_policy | tojson }}
+{% endif %}
+  dnsServers: {{ defaults.dns_servers | tojson }}
+  ntpServers: {{ defaults.ntp_servers | tojson }}
+{% if defaults.gitops_timescape.get("objectStore") %}
+  objectStore: {{ defaults.gitops_timescape["objectStore"] | tojson }}
+{% endif %}
+{% if defaults.gitops_repo_url and defaults.gitops_target_revision %}
+  gitops:
+    repoURL: {{ defaults.gitops_repo_url | tojson }}
+    targetRevision: {{ defaults.gitops_target_revision | tojson }}
+    operatorSubscription: {{ defaults.operator_subscription("openshift-gitops-operator") | tojson }}
+{% endif %}
+imagePolicyBundles:
+  ocpInstallCore: {{ cluster.release.ocp_install_core_bundle }}
+{% if cluster.network_type == "Cilium" %}
+  ciliumDay1: {{ cluster.release.cilium_day1_bundle }}
+{% endif %}
+  gitopsBootstrap: {{ cluster.release.gitops_bootstrap_bundle }}
+  platformDay2: {{ cluster.release.platform_day2_bundle }}
+{% if cluster.network_type == "Cilium" %}
+ciliumDay1:
+  version: {{ cluster.release.cilium_day1_version }}
+  channel: {{ cluster.release.cilium_day1_channel | tojson }}
+{% if cluster.release.clife_manifest_archive %}
+  manifestArchive: {{ cluster.release.clife_manifest_archive | tojson }}
+{% endif %}
+  images:
+    cilium: {{ cluster.release.cilium_image }}
+    operator: {{ cluster.release.cilium_operator_image }}
+    clife: {{ cluster.release.clife_image }}
+{% endif %}
+ciliumDay2Migration: {{ cluster.cilium_day2_migration | lower }}
+capabilities:
+{% for capability in cluster.capabilities %}
+- {{ capability }}
+{% endfor %}
+gitopsBootstrapPath: clusters/{{ cluster.name }}
+ntpServers:
+{% for ntp in defaults.ntp_servers %}
+- {{ ntp }}
+{% endfor %}
+nodes:
+{% for node in cluster.nodes %}
+- name: {{ node.name }}
+{% if node.ucs_profile %}
+  ucsProfile: {{ node.ucs_profile }}
+{% endif %}
+{% if node.serial %}
+  serial: {{ node.serial }}
+{% endif %}
+{% endfor %}

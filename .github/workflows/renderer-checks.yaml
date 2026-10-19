@@ -1,0 +1,50 @@
+name: renderer-checks
+# Public reference execution follows the existing site-configured runner model.
+# Initial publication must not launch jobs on an unconfigured persistent runner.
+# Internal Platform keeps automatic PR/main checks; this portable adapter is explicit.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  renderer-checks:
+    runs-on: ${{ fromJSON(vars.RUNNER_LABELS) }}
+    container:
+      image: ${{ vars.RUNNER_CONTAINER_IMAGE }}
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      # Airgap owns acquisition; the renderer only consumes verified local bytes.
+      - name: Checkout pinned Airgap artifact preparer
+        uses: actions/checkout@v7
+        with:
+          repository: mahowlin/secure-ai-airgap
+          ref: 1052aa0707d1fdcd3034c29ff02855ce48771e76
+          path: .artifacts/source-airgap
+          persist-credentials: false
+      - name: Prepare selected operator inspection inputs
+        uses: ./.artifacts/source-airgap/.github/actions/prepare-operator-inputs
+        with:
+          contract: ${{ github.workspace }}/data/package-contracts/oc-mirror-operator-v0.1.7.json
+          output: ${{ github.workspace }}/.artifacts/oc-mirror-operator/v0.1.7
+          source-root: ${{ vars.OPERATOR_ARTIFACT_SOURCE_PATH }}
+
+      - name: Install declared requirements
+        run: |
+          python3 -m venv --without-pip .venv
+          python3 -m pip --python .venv install -r requirements.txt
+      - name: Validate declared inputs and selected operator
+        run: |
+          .venv/bin/python -m unittest discover -s tests -p 'test_selected_validator_inputs.py'
+          .venv/bin/python -m unittest discover -s tests -p 'test_oc_mirror*.py'
+          .venv/bin/python -m unittest discover -s tests -p 'test_operator_artifact_input.py'
+      - name: Render selected GitOps inputs
+        run: .venv/bin/python scripts/render-gitops.py --root .

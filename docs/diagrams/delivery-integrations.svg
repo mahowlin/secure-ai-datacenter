@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1340" viewBox="0 0 1100 1340" role="img" aria-labelledby="title description">
+<title id="title">Disconnected image supply and bare-metal installation</title>
+<desc id="description">Release intent authorizes authenticated mirroring to the configured registry on the shared service host. Separately, rendered install data becomes an Agent ISO. The UCS automation variant shown uploads it to an HTTP container and mounts it through Intersight vMedia. Portable installation hands the same ISO to the site-owned boot process, without requiring Intersight or a supplied BMC adapter. Management IDMS and HostedCluster imageContentSources redirect different consumers to the mirror.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="1340" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Disconnected image supply and bare-metal installation</text>
+<text x="36" y="78" class="subheading" text-anchor="start">The registry image path and the HTTP Agent ISO path are separate deliveries with different consumers.</text>
+<g id="zone-supply">
+<rect x="20" y="105" width="1060" height="260" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-install">
+<rect x="20" y="445" width="1060" height="250" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-policy">
+<rect x="45" y="785" width="1010" height="275" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-consumers">
+<rect x="45" y="1080" width="1010" height="230" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 280 245 L 305 245" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 545 245 L 570 245" fill="none" stroke="#C93756" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2 5" marker-end="url(#arrow-trust)"/>
+<path d="M 810 245 L 835 245" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+<path d="M 160 335 L 160 390 L 8 390 L 8 550 L 40 550" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 280 592 L 305 592" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 545 592 L 570 592" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 810 592 L 835 592" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 955 665 L 1075 665 L 1075 1070 L 20 1070 L 20 1205 L 80 1205" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 955 335 L 1085 335 L 1085 760 L 550 760" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5"/>
+<path d="M 550 760 L 295 760 L 295 840" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+<path d="M 550 760 L 805 760 L 805 840" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+<path d="M 295 1030 L 295 1130" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 805 1030 L 805 1130" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-supply">
+<rect x="32" y="114" width="361.59999999999997" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">1. Authenticated software supply</text>
+</g>
+<g id="zone-label-install">
+<rect x="32" y="454" width="713.7600000000001" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="476" class="zone-title" style="font-size:18.0px" text-anchor="start">2. Agent ISO delivery — UCS automation variant</text>
+<text x="40" y="498" class="zone-note" style="font-size:14.0px" text-anchor="start">Portable installs: hand the same ISO to your site’s boot process; no Intersight required.</text>
+</g>
+<g id="zone-label-policy">
+<rect x="57" y="794" width="426.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="65" y="816" class="zone-title" style="font-size:18.0px" text-anchor="start">3. Two image-source mapping mechanisms</text>
+</g>
+<g id="zone-label-consumers">
+<rect x="57" y="1089" width="232.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="65" y="1111" class="zone-title" style="font-size:18.0px" text-anchor="start">4. Cluster consumers</text>
+</g>
+</g>
+<g id="nodes">
+<g id="release">
+<rect x="40" y="160" width="240" height="175" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="189" class="node-title" style="font-size:18.0px" text-anchor="start">Release composition</text>
+<text x="57" y="215" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="76" y="215" class="node-line" style="font-size:15.0px" text-anchor="start">platform-release.yaml</text>
+<text x="57" y="238" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="76" y="238" class="node-line" style="font-size:14.9px" text-anchor="start">OpenShift and IEP artifacts</text>
+<text x="57" y="261" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="76" y="261" class="node-line" style="font-size:15.0px" text-anchor="start">image-policy bundles</text>
+<text x="57" y="284" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="76" y="284" class="node-line" style="font-size:15.0px" text-anchor="start">profile authorization</text>
+</g>
+<g id="upstream">
+<rect x="305" y="160" width="240" height="175" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="321" y="189" class="node-title" style="font-size:18.0px" text-anchor="start">Upstream sources</text>
+<text x="322" y="215" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="341" y="215" class="node-line" style="font-size:15.0px" text-anchor="start">Red Hat release images</text>
+<text x="322" y="238" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="341" y="238" class="node-line" style="font-size:14.9px" text-anchor="start">Red Hat operator indexes</text>
+<text x="322" y="261" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="341" y="261" class="node-line" style="font-size:14.9px" text-anchor="start">Isovalent Artifactory images</text>
+<text x="322" y="284" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="341" y="284" class="node-line" style="font-size:15.0px" text-anchor="start">OCI platform charts</text>
+</g>
+<g id="mirror">
+<rect x="570" y="160" width="240" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="586" y="189" class="node-title" style="font-size:18.0px" text-anchor="start">secure-ai-airgap</text>
+<text x="587" y="215" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="606" y="215" class="node-line" style="font-size:14.9px" text-anchor="start">authenticated mirroring</text>
+<text x="587" y="238" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="606" y="238" class="node-line" style="font-size:14.9px" text-anchor="start">immutable bundle evidence</text>
+<text x="587" y="261" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="606" y="261" class="node-line" style="font-size:14.9px" text-anchor="start">credentials remain external</text>
+</g>
+<g id="registry">
+<rect x="835" y="160" width="240" height="175" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="851" y="189" class="node-title" style="font-size:18.0px" text-anchor="start">Internal registry</text>
+<text x="852" y="215" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="871" y="215" class="node-line" style="font-size:15.0px" text-anchor="start">shared service host</text>
+<text x="852" y="238" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="871" y="238" class="node-line" style="font-size:14.9px" text-anchor="start">OpenShift + Isovalent images</text>
+<text x="852" y="261" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="871" y="261" class="node-line" style="font-size:15.0px" text-anchor="start">operator catalogs</text>
+<text x="852" y="284" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="871" y="284" class="node-line" style="font-size:15.0px" text-anchor="start">OCI platform charts</text>
+</g>
+<g id="install-data">
+<rect x="40" y="520" width="240" height="145" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="549" class="node-title" style="font-size:17.4px" text-anchor="start">Rendered install data</text>
+<text x="57" y="575" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="76" y="575" class="node-line" style="font-size:15.0px" text-anchor="start">secure-ai-compute</text>
+<text x="57" y="598" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="76" y="598" class="node-line" style="font-size:14.9px" text-anchor="start">data/openshift/&lt;cluster&gt;/</text>
+<text x="57" y="621" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="76" y="621" class="node-line" style="font-size:14.9px" text-anchor="start">install and AgentConfig files</text>
+</g>
+<g id="agent">
+<rect x="305" y="520" width="240" height="145" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="321" y="549" class="node-title" style="font-size:18.0px" text-anchor="start">Agent ISO build</text>
+<text x="322" y="575" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="341" y="575" class="node-line" style="font-size:14.9px" text-anchor="start">openshift-install agent</text>
+<text x="322" y="598" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="341" y="598" class="node-line" style="font-size:15.0px" text-anchor="start">create image</text>
+<text x="322" y="621" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="341" y="621" class="node-line" style="font-size:14.9px" text-anchor="start">embeds Day 1 image policy</text>
+</g>
+<g id="http">
+<rect x="570" y="520" width="240" height="145" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="586" y="549" class="node-title" style="font-size:18.0px" text-anchor="start">HTTP ISO server</text>
+<text x="587" y="575" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="575" class="node-line" style="font-size:15.0px" text-anchor="start">shared service host</text>
+<text x="587" y="598" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="598" class="node-line" style="font-size:15.0px" text-anchor="start">receives the Agent ISO</text>
+<text x="587" y="621" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="621" class="node-line" style="font-size:15.0px" text-anchor="start">serves the ISO URL</text>
+</g>
+<g id="vmedia">
+<rect x="835" y="520" width="240" height="145" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="851" y="549" class="node-title" style="font-size:18.0px" text-anchor="start">Intersight vMedia</text>
+<text x="852" y="575" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="871" y="575" class="node-line" style="font-size:14.9px" text-anchor="start">mounts the HTTP ISO URL</text>
+<text x="852" y="598" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="871" y="598" class="node-line" style="font-size:14.9px" text-anchor="start">attaches ISO to servers</text>
+<text x="852" y="621" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="871" y="621" class="node-line" style="font-size:14.9px" text-anchor="start">servers boot the Agent ISO</text>
+</g>
+<g id="idms">
+<rect x="80" y="840" width="430" height="190" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="96" y="869" class="node-title" style="font-size:18.0px" text-anchor="start">Management ImageDigestMirrorSet</text>
+<text x="97" y="895" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="895" class="node-line" style="font-size:15.0px" text-anchor="start">platform-idms Application</text>
+<text x="97" y="918" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="918" class="node-line" style="font-size:15.0px" text-anchor="start">rewrites public source references</text>
+<text x="97" y="941" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="116" y="941" class="node-line" style="font-size:14.9px" text-anchor="start">pulls matching digests from the internal registry</text>
+<text x="97" y="964" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="964" class="node-line" style="font-size:15.0px" text-anchor="start">applies to the management cluster</text>
+</g>
+<g id="hosted-policy">
+<rect x="590" y="840" width="430" height="190" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="606" y="869" class="node-title" style="font-size:18.0px" text-anchor="start">HostedCluster imageContentSources</text>
+<text x="607" y="895" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="626" y="895" class="node-line" style="font-size:15.0px" text-anchor="start">field on each HostedCluster</text>
+<text x="607" y="918" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="626" y="918" class="node-line" style="font-size:15.0px" text-anchor="start">maps public sources to internal mirrors</text>
+<text x="607" y="941" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="626" y="941" class="node-line" style="font-size:15.0px" text-anchor="start">used for hosted-worker bootstrap</text>
+<text x="607" y="964" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="626" y="964" class="node-line" style="font-size:15.0px" text-anchor="start">not a tenant-side IDMS Application</text>
+</g>
+<g id="management">
+<rect x="80" y="1130" width="430" height="150" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="96" y="1159" class="node-title" style="font-size:18.0px" text-anchor="start">Management cluster consumer</text>
+<text x="97" y="1185" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="1185" class="node-line" style="font-size:15.0px" text-anchor="start">boots from Agent ISO</text>
+<text x="97" y="1208" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="1208" class="node-line" style="font-size:15.0px" text-anchor="start">pulls mirrored Day 1 and Day 2 images</text>
+<text x="97" y="1231" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="1231" class="node-line" style="font-size:15.0px" text-anchor="start">reconciles the platform IDMS</text>
+</g>
+<g id="hosted">
+<rect x="590" y="1130" width="430" height="150" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="606" y="1159" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted worker consumer</text>
+<text x="607" y="1185" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="626" y="1185" class="node-line" style="font-size:15.0px" text-anchor="start">HCP bootstrap follows imageContentSources</text>
+<text x="607" y="1208" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="626" y="1208" class="node-line" style="font-size:15.0px" text-anchor="start">pulls release images from the internal mirror</text>
+<text x="607" y="1231" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="626" y="1231" class="node-line" style="font-size:15.0px" text-anchor="start">policy is per HostedCluster</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="952.5" y="681.5" width="115.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="1010" y="700" class="edge-label" style="font-size:12.5px" text-anchor="middle">Agent ISO boot</text>
+<rect x="788.75" y="736.5" width="122.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="850" y="755" class="edge-label" style="font-size:12.5px" text-anchor="middle">mirror endpoint</text>
+<rect x="751.25" y="1071.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="805" y="1090" class="edge-label" style="font-size:12.5px" text-anchor="middle">HCP bootstrap</text>
+</g>
+<line x1="40" y1="1301" x2="76" y2="1301" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="1306" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+<line x1="290.0" y1="1301" x2="326.0" y2="1301" stroke="#D96C00" stroke-width="3" stroke-dasharray="4 5"/>
+<text x="336.0" y="1306" class="legend" style="font-size:12.5px" text-anchor="start">software supply</text>
+<line x1="472.5" y1="1301" x2="508.5" y2="1301" stroke="#C93756" stroke-width="3" stroke-dasharray="2 5"/>
+<text x="518.5" y="1306" class="legend" style="font-size:12.5px" text-anchor="start">trust / credential boundary</text>
+<line x1="745.0" y1="1301" x2="781.0" y2="1301" stroke="#7A5AF8" stroke-width="3"/>
+<text x="791.0" y="1306" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+</svg>

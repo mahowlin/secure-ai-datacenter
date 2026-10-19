@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="830" viewBox="0 0 900 830" role="img" aria-labelledby="title description">
+<title id="title">Hosted-image delivery: source, copier, cache and consumer</title>
+<desc id="description">Management OpenShift boots first, then hosts the selected mirror operator and cache. Declared example architecture, not observed deployment. Labels and adjacent ownership tables are the text alternative.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="900" height="830" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Hosted-image delivery: source, copier, cache and consumer</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Management OpenShift boots first, then hosts the selected mirror operator and cache.</text>
+<g id="zone-hosting">
+<rect x="25" y="390" width="850" height="180" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 450 156 L 450 245" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+<path d="M 600 311 L 600 440 L 220 440 L 220 460" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+<path d="M 385 493 L 515 493" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+<path d="M 680 526 L 680 650" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-hosting">
+<rect x="37" y="399" width="232.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="45" y="421" class="zone-title" style="font-size:18.0px" text-anchor="start">Management OpenShift</text>
+</g>
+</g>
+<g id="nodes">
+<g id="external">
+<rect x="255" y="90" width="390" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="271" y="119" class="node-title" style="font-size:18.0px" text-anchor="start">Vendor image sources</text>
+<text x="271" y="145" class="node-line" style="font-size:16.0px" text-anchor="start">selected releases / products</text>
+</g>
+<g id="site">
+<rect x="255" y="245" width="390" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="271" y="274" class="node-title" style="font-size:18.0px" text-anchor="start">Preceding site registry</text>
+<text x="271" y="300" class="node-line" style="font-size:16.0px" text-anchor="start">available before management boot</text>
+</g>
+<g id="operator">
+<rect x="55" y="460" width="330" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="71" y="489" class="node-title" style="font-size:18.0px" text-anchor="start">Mirror operator</text>
+<text x="71" y="515" class="node-line" style="font-size:16.0px" text-anchor="start">copies the selected inventory</text>
+</g>
+<g id="cache">
+<rect x="515" y="460" width="330" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="531" y="489" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted-image registry/cache</text>
+<text x="531" y="515" class="node-line" style="font-size:15.0px" text-anchor="start">registry server + persistent storage</text>
+</g>
+<g id="workers">
+<rect x="515" y="650" width="330" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="531" y="679" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted workers</text>
+<text x="531" y="705" class="node-line" style="font-size:16.0px" text-anchor="start">pull selected cached images</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="358.75" y="186.5" width="182.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="205" class="edge-label" style="font-size:12.5px" text-anchor="middle">mirror selected content</text>
+<rect x="653.75" y="346.5" width="92.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="700" y="365" class="edge-label" style="font-size:12.5px" text-anchor="middle">read source</text>
+<rect x="430.0" y="458.5" width="40.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="477" class="edge-label" style="font-size:12.5px" text-anchor="middle">copy</text>
+<rect x="637.5" y="581.5" width="85.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="680" y="600" class="edge-label" style="font-size:12.5px" text-anchor="middle">image pull</text>
+</g>
+<line x1="40" y1="770" x2="74" y2="770" stroke="#D96C00" stroke-width="3" stroke-dasharray="4 5"/><text x="84" y="775" font-size="14" fill="#344563">software supply</text></svg>

@@ -1,0 +1,566 @@
+apiVersion: saif.example.com/v1alpha1
+kind: GeneratedArtifactManifest
+metadata:
+  name: saif-generated-artifacts
+source:
+  repo: secure-ai-datacenter
+  commit: unknown
+  contractInputs:
+  - platform-release.yaml
+  - data/networks/
+  - data/clusters/
+  - data/defaults/
+  - data/traffic/
+  - data/cilium-config-profiles/
+  - data/package-inputs/
+  - data/package-contracts/
+  - data/gitops/
+  - schemas/cilium-config-profile-v1.schema.json
+  - schemas/gitops-exception-register-v1.schema.json
+  releaseContracts:
+  - cluster: example-management
+    releaseRef: saif-ocp-4.19-cilium-1.19
+    currentReleaseRef: saif-ocp-4.19-cilium-1.19
+    targetReleaseRef: saif-ocp-4.19-cilium-1.19
+    ocpVersion: 4.19.21
+    networkType: Cilium
+    imagePolicyBundles:
+      ocpInstallCore: ocp-install-core
+      gitopsBootstrap: gitops-bootstrap
+      platformDay2:
+        profile: ocp-4.19-cilium-1.19
+        targetRevision: 0.0.0-platform-day2.ocp-4.19-cilium-1.19
+      ciliumDay1: cilium-day1
+  - cluster: example-sno
+    releaseRef: saif-ocp-4.19-cilium-1.18
+    currentReleaseRef: null
+    targetReleaseRef: null
+    ocpVersion: 4.19.21
+    networkType: OVNKubernetes
+    imagePolicyBundles:
+      ocpInstallCore: ocp-install-core
+      gitopsBootstrap: gitops-bootstrap
+      platformDay2:
+        profile: ocp-4.19-cilium-1.18
+        targetRevision: 0.0.0-platform-day2.ocp-4.19-cilium-1.18
+  - cluster: example-third-party
+    releaseRef: saif-ocp-4.19-cilium-1.19.7-stable
+    currentReleaseRef: null
+    targetReleaseRef: null
+    ocpVersion: 4.19.21
+    networkType: Cilium
+    imagePolicyBundles:
+      ocpInstallCore: ocp-install-core
+      gitopsBootstrap: gitops-bootstrap
+      platformDay2:
+        profile: ocp-4.19-cilium-1.19
+        targetRevision: 0.0.0-platform-day2.ocp-4.19-cilium-1.19
+      ciliumDay1: cilium-day1
+  rendererVersions:
+    aci: scripts/render-aci.py
+    ucs: scripts/render-ucs.py
+    ocp: scripts/render-ocp.py
+    gitops: scripts/render-gitops.py
+targets:
+- repo: secure-ai-fabric
+  sourceRoot: generated/repos/secure-ai-fabric/data
+  targetRoot: data
+  files:
+  - path: access/10-platform-management-domains.yml
+    sha256: e6d1c9ab24a88114dd3ffd1d562a0f986920699c9bc0fe071332bc78e010c764
+  - path: access/30-platform-management-attachments.yml
+    sha256: e57ef2d896eb6420eed07284eaab330b0432ce35015cf521d2a648d668b4a4da
+  - path: platform-management/platform-management.yml
+    sha256: 11b66795e4ff6182c99cf9f33c39b74e33e5949dcce18e25ea0471556aa114b6
+  - path: tenant-workloads/access-policies.yml
+    sha256: 25f72eb388d0bf2e4de417d663d84b8692f414d107d45b211b5e3f5db1e56f39
+  - path: tenant-workloads/tenant-workloads.yml
+    sha256: 76b60bcb8dbe594d1664114650c51e752539e804da6eb5e6b618bf8f8473b7bb
+- repo: secure-ai-compute
+  sourceRoot: generated/repos/secure-ai-compute/data
+  targetRoot: data
+  files:
+  - path: openshift/example-management/agent-config.yaml
+    sha256: 0c6ea241ea9f441bfc5616aae9a58adc32cfaeac68c8f03f9f1303c29372a760
+  - path: openshift/example-management/install-config.yaml
+    sha256: 277cf928ff97d7472060f4527a2fad7fa6dea1812f6d736e16723a11ba3f1960
+  - path: openshift/example-management/manifests/ciliumconfig.yaml
+    sha256: 1cea9b606588759f2a33e888083e225473ddc74280d017c5a2649d68c5d36837
+  - path: openshift/example-management/manifests/cluster-network-02-config-local.yml
+    sha256: 2cd38824a3b9872b70965e6cb13f0105be06827169b0c1ae50e893e4f02b7510
+  - path: openshift/example-management/metadata.yaml
+    sha256: a2d83bb3e6d3b73e3b7d65cf7673a4f7f6f987e7463279935838da8fb35b2d87
+  - path: openshift/example-sno/agent-config.yaml
+    sha256: 6b3fca07c8c47a6892a7a7c2a8e22e7dc94966408ba65b089b6bd699152bf136
+  - path: openshift/example-sno/install-config.yaml
+    sha256: 415c0325cf46e342f34b89a7602dd2a88cb843e77c09fc013d67225c74030997
+  - path: openshift/example-sno/metadata.yaml
+    sha256: e79bbc44d67d5cca4db9deec5ea477873c0808d44a21cb19a8d39bc556bb3dbd
+  - path: openshift/example-third-party/agent-config.yaml
+    sha256: b89a2490868e8901eba20e0b19984dac24ce58044854a62a6e99ab1c46a88ca6
+  - path: openshift/example-third-party/install-config.yaml
+    sha256: fcb7a13ffed0a990589a689859d7831a928316135ad08dd2ab0a428bb26fa92e
+  - path: openshift/example-third-party/manifests/ciliumconfig.yaml
+    sha256: 2f88aa4a72819c5cae80e194dbb7b9e4f2c5226f27f7413e34b69cf2e9865bed
+  - path: openshift/example-third-party/manifests/cluster-network-02-config-local.yml
+    sha256: 2cd38824a3b9872b70965e6cb13f0105be06827169b0c1ae50e893e4f02b7510
+  - path: openshift/example-third-party/metadata.yaml
+    sha256: b3ff153d99518c749fb6a5abd4168fbe535d213aa5c76f33aa191c31c642ea17
+  - path: ucs/ethernet_network_group.ezi.yaml
+    sha256: cd69acce3fc08ac2bf627fd6466e4aac25ae56075240dad1a6d3775516d71e83
+  - path: ucs/lan-connectivity.ezi.yaml
+    sha256: 4385c81b88bad6f07f34c563f93c570f25e428e78cb214f0a38f1d51ea69c2ec
+  - path: ucs/vlan.ezi.yaml
+    sha256: aa0afe4ca3a3f7f4f03076d58a8326e053c0a48c13c645d9814fd0425cb09bce
+- repo: secure-ai-gitops
+  sourceRoot: generated/repos/secure-ai-gitops
+  targetRoot: .
+  files:
+  - path: apps/argocd-config/argocd-controller-resources.yaml
+    sha256: 2bdff9fb268fbc55494fd0b0f66790e1a6df6fb3f740133da43e282c289a9126
+  - path: apps/argocd-config/kustomization.yaml
+    sha256: 34605787b08af6c60e06172e31c7ff54691f8d76985ab3e4ae87e7ac0f16e795
+  - path: apps/argocd-config/oci-registry-repo.yaml
+    sha256: 436fd3988f1808fe946ee6fd017391deb42e8aa544c12d156ec524d5e23ab261
+  - path: apps/hcp/management/console-login/overlays/example-management/binding.yaml
+    sha256: 57dc25b83507da0d81a41f16de1848760360da06e03100e5d4cde62f3d0cb1d9
+  - path: apps/hcp/management/console-login/overlays/example-management/group.yaml
+    sha256: e1916e08e748fe1e1238bee5e4f66abe0772f45c8afe4f73273bcef779aeadda
+  - path: apps/hcp/management/console-login/overlays/example-management/kustomization.yaml
+    sha256: fc38b3a259ee274d4c6828639d735d1e99aad0d4bc79abc017bf3678833d1550
+  - path: apps/hcp/management/console-login/overlays/example-management/oauth.yaml
+    sha256: 247a645a0ab1d8a3d3157aeb14b5aac518a8cf5644aee962d40ccaef6ac9d385
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/argocd-cluster-sync-job.yaml
+    sha256: 13e762d4608783ee832f83dbbfd40432881f99e925d1680787bf80f327facc7f
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/argocd-cluster-sync-rbac.yaml
+    sha256: 487c9ba483c898f4639465b3a85c6951c8a128240271a6f2e7980573a8329e7f
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/argocd-cluster-sync-sa.yaml
+    sha256: 8cef7733abe84c0754328722ed8b52885ba9f1b95317f21398694a42c25f9c3e
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/bootstrap/adopt-example-shared-pull-secret.yaml
+    sha256: 5fafb3771f94368cda408a065b3397cf184450dc1549c3f7c94883d9806926e8
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/bootstrap/kustomization.yaml
+    sha256: 9f34490371fe117420b3c45f3312ec44c8d1273eae92ebfe88ac6d73d9ff7499
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/control-plane-ingress-dns-records.yaml
+    sha256: 52bb75f80480e0924c154dcb2f673235d5a76f663fdb9322916f1216d2a15ecb
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/cdi-importer-ingress-cnp.yaml
+    sha256: d57e3747489b7a164e256ff2425d4ae4f792ac023f75c7288ee9aeeca2cf370d
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/hostedcluster.yaml
+    sha256: a804cff16c87d55334175e6b52e66cb9bc1bf011eb1bd228aa762abb80bf4a12
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/kustomization.yaml
+    sha256: 545b11709ba96430d93322471a579fe46e0f2e937bacdf14e43e7a81e2129ec9
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/namespace.yaml
+    sha256: bcda4c89b0a23cb54b3e3b565ae7775d18492a26725668c06fba7cd478abf552
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/nodepool-workers.yaml
+    sha256: 44afc693b8dc71c7421e1811e601dd67b34699d350e87e8ba37046293b906529
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/router-ingress-cnp.yaml
+    sha256: e23d4f16ad524828cd2981af4841c9aea216f4205a0e7a994c51e6b16d2771a4
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/virt-launcher-hostnetwork-egress-cnp.yaml
+    sha256: c4ab498502eff53894b8f276bea990535e2e58532f3dc703965c94d276d60ff5
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-multus-a/worker-chrony-machineconfig.yaml
+    sha256: 8497b360ae0d0015a331d88565ad8d150726faa60d106c95e54745d3180c593a
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/cdi-importer-ingress-cnp.yaml
+    sha256: 904b946149b941e858d230da19bc9b731193274143bf31dcf42faa44b35601f3
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/hostedcluster.yaml
+    sha256: 585b603e3075374bf09ccc4887a693e8a96608119a962954a92fbd107b7b7228
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/kustomization.yaml
+    sha256: 545b11709ba96430d93322471a579fe46e0f2e937bacdf14e43e7a81e2129ec9
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/namespace.yaml
+    sha256: a1d6eb43494b087e9cf761e6776aeb8c78dfd3bde619da2acfd1409630b2450e
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/nodepool-workers.yaml
+    sha256: 569bb68490b5d098d0abe8fe7b3e3a3e1bd653cc99d0ca739536638fe56a22e3
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/router-ingress-cnp.yaml
+    sha256: 4990814c5252bb0dde9aa6b676faf27ab57fcb3f89aff792bde49f68c9cc117d
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/virt-launcher-hostnetwork-egress-cnp.yaml
+    sha256: fd178af0cec99400ec142e6de3e7c8a5466e8b811731df22b93045a6a6b464e0
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/worker-chrony-machineconfig.yaml
+    sha256: 9c6484a36c4ca70935ff1645cff8b0dad64ebce31f05437b758aef62a49c873b
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/kustomization.yaml
+    sha256: 4e6cf5dd7f352d7071832d24e6dee98233c825a335a7df37900c14a18d6228d7
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/router-service-labeler-job.yaml
+    sha256: 9fd1dc2c487603166bd341cb421d1558f6e64ca06a71591277342eb25281771d
+  - path: apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/router-service-labeler-rbac.yaml
+    sha256: eb25f1bc55a0d875d3b98078e46388d1674c8f7203573f3a01c108d3e02be1ba
+  - path: apps/hcp/management/ilb-install/overlays/example-management/router-t1/kustomization.yaml
+    sha256: 8ad70f09eb7aeaeaaff6e1d5d75009775aacfb3500e40bf1e6dbe8681cb3c858
+  - path: apps/hcp/management/ilb-install/overlays/example-management/router-t1/placement.yaml
+    sha256: 22450bd1a0737a69eb66dc13aef162ce80298777c45c85a727270886f5a339b8
+  - path: apps/hcp/management/ilb-install/overlays/example-management/t2/kustomization.yaml
+    sha256: 8ad70f09eb7aeaeaaff6e1d5d75009775aacfb3500e40bf1e6dbe8681cb3c858
+  - path: apps/hcp/management/ilb-install/overlays/example-management/t2/placement.yaml
+    sha256: 603764dfdb5a169ed1970c5b81f91b18a39fd8a5e5e8a3b9e7fa6fe955958e5c
+  - path: apps/hcp/management/local-registry/overlays/example-management/configmap.yaml
+    sha256: 0c8184f7d5dc4e3b53d7468f9dc753309322f78b46c4da5c5141c01ad30831b6
+  - path: apps/hcp/management/local-registry/overlays/example-management/deployment.yaml
+    sha256: 983eab47d0b4ee1e7a9f7dac8ec6c10fa10669364791dbeb4dc661651432fbbd
+  - path: apps/hcp/management/local-registry/overlays/example-management/external-bgp-advertisement.yaml
+    sha256: f2bc258e083f130bfb756d3eb198615ebf83dd75c937d5c1d6d60809c155fad0
+  - path: apps/hcp/management/local-registry/overlays/example-management/external-lb-pool.yaml
+    sha256: e7f4aa12a24068315dbbd09a41660875809fe344c57ab399f9545aa70e65429e
+  - path: apps/hcp/management/local-registry/overlays/example-management/external-runtime-contract.yaml
+    sha256: e3a198cfa83d24dbbd62de1e4e228a7c18c979873855b07bd3aed80f90dce790
+  - path: apps/hcp/management/local-registry/overlays/example-management/kustomization.yaml
+    sha256: 0f1311910f77bc80aefeb75342faab0c010d44b86f6190839ab9a71e322830af
+  - path: apps/hcp/management/local-registry/overlays/example-management/networkpolicy.yaml
+    sha256: 09295eaa4aa85fa8808cdf0b5f5e73d7fe5b94c3ee25a032b7df71d6dc2567b5
+  - path: apps/hcp/management/local-registry/overlays/example-management/persistentvolumeclaim.yaml
+    sha256: d3f42b287a3aca140e44d1e292a2796280b1f287ea1da8814cdad8ea6b2d2ad2
+  - path: apps/hcp/management/local-registry/overlays/example-management/service-external.yaml
+    sha256: 7c0425d7a84be93f7344207ed4a795071f1ed267c35aed7485020fd361f617eb
+  - path: apps/hcp/management/local-registry/overlays/example-management/service-pull.yaml
+    sha256: 4f709eb1385a1daa55a269f8586fefe237be019435a5d18166f6b7448fb192f4
+  - path: apps/hcp/management/local-registry/overlays/example-management/service-sync.yaml
+    sha256: 7b04004736c2aa3844754318bf00020d1b09e91217f8edaf675ce7408c49141f
+  - path: apps/hcp/management/local-registry/overlays/example-management/serviceaccount.yaml
+    sha256: 0f36e858e43fe6bd287f0da198399f49ab122eb85b503909bc1f52169663395a
+  - path: apps/hcp/management/native-monitoring/overlays/example-management/manifest.json
+    sha256: b472e5cb50b5d2e74ed15b86ef3e7cbb976653040b73e057695396e83b2ed7eb
+  - path: apps/hcp/management/native-monitoring/overlays/example-management/platform/core.yaml
+    sha256: 7686d336619ab42f5b3b347101193469c9b6d11daf76205126543fbd74de936e
+  - path: apps/hcp/management/native-monitoring/overlays/example-management/platform/kustomization.yaml
+    sha256: ab818f341728e106c6b86ba1d86cc1b9d6a8d99a090cd7144cb4ce5fc279bdc5
+  - path: apps/hcp/management/native-monitoring/overlays/example-management/platform-prometheus/core.yaml
+    sha256: 21b9e251f96ba959bdd6f68e1c87a1cd009c329b4f2aa83810d731878d6a0cd2
+  - path: apps/hcp/management/native-monitoring/overlays/example-management/platform-prometheus/kustomization.yaml
+    sha256: ab818f341728e106c6b86ba1d86cc1b9d6a8d99a090cd7144cb4ce5fc279bdc5
+  - path: apps/hcp/management/native-monitoring/overlays/example-management/user-workload/config.yaml
+    sha256: cd1f20aa334e012d99533247ba43e4e8e1c941889f101174421969446f5ca174
+  - path: apps/hcp/management/native-monitoring/overlays/example-management/user-workload/kustomization.yaml
+    sha256: 3c617cd32b1cfe7fb26c2799ef4d7ded5a70b344e5126005e1d2d26f8ed3cb4c
+  - path: apps/hcp/management/oc-mirror-trial/overlays/example-management/catalogsource.yaml
+    sha256: 1e8cc53ad26ecb28196ab08ebd77c6c6b55efcbe882a2759e82d1dc466941642
+  - path: apps/hcp/management/oc-mirror-trial/overlays/example-management/image-mirrors.yaml
+    sha256: 86dc1dc2cc00ae4c458d233ca5a1045b1e4f1b8baa341fecaa3e4f553993ea7f
+  - path: apps/hcp/management/oc-mirror-trial/overlays/example-management/imageset.yaml
+    sha256: 8266203cdc209910684276a0285c98de4ecbfc039bacaf5f9aca9b0fbbbd3117
+  - path: apps/hcp/management/oc-mirror-trial/overlays/example-management/kustomization.yaml
+    sha256: d2f082d6532338aee65655b56e120d911fbc4950d858ceefc1b260be79a6d88b
+  - path: apps/hcp/management/oc-mirror-trial/overlays/example-management/mirrortarget.yaml
+    sha256: 2a70bb7e9bf728c803e8a49e9b8a678ca8a35b197339c7ba49be041ccf8fcbcd
+  - path: apps/hcp/management/oc-mirror-trial/overlays/example-management/namespace.yaml
+    sha256: d9650eb811fcef05fc8c45b985b15471191376b1fd08755e6c08bc814fe31d2c
+  - path: apps/hcp/management/oc-mirror-trial/overlays/example-management/operatorgroup.yaml
+    sha256: 1c44ab94c20065a992e085d02f5d7d23a88bef85b520cb7ac34cfb4be9888188
+  - path: apps/hcp/management/oc-mirror-trial/overlays/example-management/subscription.yaml
+    sha256: 52ffe29dc09d744cfec0eed42da5f962d4e0db28a6bfdf87fc2d8a1bb078ffde
+  - path: apps/hcp/management/operands/overlays/example-management/hypershift-seccomp-fix-hook.yaml
+    sha256: 417eee5023ea8eca15e1536cd7e906bc5a8bf167c3fb750240e9cbee13b839e3
+  - path: apps/hcp/management/operands/overlays/example-management/hypershift-seccomp-fix-rbac.yaml
+    sha256: 5125983abeadb0eb509071aad7a366cf091947e0aba777308a71af66fc100a75
+  - path: apps/hcp/management/operands/overlays/example-management/kustomization.yaml
+    sha256: bbb8ad48eda941dc5da8f0f672f2ea8f10cb514ea2d09d02d28b30b74967d846
+  - path: apps/hcp/management/operands/overlays/example-management/mce.yaml
+    sha256: ce2ef963663011424c69a4b21f2bf17a1dd2a86125be0f8f4c0f591f7337de64
+  - path: apps/hcp/management/operands/overlays/example-management/nmstate.yaml
+    sha256: 2e2ff26889d798048697c8c39870f98761fd8be82186b7b5b9c5dc9b9ae93562
+  - path: apps/hcp/management/operands/overlays/example-management/openshift-virtualization.yaml
+    sha256: 96f9047724b904b13f12422884596c1a7e74f3b6ba519061c944c04235d650c4
+  - path: apps/hcp/management/operators/overlays/example-management/kubernetes-nmstate/kustomization.yaml
+    sha256: 269c4d7ff327322e657688e651ba6dc0bfaf17e7239289936fe93509e2018299
+  - path: apps/hcp/management/operators/overlays/example-management/kubernetes-nmstate/namespace.yaml
+    sha256: 56806c4f6a20b481b63a840cd79f37ebf39071aa3dc6cb059ca76611276425a9
+  - path: apps/hcp/management/operators/overlays/example-management/kubernetes-nmstate/operatorgroup.yaml
+    sha256: 5d3cf4206721e382840e93a2bf09cb5e9e0289133a9a796dbe949d3c4ead36c9
+  - path: apps/hcp/management/operators/overlays/example-management/kubernetes-nmstate/subscription.yaml
+    sha256: a942351cd02438a724051b148236107cfba5e4a6126262af90cf5939e322cd32
+  - path: apps/hcp/management/operators/overlays/example-management/kustomization.yaml
+    sha256: 40de97c7684c940067224675ad3d043c208022d28b82992aa1a33c1f45e2d04d
+  - path: apps/hcp/management/operators/overlays/example-management/mce-hypershift/kustomization.yaml
+    sha256: 269c4d7ff327322e657688e651ba6dc0bfaf17e7239289936fe93509e2018299
+  - path: apps/hcp/management/operators/overlays/example-management/mce-hypershift/namespace.yaml
+    sha256: f99291a50a6c5b8d14e563f2c722ce9dfcf27b1962f9463cca46e8859d3f13f2
+  - path: apps/hcp/management/operators/overlays/example-management/mce-hypershift/operatorgroup.yaml
+    sha256: 099821620b55c02d625666b2355f138facc5cafae8b626406bdf719f19b04241
+  - path: apps/hcp/management/operators/overlays/example-management/mce-hypershift/subscription.yaml
+    sha256: 21af9c346adbe6d0fdfc31679627db558b44d6f309aa42b7c6a416b122038d4e
+  - path: apps/hcp/management/operators/overlays/example-management/openshift-gitops-operator/kustomization.yaml
+    sha256: 4ab98a575157cb654a26d3f78a8c7e062d622f88c0b5f0777efb478999bee083
+  - path: apps/hcp/management/operators/overlays/example-management/openshift-gitops-operator/subscription.yaml
+    sha256: df39f63f55e910e6f8b2f92ebf76fcdcf3e9900bff2f7842d7b17b86721451a9
+  - path: apps/hcp/management/operators/overlays/example-management/openshift-virtualization/kustomization.yaml
+    sha256: 269c4d7ff327322e657688e651ba6dc0bfaf17e7239289936fe93509e2018299
+  - path: apps/hcp/management/operators/overlays/example-management/openshift-virtualization/namespace.yaml
+    sha256: 32309701748749d7625a054bccad160333e6f914f0fda2550a024e79cf744b91
+  - path: apps/hcp/management/operators/overlays/example-management/openshift-virtualization/operatorgroup.yaml
+    sha256: 2eae637afd20fa8d72bf6004ecc5cf351e4889c7f2dc7c0565b14f7b69d55c55
+  - path: apps/hcp/management/operators/overlays/example-management/openshift-virtualization/subscription.yaml
+    sha256: 15a45450eaed5a34e0db48a246ac442b854d6faba69291f1038ef46b64b45e1d
+  - path: apps/hcp/management/operators/overlays/example-management/pod-density/kubeletconfig.yaml
+    sha256: efd7cdaab86e9cee32122715968360256634b76de0c8ef4776e1b9b67d96282a
+  - path: apps/hcp/management/operators/overlays/example-management/pod-density/kustomization.yaml
+    sha256: 006038cb121a8d003980f2f3dc5655d9837a8546e871de80ab473fa076dc8493
+  - path: apps/hcp/management/operators/overlays/example-management/pod-density-policy/kustomization.yaml
+    sha256: 4fcd8af2d59496f404824435e17fb9deb5cd5097f17722b098349d235611aeef
+  - path: apps/hcp/management/operators/overlays/example-management/pod-density-policy/machineconfiguration.yaml
+    sha256: 0a201f66eb708b1337bd86585c02ba2304549952bb72cea59cc94346e41b83ba
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/advertisement-example-multus-a.yaml
+    sha256: ceb465bd2c376288b925fc3c26c551635264437f6d1b5ee59da7e221a9da8673
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/advertisement-example-shared.yaml
+    sha256: 054b0452fbc9617bcd16bdbfbeafc716d18f2839543884f2f3f0790e4c903534
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/bfd-profile.yaml
+    sha256: 96f14830be4018ec811df71bfef3e93cc8cf86814d768f30a74e53a4718c82b4
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/cluster-config.yaml
+    sha256: 510189e9142334318a57e01b372a6282bab994e3e18d33351fb1e572c945f286
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/import-policy-tenant-b-kube-api-peering.yaml
+    sha256: 18a34df5f6c0dfec96441c05275d8103123431ae0a02ab9141b0d8488162dd62
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/kustomization.yaml
+    sha256: eb3d4020a5808be6d1acf388926686f294498d01b8dd164098516c98b553d444
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/lb-pool-example-multus-a.yaml
+    sha256: 6a5e37197e3b6280d4294a2df7a44b8c65170cab96c839a5495cbe677b8ea6e4
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/lb-pool-example-shared.yaml
+    sha256: eb001db931fa010811ce4afc4892b916d8e99336736921fb9ad8da47ecab6e88
+  - path: apps/hcp/management/parent-network/overlays/example-management/cilium-bgp/peer-config-tenant-b-kube-api-peering.yaml
+    sha256: 03f294e27992135fb28974d14a12204e5a138b05fb1bda352daaba66b35fa87f
+  - path: apps/hcp/management/parent-network/overlays/example-management/kustomization.yaml
+    sha256: 001af12407c039c2e98a85c2112ea9a688607456660b8e4f1b9ab51ca01b9b89
+  - path: apps/hcp/management/parent-network/overlays/example-management/network-attachments/kustomization.yaml
+    sha256: 40407e0d02ea8e3792314128607bdb090c76dfeafd23f99438282acbee11e5f3
+  - path: apps/hcp/management/parent-network/overlays/example-management/network-attachments/tenant-b-workers-example-multus-a.yaml
+    sha256: a0ef5f849f763a172a2581c59ad0fa340641d1c08ec9ef5325e3aaa14ab1a15b
+  - path: apps/hcp/management/parent-network/overlays/example-management/network-attachments/tenant-b-workers-example-shared.yaml
+    sha256: 0c059688382b339d734d0784cfa6b7e05bc39352b48ea0dc5ba2515302152d80
+  - path: apps/hcp/management/parent-network/overlays/example-management/nmstate/bond1-bond.yaml
+    sha256: 4b03235416bbdb7cf38d1731d57ef1d535f0d22d48c4e7196cb7ede092370c1f
+  - path: apps/hcp/management/parent-network/overlays/example-management/nmstate/kustomization.yaml
+    sha256: ec1483d125c83f6f33ed110ab567b27c3e54462e9d822f5d697b76c46bf0f9e2
+  - path: apps/hcp/management/parent-network/overlays/example-management/nmstate/tenant-b-kube-api-peering-example-node-2.yaml
+    sha256: 0ca0b27a185d163edd1068c121db9ac75f8f5376bcb297e7e59c77e6812c79a2
+  - path: apps/hcp/management/parent-network/overlays/example-management/nmstate/tenant-b-kube-api-peering-example-node-3.yaml
+    sha256: 60b99920d11d4f7bc8b94527a93bbbb5e88d3bbfaf826450a0a9f243dd9c142a
+  - path: apps/hcp/management/parent-network/overlays/example-management/nmstate/tenant-b-kube-api-peering-example-node-4.yaml
+    sha256: 96d196cf860655159ac299b9cac7d23d5dddd39aff0142379abef24f914324ad
+  - path: apps/hcp/management/parent-network/overlays/example-management/nmstate/tenant-b-workers.yaml
+    sha256: 3caf409115367d62601a7124dd9098093318ac99add5af23a14df2aa68007398
+  - path: apps/hcp/management/parent-network/overlays/example-management/worker-dhcp/example-multus-a/network-attachments.yaml
+    sha256: 6760e81390749254651f41df8534c2b1d34243209e52afa2f82bd47c3ea8a9f2
+  - path: apps/hcp/management/parent-network/overlays/example-management/worker-dhcp/example-shared/cloud-init-config.yaml
+    sha256: 7702324e74ff894a804611e13bc40a8fe2131be37981a9dc62fdb5bc083e9d47
+  - path: apps/hcp/management/parent-network/overlays/example-management/worker-dhcp/example-shared/kustomization.yaml
+    sha256: 107ca14ffe9f78c2b256913bf4f9c0d5bf5f700a2d9877a7eaf006f2e7b757c6
+  - path: apps/hcp/management/parent-network/overlays/example-management/worker-dhcp/example-shared/network-attachments.yaml
+    sha256: 6760e81390749254651f41df8534c2b1d34243209e52afa2f82bd47c3ea8a9f2
+  - path: apps/hcp/management/parent-network/overlays/example-management/worker-dhcp/example-shared/persistentvolumeclaim.yaml
+    sha256: 7a5b080bc6952034e870bd0635869afb7fc0a5c94e01ecbea68d0cbb6bbb6976
+  - path: apps/hcp/management/parent-network/overlays/example-management/worker-dhcp/example-shared/virtualmachine.yaml
+    sha256: ee65cfe66aeed2d1fcd48bd33f7d2faf8e03225b539cbe7e4a9ec7f83ca7ab09
+  - path: apps/hcp/management/parent-network/overlays/example-management/worker-dhcp/kustomization.yaml
+    sha256: 1691027aab50bf99342fe3937070e9517b1c0c9299efec63fab18b3c6ceebf1f
+  - path: apps/hcp/management/parent-network/overlays/example-management/worker-dhcp/namespace.yaml
+    sha256: 014c8b8b135b2eb8070cf4574b3281144f53613e8c6ccc31b21f0b0c500a1fb9
+  - path: apps/hcp/tenant/console-login/overlays/example-multus-a/binding.yaml
+    sha256: e3c1576d5fc83548d038207689999b5170328d0d12a3ca1abfbd41fb4163d243
+  - path: apps/hcp/tenant/console-login/overlays/example-multus-a/group.yaml
+    sha256: 80a8e9b68a4294a86a7a23b0cc521a8b56918d21fda9b50f2ade51b2178f825c
+  - path: apps/hcp/tenant/console-login/overlays/example-multus-a/kustomization.yaml
+    sha256: ec5f088066f3d69f850ad37cc68364912febf689640b3eda61e481ca69f9a254
+  - path: apps/hcp/tenant/native-monitoring/overlays/example-multus-a/platform/core.yaml
+    sha256: 97cb72e9bb56a8b56566054f45fbbe20aabfa7369abf82470baff2b41d73394c
+  - path: apps/hcp/tenant/native-monitoring/overlays/example-multus-a/platform/kustomization.yaml
+    sha256: ab818f341728e106c6b86ba1d86cc1b9d6a8d99a090cd7144cb4ce5fc279bdc5
+  - path: apps/hcp/tenant/native-monitoring/overlays/example-multus-a/user-workload/config.yaml
+    sha256: 094b2a87ce1c278132a30fe741d597a0cb74f2dd43c7dbde5d0dbaa1ee54706f
+  - path: apps/hcp/tenant/native-monitoring/overlays/example-multus-a/user-workload/kustomization.yaml
+    sha256: 3c617cd32b1cfe7fb26c2799ef4d7ded5a70b344e5126005e1d2d26f8ed3cb4c
+  - path: apps/hcp/tenant/observability-scc/overlays/example-multus-a/kustomization.yaml
+    sha256: 705920a42acdf00eb5f3adc572c0eb0c0159ce977c1035df6dcd40f91286376a
+  - path: apps/hcp/tenant/observability-scc/overlays/example-multus-a/scc-rolebinding.yaml
+    sha256: a437a5672b4599d662f8611d09d40a20d0ab59f6942d84041cadbab17dc47d1d
+  - path: apps/hcp/tenant/observability-scc/overlays/example-shared/kustomization.yaml
+    sha256: 705920a42acdf00eb5f3adc572c0eb0c0159ce977c1035df6dcd40f91286376a
+  - path: apps/hcp/tenant/observability-scc/overlays/example-shared/scc-rolebinding.yaml
+    sha256: ed78e4976a76ced50bada556e9fd7ddf7ffb253a7ac31f85d126255864bae40c
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-multus-a/kustomization.yaml
+    sha256: ca9002709e725c13410f6dd8db4fb27b32e539ac807b82e96716ee293d22cd1d
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-multus-a/networking/cilium/advertisement-tenant-b-workers.yaml
+    sha256: f5fe3b3053cba39e00b25ab5c2ef207a6a0a835c8bb2c50eadfbc8eb0ba5d285
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-multus-a/networking/cilium/cluster-config.yaml
+    sha256: b1599c02d4943caa0716f5394f25f3d3c6098d1b025e08e2cebc6b44a2534c99
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-multus-a/networking/cilium/kustomization.yaml
+    sha256: 7a5375f8471d6b30409dd84e98ac92c3aa9bbe3f6783d34a2fb8e603e1aa18fd
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-multus-a/networking/cilium/lb-ipam-tenant-b-ingress-example-multus-a.yaml
+    sha256: e8aa813d6f9c577478ece4a40fcaa25d6050a6e8c0166e182d981ceabc5a884e
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-multus-a/networking/cilium/peer-config-tenant-b-workers.yaml
+    sha256: e3923d6341b65bc4e31bf92349db6eefdd85e6228319c3515083b1138736c4ef
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-multus-a/networking/cilium/router-apps-lb.yaml
+    sha256: 3061c62ee771cc69b113335844761e80320e171e4163ea0f7722d8a9c29b82ae
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-multus-a/networking/kustomization.yaml
+    sha256: 499576608caf8ac5f1fbc1419f0fe6fa864e39acb9caa114bd25573fbe711095
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/kustomization.yaml
+    sha256: ca9002709e725c13410f6dd8db4fb27b32e539ac807b82e96716ee293d22cd1d
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/cilium/advertisement-tenant-b-workers.yaml
+    sha256: 3a5508aa8708ea14a616e0ad31939e1329610dd9a7cc34e8d4e647a2008475c5
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/cilium/cluster-config.yaml
+    sha256: 054b4880f75d1a2910b1f7b4f50d5539ead83e9189ab96b8f214adc029c64709
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/cilium/egress-gateway-tenant-b-egress.yaml
+    sha256: bdc3b8ab77274ff543e50e984163b3163c0b2f7321c32dafcd506feac64bdcb7
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/cilium/kustomization.yaml
+    sha256: a04c3e01d8618b93d89abb28ed22f4f674e29549123a04c6cb6b8fc9a84e8507
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/cilium/lb-ipam-egress-tenant-b-egress.yaml
+    sha256: e821c0d20f1ad1f2f72a373faa7872c180e7fa562d8ae10dac84897d3c6c045e
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/cilium/lb-ipam-tenant-b-ingress.yaml
+    sha256: 74eb7f5f798c205c746a8068f65e115fb9046a43955c5c43d8e4feac1dc604f4
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/cilium/peer-config-tenant-b-workers.yaml
+    sha256: 9f6e943373d0e63cfae37f16600581b044b56d7bd8d5a654de11ebbfdcc5fc6e
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/cilium/router-apps-lb.yaml
+    sha256: f4929ca1a47ba82c8f0319ca9af09d5bae32a0d2429936f6e536e319b428cd88
+  - path: apps/hcp/tenant/tenant-datapath/overlays/example-shared/networking/kustomization.yaml
+    sha256: 499576608caf8ac5f1fbc1419f0fe6fa864e39acb9caa114bd25573fbe711095
+  - path: apps/platform-catalogsources/certified-operators-local.yaml
+    sha256: 18e5b9dc3c0a989615ceac220031058be1c6b17b290389cdb3b5a08445526226
+  - path: apps/platform-catalogsources/kustomization.yaml
+    sha256: 87f1876d6bf7cf9a89b6eeba87bd21b69e03c9fad220c6964f2d89cc9599e2bb
+  - path: apps/platform-catalogsources/redhat-operators-local.yaml
+    sha256: d234fab113e2fe523e03d2ddd635b1d2a592b18cc0e2969b46154cd6412cd707
+  - path: apps/sealed-secrets/hosted-writer-intent.json
+    sha256: fe51ebe6c821d4315fd53191376df8868aa0e58a89147fe3f05e7bb09d7190d9
+  - path: apps/storage/portworx-local/example-management/clusterrole.yaml
+    sha256: c5f6f4f818044829da8f1c468961125e26130356fd16f5faa3064eb5e5d5debd
+  - path: apps/storage/portworx-local/example-management/clusterrolebinding.yaml
+    sha256: 54596c624d67422d9c088411e2bb8a82e43ec0235ad7c5b4304eeff9ac0720cc
+  - path: apps/storage/portworx-local/example-management/componentk8sconfig.yaml
+    sha256: 8dd21cf08f2dcfc711f5bafdf544f6b696221e43df61d1f06cf224f255be6548
+  - path: apps/storage/portworx-local/example-management/default-storageclass.yaml
+    sha256: 3c492cacc08204ba4e73350ef06be7c35afd4942c4bc0cd31445380cff2a0532
+  - path: apps/storage/portworx-local/example-management/kustomization.yaml
+    sha256: 79b088ad958eaeebf15711185b25ba5fd30835bb8ce09a56e10b7fde05da8ab1
+  - path: apps/storage/portworx-local/example-management/namespace.yaml
+    sha256: 5eef53905f8a5591effa6f7bde3c9ffaf033435c9958ffca1c2a585808c13b54
+  - path: apps/storage/portworx-local/example-management/operator.yaml
+    sha256: 4b7159a642a159ee86be7cc6426bd5ab06f5f5c8679ce40607a1f5f4a0616f1d
+  - path: apps/storage/portworx-local/example-management/px-versions.yaml
+    sha256: 9e81a9035e4446c7855ae12d8492e17dab9d80d3a1d90ce1a429b11c4df16cc8
+  - path: apps/storage/portworx-local/example-management/serviceaccount.yaml
+    sha256: 756c5b172e15b14ab76f2473c9aac819e13738f2d8e71c8743a15e4c761118c8
+  - path: apps/storage/portworx-local/example-management/storagecluster.yaml
+    sha256: 6967caf0f16e2a62164bcd912dd23b4afcff73a212ebc5a33b91078d35a2d13d
+  - path: apps/storage/sno-mdadm-lvms/example-sno/clusterrole.yaml
+    sha256: fbd56189370f7fa229d021325e32495688e429fd7bcc7e7eea9929c8b576f64e
+  - path: apps/storage/sno-mdadm-lvms/example-sno/clusterrolebinding.yaml
+    sha256: 29f7436277472ddcd91a309f212eb7c56cc51e52b310f5fdaf680792e0f0388f
+  - path: apps/storage/sno-mdadm-lvms/example-sno/kustomization.yaml
+    sha256: dc562ef8af859122412eb8ce547522db37b094ed981da14aada14f948851f6a4
+  - path: apps/storage/sno-mdadm-lvms/example-sno/lvmcluster.yaml
+    sha256: ed435445d8fd15e1232d5e1d639ae51c64a85db52f131cea8425327ae87fddc0
+  - path: apps/storage/sno-mdadm-lvms/example-sno/machineconfig.yaml
+    sha256: b5af15356ec7f35337d0d8b3e273f320360484eaa83d87666ea578afad1f357e
+  - path: apps/storage/sno-mdadm-lvms/example-sno/namespace.yaml
+    sha256: 491710716cc0444580601ce6cdc31e0ef41c7072378618d0540c71c057c9e796
+  - path: apps/storage/sno-mdadm-lvms/example-sno/operatorgroup.yaml
+    sha256: 5e2debf994cb52c34a2777a9276e7acebcac02325025f392268df0ad9b11d588
+  - path: apps/storage/sno-mdadm-lvms/example-sno/readiness-job.yaml
+    sha256: 7876105251acc7ed089e504c4bbe59692c0076fe170248e3fe6a9adbec2b0be1
+  - path: apps/storage/sno-mdadm-lvms/example-sno/readiness-namespace.yaml
+    sha256: f810dcc7c946d63ca6cc320b3328d94e93c60cc1a12f46275b516e75ad8de21f
+  - path: apps/storage/sno-mdadm-lvms/example-sno/serviceaccount.yaml
+    sha256: 248b7e3a7567f706af60f9f40ca2d33c9223931752e7fe1e1127b6b581088f66
+  - path: apps/storage/sno-mdadm-lvms/example-sno/subscription.yaml
+    sha256: fca3768933f36669f0cdb3dc3382ddb8d871134596abd285533dc1356dfd35ac
+  - path: clusters/_base/tier1-core/argocd-config.yaml
+    sha256: 8555eb4b2e9d87970a8483095e741081949b8cb1a463256802c437b075373733
+  - path: clusters/_base/tier1-core/platform-idms.yaml
+    sha256: 346f0a8c54a2331f07c355a47f664ed71c26db334dac4a78d9e4c3b735d14972
+  - path: clusters/_base/tier2-isovalent/hubble-timescape.yaml
+    sha256: bf2451b2bafea01b0ab5a265d2c3b013f21fa144cab6d060f2655d74558c062d
+  - path: clusters/_base/tier2-isovalent/kustomization.yaml
+    sha256: d79f05ca1d7851bc6befe2cd01d04e30a9702ef16d683d78afe27d9db473aaad
+  - path: clusters/_base/tier2-isovalent/vector-exporter.yaml
+    sha256: a59321a98b1037996ce4d779be2f06e7cab4b54e43e5c9c4a1b79c92dcf629de
+  - path: clusters/_types/hcp-management/kustomization.yaml
+    sha256: 1d3969b5f16f80d9cd3b69a626bb4a3e7c72581ad759118c6c86215ca2843eb6
+  - path: clusters/_types/hcp-tenant/kustomization.yaml
+    sha256: 1d3969b5f16f80d9cd3b69a626bb4a3e7c72581ad759118c6c86215ca2843eb6
+  - path: clusters/example-management/console-login.yaml
+    sha256: 0df7e1233f6e4b07e26e2d5dfb6525ee18ab8e39b6f1d03df62e9961c544088c
+  - path: clusters/example-management/example-multus-a-console-login.yaml
+    sha256: c0f981772a6e55f96df54b6e0adcda0833f7a2cfcc177fefe716d596abb4ab02
+  - path: clusters/example-management/example-multus-a-hubble-k8s-exporter.yaml
+    sha256: 20d40eadad11d260bc6f92c5b424c00e4cabab1de9460b38e5eb5895d99c3d86
+  - path: clusters/example-management/example-multus-a-platform-catalogsources.yaml
+    sha256: dcc22f202d74bd0bd5b92bb44f8c16d3e05ede88914989b868cb4f425a12db08
+  - path: clusters/example-management/example-multus-a-sealed-secrets-controller.yaml
+    sha256: aabe188d16b04ad6eb7e0455a73cd17655df85dc30264bae3c8dfcaca095c307
+  - path: clusters/example-management/example-multus-a-sealed-secrets.yaml
+    sha256: 179dbf6620eb6397e4da6627d020979b34fc5c3c825ed7b21efe5379367a9840
+  - path: clusters/example-management/example-multus-a-tenant-networking.yaml
+    sha256: b37ff6475fa323540a5e5f703eccaac1c90133eb60a2a329996eebcfa30fd121
+  - path: clusters/example-management/example-multus-a-timescape-exporter-scc.yaml
+    sha256: e172e80cea77e35ed8481c6e6006d2a46eefd6a547e3e6f5aa07dd5714d60c7d
+  - path: clusters/example-management/example-multus-a-timescape-s3-exporter.yaml
+    sha256: 3fd055ac8efd654b05fe2d17faf2c9241a38f5e0f717f2e38064658fd2a6e8ef
+  - path: clusters/example-management/example-shared-hubble-k8s-exporter.yaml
+    sha256: 78312b2228fb34c2afa86bfa2d9a1887f65e08538914c997b94a805a4056ff24
+  - path: clusters/example-management/example-shared-platform-catalogsources.yaml
+    sha256: cfe8cd5fb558c153c7134280dfa7731dbc60355d95b1415b4242a9f8fec93ba4
+  - path: clusters/example-management/example-shared-sealed-secrets-controller.yaml
+    sha256: 6c01c045c796d4323460c62aced9baf45fa3f8303b6ed3c47b0e2cd4dc08d6d0
+  - path: clusters/example-management/example-shared-sealed-secrets.yaml
+    sha256: ede4e8cfd209794f570351cc992e70b209a6ec547d2b8942a7bacf7a2f1ea43d
+  - path: clusters/example-management/example-shared-tenant-networking.yaml
+    sha256: 3f69334a9fac5734323b4b9a581ab054bf7d289efbd39966c6c3e4f989fb43d0
+  - path: clusters/example-management/example-shared-timescape-exporter-scc.yaml
+    sha256: 6943b4d5a4c033c1c1d85426ce347af3fbe8f94904d3d51e49796f4a6d6588b2
+  - path: clusters/example-management/example-shared-timescape-s3-exporter.yaml
+    sha256: ad07316763a194d7780ff02c6f6136f32b1e73d304e00e56f5911e66e17658f9
+  - path: clusters/example-management/hcp-hosted-clusters.yaml
+    sha256: 7683d2d0b47df247899a6eead969d499621c8b6d9ecdb429d47c4cffdd146035
+  - path: clusters/example-management/hcp-ilb-router-t1-placement.yaml
+    sha256: 136e245d3818ef26612a01dd2347891242905f57259b1f3843d7cd78ca905d5a
+  - path: clusters/example-management/hcp-ilb-t2-placement.yaml
+    sha256: d23cd3fb0aa7dca14f7a2ed3ef08adbcd66f6c7cd84a08f1916c0ebecd09eb8e
+  - path: clusters/example-management/hcp-local-registry.yaml
+    sha256: a264bb03bd187ec79c9742b4326d5d2dc69690311a55580665067d862cbd5910
+  - path: clusters/example-management/hcp-oc-mirror-trial.yaml
+    sha256: a80ae2c0bebdced1e90e0feec83e8ac46dc85713c92cc4794f74ed58cfbc577a
+  - path: clusters/example-management/hcp-operands.yaml
+    sha256: 1a41a510d70af0e2bf8ff3e2de6575010145a960e1ea167d8ceb4ef310d28007
+  - path: clusters/example-management/hcp-operators.yaml
+    sha256: 003e86c62ad3789522a46495ec5f23a7efc7800cea2fdab1bf1db54c8553dd09
+  - path: clusters/example-management/hcp-parent-network.yaml
+    sha256: ab0c8be7cb22af82cc6f418abc4bc28f14ead1bb670345ae796d37b233947ac2
+  - path: clusters/example-management/hcp-pod-density-policy.yaml
+    sha256: 11350eb77d7dfb422bdb576b571ee9f7a85c7de64689b44130f0193e4c2feb48
+  - path: clusters/example-management/hcp-pod-density.yaml
+    sha256: 1718803b2ca4218a314f66af36df27ce19a96e3e8e7d2457caf007f93e3a96fb
+  - path: clusters/example-management/kustomization.yaml
+    sha256: 8c5a346e0166de0cc419878066bc33313465ce01f8200c2b00a8b4a9cb32329b
+  - path: clusters/example-management/release-contract.yaml
+    sha256: 5c6a4268e87be83818b05b80836f6caa73aca8ea2a0531f398b5c3f4d071f4ad
+  - path: clusters/example-management/storage-portworx.yaml
+    sha256: 326563ab5a5146f29068551864cc6abb61d675f07a71f31110415f12b7d383c8
+  - path: clusters/example-multus-a/console-login.yaml
+    sha256: c0f981772a6e55f96df54b6e0adcda0833f7a2cfcc177fefe716d596abb4ab02
+  - path: clusters/example-multus-a/example-multus-a-hubble-k8s-exporter.yaml
+    sha256: 20d40eadad11d260bc6f92c5b424c00e4cabab1de9460b38e5eb5895d99c3d86
+  - path: clusters/example-multus-a/example-multus-a-sealed-secrets-controller.yaml
+    sha256: aabe188d16b04ad6eb7e0455a73cd17655df85dc30264bae3c8dfcaca095c307
+  - path: clusters/example-multus-a/example-multus-a-sealed-secrets.yaml
+    sha256: 179dbf6620eb6397e4da6627d020979b34fc5c3c825ed7b21efe5379367a9840
+  - path: clusters/example-multus-a/example-multus-a-timescape-exporter-scc.yaml
+    sha256: e172e80cea77e35ed8481c6e6006d2a46eefd6a547e3e6f5aa07dd5714d60c7d
+  - path: clusters/example-multus-a/example-multus-a-timescape-s3-exporter.yaml
+    sha256: 3fd055ac8efd654b05fe2d17faf2c9241a38f5e0f717f2e38064658fd2a6e8ef
+  - path: clusters/example-multus-a/kustomization.yaml
+    sha256: f2890353f9a137f27960040eb684844b224d548887225e508792c46393900f31
+  - path: clusters/example-multus-a/platform-catalogsources.yaml
+    sha256: dcc22f202d74bd0bd5b92bb44f8c16d3e05ede88914989b868cb4f425a12db08
+  - path: clusters/example-multus-a/tenant-networking.yaml
+    sha256: b37ff6475fa323540a5e5f703eccaac1c90133eb60a2a329996eebcfa30fd121
+  - path: clusters/example-shared/example-shared-hubble-k8s-exporter.yaml
+    sha256: 78312b2228fb34c2afa86bfa2d9a1887f65e08538914c997b94a805a4056ff24
+  - path: clusters/example-shared/example-shared-sealed-secrets-controller.yaml
+    sha256: 6c01c045c796d4323460c62aced9baf45fa3f8303b6ed3c47b0e2cd4dc08d6d0
+  - path: clusters/example-shared/example-shared-sealed-secrets.yaml
+    sha256: ede4e8cfd209794f570351cc992e70b209a6ec547d2b8942a7bacf7a2f1ea43d
+  - path: clusters/example-shared/example-shared-timescape-exporter-scc.yaml
+    sha256: 6943b4d5a4c033c1c1d85426ce347af3fbe8f94904d3d51e49796f4a6d6588b2
+  - path: clusters/example-shared/example-shared-timescape-s3-exporter.yaml
+    sha256: ad07316763a194d7780ff02c6f6136f32b1e73d304e00e56f5911e66e17658f9
+  - path: clusters/example-shared/kustomization.yaml
+    sha256: 23d05565a7611ae76885c8a21f068695a59000cc4d27c434608eca58ae1120df
+  - path: clusters/example-shared/platform-catalogsources.yaml
+    sha256: cfe8cd5fb558c153c7134280dfa7731dbc60355d95b1415b4242a9f8fec93ba4
+  - path: clusters/example-shared/tenant-networking.yaml
+    sha256: 3f69334a9fac5734323b4b9a581ab054bf7d289efbd39966c6c3e4f989fb43d0
+  - path: clusters/example-sno/storage.yaml
+    sha256: 8c3234646a415d47d0647c009c3ff1bfc92d8005a99350b09428032ebe9da222
+  - path: gitops-exceptions.yaml
+    sha256: 13179e4bf38986bde15c5580771d2dbeba6035ecc9bb64a52a782861cc0d90fe

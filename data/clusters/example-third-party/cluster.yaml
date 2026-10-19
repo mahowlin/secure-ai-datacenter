@@ -1,0 +1,96 @@
+# Documentation-range example only; replace declared inputs for your site.
+kind: OCPCluster
+metadata:
+  name: example-third-party
+  description: Three control-plane/workload hybrid servers; vendor-neutral declared
+    inventory.
+spec:
+  releaseRef: saif-ocp-4.19-cilium-1.19.7-stable
+  mode: compact
+  features:
+    hostedControlPlanes: false
+    KubeVirt: false
+  installConfig:
+    openshift:
+      baseDomain: example.com
+      networkCatalog: example-federal
+      networkType: Cilium
+      registryTrustPolicy: additional-ca
+      imageDelivery:
+        mode: connected
+        scopes: []
+    networking:
+      machineNetwork: Generic-Management
+      apiVIP: 192.0.2.20
+      ingressVIP: 192.0.2.21
+    capabilities: {}
+    cilium:
+      securityContext:
+        privileged: true
+      routingMode: tunnel
+      tunnelProtocol: vxlan
+      tunnelPort: 4789
+      autoDirectNodeRoutes: false
+      kubeProxyReplacement: true
+      socketLB:
+        hostNamespaceOnly: true
+      bpf:
+        masquerade: true
+      cni:
+        binPath: /var/lib/cni/bin
+        confPath: /var/run/multus/cni/net.d
+        exclusive: false
+      clusterHealthPort: 9940
+      operator:
+        replicas: 2
+        prometheus:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+      hubble:
+        enabled: true
+      prometheus:
+        enabled: true
+        serviceMonitor:
+          enabled: true
+  agentConfig:
+    inventoryMode: declared
+    rendezvousNode: bm-node-2
+    managementInterface:
+      bond: bond0
+      members:
+      - eno1
+      - eno2
+      mode: 802.3ad
+      options:
+        miimon: '100'
+        lacp_rate: fast
+        xmit_hash_policy: layer3+4
+    nodes:
+    - name: bm-node-1
+      ip: 192.0.2.10
+      interfaces:
+      - name: eno1
+        macAddress: 02:00:5e:00:53:00
+      - name: eno2
+        macAddress: 02:00:5e:00:53:01
+      rootDeviceHints:
+        serialNumber: EXAMPLE-BOOT-0001
+    - name: bm-node-2
+      ip: 192.0.2.11
+      interfaces:
+      - name: eno1
+        macAddress: 02:00:5e:00:53:02
+      - name: eno2
+        macAddress: 02:00:5e:00:53:03
+      rootDeviceHints:
+        serialNumber: EXAMPLE-BOOT-0002
+    - name: bm-node-3
+      ip: 192.0.2.12
+      interfaces:
+      - name: eno1
+        macAddress: 02:00:5e:00:53:04
+      - name: eno2
+        macAddress: 02:00:5e:00:53:05
+      rootDeviceHints:
+        serialNumber: EXAMPLE-BOOT-0003

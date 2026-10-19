@@ -1,0 +1,66 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ilb-hcp-pip-controller
+rules:
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "patch"]
+  - apiGroups: ["isovalent.com"]
+    resources: ["lbk8sbackendclusters"]
+    verbs: ["get", "list", "watch"]
+  # Required only to add and remove this controller's finalizer. The
+  # controller does not mutate spec, annotations, or status.
+  - apiGroups: ["isovalent.com"]
+    resources: ["lbk8sbackendclusters"]
+    verbs: ["update"]
+  - apiGroups: ["isovalent.com"]
+    resources: ["lbvips", "lbbackendpools", "lbservices"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ilb-hcp-pip-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ilb-hcp-pip-controller
+subjects:
+  - kind: ServiceAccount
+    name: ilb-hcp-pip-controller
+    namespace: ilb-hcp-pip-controller
+---
+# The PoC binding example keeps remote kubeconfigs in cilium-secrets. Add an
+# equivalent namespaced RoleBinding for another approved Secret namespace;
+# never grant cluster-wide Secret read access.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ilb-hcp-pip-controller-kubeconfigs
+  namespace: cilium-secrets
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    resourceNames: ["example-tenant-a-k8sbackend-auth"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ilb-hcp-pip-controller-kubeconfigs
+  namespace: cilium-secrets
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: ilb-hcp-pip-controller-kubeconfigs
+subjects:
+  - kind: ServiceAccount
+    name: ilb-hcp-pip-controller
+    namespace: ilb-hcp-pip-controller

@@ -1,21 +1,35 @@
-# Copyright (c) 2026 Cisco and/or its affiliates.
-# Licensed under the Cisco Sample Code License, Version 1.1
-# See LICENSE in the project root.
-
-# SAIF Platform Repository Map
+# Reference composition repository map
 #
 # Maps repositories to their key files and workflows.
 # Used by orchestration workflows to understand cross-repo dependencies.
 
+# Workflow paths describe the source handoff contract. They are not assertions
+# that the older public main branches contain the refreshed implementations.
 repos:
-  saif-platform:
-    orchestration:
-      release: ".github/workflows/orchestrate-release.yaml"
-      destroy: ".github/workflows/orchestrate-destroy.yaml"
+  secure-ai-datacenter:
+    publicRepository: "https://github.com/mahowlin/secure-ai-datacenter"
+    local_entrypoints:
+      aci: "scripts/render-aci.py"
+      ocp: "scripts/render-ocp.py"
+      manifest: "scripts/write-artifact-manifest.py"
+      verify: "scripts/verify-artifact-manifest.py"
+      note: "This public snapshot has no platform orchestration workflows; execute only the reviewed consumer adapter."
     docs:
       sbom: "platform-release.yaml"
+    generated_artifacts:
+      manifest: "generated/artifact-manifest.yaml"
+      repos_root: "generated/repos/"
+      aci_data: "generated/repos/secure-ai-fabric/data/"
+      ai_pod_data: "generated/repos/secure-ai-compute/data/"
+      gitops_data: "generated/repos/secure-ai-gitops/"
 
-  saif-ai-pod:
+  secure-ai-compute:
+    publicRepository: "https://github.com/mahowlin/secure-ai-compute"
+    generated_artifacts:
+      repo_shaped_source: "generated/repos/secure-ai-compute/data/"
+      data_root: "data/"
+      ucs: "data/ucs/"
+      ocp_install_root: "data/openshift/"
     day0:
       ucs_pipeline: ".github/workflows/ucs-pipeline.yaml"
       ucs_profiles: "ucs/data/example/"
@@ -24,14 +38,35 @@ repos:
       openshift_pipeline: ".github/workflows/openshift-pipeline.yaml"
       openshift_undeploy: ".github/workflows/openshift-undeploy.yaml"
       openshift_test: ".github/workflows/openshift-test.yaml"
-      cluster_mappings: "openshift/cluster-mappings.yaml"
+      generated_cluster_data: "data/openshift/<cluster>/"
 
-  saif-sys-admin:
+  secure-ai-fabric:
+    intendedRepository: "https://github.com/mahowlin/secure-ai-fabric"
+    publicationStatus: "required ACI source deliverable; exact public publication remains separately approved"
+    generated_artifacts:
+      repo_shaped_source: "generated/repos/secure-ai-fabric/data/"
+      data_root: "data/"
+    validation:
+      plan: "terraform plan / NAC plan using data/"
+
+  secure-ai-airgap:
+    publicRepository: "https://github.com/mahowlin/secure-ai-airgap"
     mirroring:
       sync_images: ".github/workflows/sync-images.yaml"
       idms_dir: "mirror/idms/"
+      image_policy_bundles:
+        ocp_install_core: "mirror/bundles/ocp-install-core/current.json"
+        cilium_day1: "mirror/bundles/cilium-day1/current.json"
+        gitops_bootstrap: "mirror/bundles/gitops-bootstrap/current.json"
+        platform_day2: "mirror/bundles/platform-day2/current.json"
 
-  saif-gitops:
+  secure-ai-gitops:
+    publicRepository: "https://github.com/mahowlin/secure-ai-gitops"
+    generated_artifacts:
+      repo_shaped_source: "generated/repos/secure-ai-gitops/"
+      target_root: "."
+      apps: "apps/"
+      clusters: "clusters/"
     gitops:
       apps: "apps/"
       clusters: "clusters/"
@@ -40,3 +75,11 @@ repos:
     day2:
       workload_test: ".github/workflows/workload-test.yaml"
 
+  secure-ai-policies:
+    policies:
+      clusterwide: "clusterwide/"
+      namespaced: "policies/"
+      validate_pr: ".github/workflows/validate-policies.yaml"
+
+  secure-ai-kubeconfigs:
+    kubeconfigs: "clusters/"

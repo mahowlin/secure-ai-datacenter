@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saif.example.com/schemas/gitops-exception-register-v1.schema.json",
+  "title": "GitOps exception register",
+  "description": "Paths that are intentionally present in the GitOps repository and are not produced by the renderer. Categories follow the renderer ownership gate: bootstrap files, inventory or allocation inputs, defaults or policy inputs, resolver-only derivation, downstream execution, runtime enrichment, operational handoff, and waivers.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {"const": "saif.example.com/v1alpha1"},
+    "kind": {"const": "GitOpsExceptionRegister"},
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"const": "gitops-exceptions"}
+      }
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["exceptions"],
+      "properties": {
+        "exceptions": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/exception"}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "exception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "category", "reason", "owner", "decision"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(?!/)(?!.*\\.\\.)\\S+$",
+          "description": "Repository-relative path or glob. A single star matches one path segment. A double star matches across segments."
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "bootstrap",
+            "inventory-allocation",
+            "defaults-policy",
+            "resolver-derivation",
+            "downstream-execution",
+            "runtime-enrichment",
+            "operational-handoff",
+            "vendored-chart",
+            "waiver"
+          ]
+        },
+        "reason": {"type": "string", "minLength": 1},
+        "owner": {"type": "string", "minLength": 1},
+        "decision": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["bead"],
+              "properties": {
+                "bead": {
+                  "type": "string",
+                  "pattern": "^(?:isovalent-[0-9a-z]+(?:\\.[0-9a-z]+)*|example-note)$"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["path"],
+              "properties": {
+                "path": {"type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*\\.\\.)\\S+$"}
+              }
+            }
+          ]
+        },
+        "expiry": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"category": {"const": "waiver"}},
+            "required": ["category"]
+          },
+          "then": {"required": ["owner", "decision", "expiry"]}
+        }
+      ]
+    }
+  }
+}

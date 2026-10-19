@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="666" viewBox="0 0 800 666" role="img" aria-labelledby="title description">
+<title id="title">Cisco UCS and OpenShift deployment</title>
+<desc id="description">Cisco UCS and OpenShift deployment. Conceptual example; configuration detail is linked from the owning README.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5E6C84"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:600 18px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="800" height="666" fill="#F7F9FC"/>
+
+
+<g id="connections">
+<path d="M 270 88 L 270 122 L 195 122 L 195 154" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 530 88 L 530 122 L 605 122 L 605 154" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 195 226 L 195 290 L 270 290 L 270 316" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 605 226 L 605 290 L 530 290 L 530 316" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 400 388 L 400 442" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 400 514 L 400 568" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+</g>
+<g id="zone-labels">
+</g>
+<g id="nodes">
+<g id="input">
+<rect x="160" y="16" width="480" height="72" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="45" class="node-title" style="font-size:18.0px" text-anchor="start">Datacenter configuration</text>
+<text x="176" y="71" class="node-line" style="font-size:18.0px" text-anchor="start">UCS policies + OpenShift install inputs</text>
+</g>
+<g id="ucs">
+<rect x="30" y="154" width="330" height="72" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="46" y="183" class="node-title" style="font-size:18.0px" text-anchor="start">Cisco Intersight</text>
+<text x="46" y="209" class="node-line" style="font-size:18.0px" text-anchor="start">UCS policies + server profiles</text>
+</g>
+<g id="iso">
+<rect x="440" y="154" width="330" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="456" y="183" class="node-title" style="font-size:18.0px" text-anchor="start">OpenShift Agent ISO</text>
+<text x="456" y="209" class="node-line" style="font-size:18.0px" text-anchor="start">Installer + Isovalent CLife archive</text>
+</g>
+<g id="servers">
+<rect x="160" y="316" width="480" height="72" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="345" class="node-title" style="font-size:18.0px" text-anchor="start">Cisco UCS servers</text>
+<text x="176" y="371" class="node-line" style="font-size:18.0px" text-anchor="start">Configured NICs / disks + ISO boot</text>
+</g>
+<g id="ocp">
+<rect x="160" y="442" width="480" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="471" class="node-title" style="font-size:18.0px" text-anchor="start">OpenShift + Isovalent CNI</text>
+<text x="176" y="497" class="node-line" style="font-size:18.0px" text-anchor="start">Bootstrap and readiness checks</text>
+</g>
+<g id="gitops">
+<rect x="160" y="568" width="480" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="597" class="node-title" style="font-size:18.0px" text-anchor="start">Argo CD bootstrap</text>
+<text x="176" y="623" class="node-line" style="font-size:18.0px" text-anchor="start">Reviewed GitOps root</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="151.25" y="261.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="190" y="280" class="edge-label" style="font-size:12.5px" text-anchor="middle">provision</text>
+<rect x="585.0" y="261.5" width="70.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="620" y="280" class="edge-label" style="font-size:12.5px" text-anchor="middle">boot ISO</text>
+</g>
+</svg>

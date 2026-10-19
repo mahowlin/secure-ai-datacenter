@@ -1,0 +1,76 @@
+kind: HCPCluster
+
+metadata:
+  name: example-multus-a
+  description: Multus hosted OpenShift cluster generated alongside example-shared. example-shared stays until example-multus-a is validated.
+
+spec:
+  parentCluster: example-management
+  workerNetworkProfileRef: multus-l2-dhcp
+
+  openshift:
+    networkType: Cilium
+
+  # Guest Timescape exporter pulls Vector by digest from hcp-registry-pull.
+  timescapeExporter:
+    enrollment: selected
+    activation: manual
+    imagePull: hosted-mirror
+    metrics:
+      endpoint: true
+      podMonitor: false
+      port: 9090
+
+  controlPlaneIngress:
+    # Distinct /32 inside the existing Tenant-B management-services pool.
+    # example-shared keeps 198.18.13.18/32.
+    loadBalancerVIPRef: example-multus-a-control-plane-ingress-lb-vip
+
+  # Dedicated guest application-router exposure, separate from the
+  # management-hosted control-plane router VIP 198.18.13.19.
+  # One DHCP server already owns 198.18.14.5. This cluster consumes that
+  # range and must not publish a second server with the same address.
+  workerDhcp:
+    publishServer: false
+
+  applicationIngress:
+    mode: direct-bgp-router
+    poolRef: tenant-b-ingress-example-multus-a
+    vip: 198.18.14.18
+    dnsWildcard: '*.apps.example-multus-a.example.com'
+    dnsZone: example.com
+    dnsAuthority: example-dc2.example.com
+    dnsPublication: external-manual
+
+  nodePool:
+    replicas: 5
+    stagedRollout:
+      defaultReplicas: 1
+      minReplicas: 0
+      maxReplicas: 5
+      checkpoints: [0, 1, 5]
+
+  networking:
+    clusterNetwork:
+      - cidr: 10.204.0.0/14
+        hostPrefix: 23
+
+    serviceNetwork:
+      - cidr: 172.16.0.0/16
+
+    workerNetworks:
+      - networkRef: tenant-b-workers
+        guestDefaultRoute: true
+
+  cilium:
+    bgp:
+      enabled: true
+      advertiseLoadBalancerIPs: true
+      # example-shared already advertises the whole tenant-b egress prefix.
+      advertiseEgressIPs: false
+      advertisePodCIDRs: false
+
+    loadBalancerPools:
+      - tenant-b-ingress-example-multus-a
+
+    # Live egw-tenant-b-egress is 198.18.14.32/28. Do not advertise it here.

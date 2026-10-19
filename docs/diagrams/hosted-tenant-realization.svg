@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1160" viewBox="0 0 1100 1160" role="img" aria-labelledby="title description">
+<title id="title">Hosted tenant cluster drill-down: control plane, workers and guest boundary</title>
+<desc id="description">The selected tenant composition renders HostedCluster and NodePool resources. HyperShift creates a dedicated hosted-control-plane namespace containing representative API, etcd, controller, OAuth and Konnectivity components. The KubeVirt provider creates VirtualMachines, virt-launcher pods and DataVolume-backed worker disks. The hosted API and registered worker VMs form the logical guest cluster.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="1160" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Hosted tenant cluster drill-down: control plane, workers and guest boundary</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Hosted control-plane pods and KubeVirt worker VMs are sibling runtime building blocks with different owners.</text>
+<g id="zone-desired">
+<rect x="25" y="105" width="1050" height="255" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-runtime">
+<rect x="25" y="420" width="1050" height="345" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-guest">
+<rect x="145" y="835" width="810" height="285" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 355 247 L 420 247" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 620 330 L 620 390 L 292 390 L 292 475" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 845 330 L 845 475" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 292 735 L 292 810 L 450 810 L 450 885" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 807 735 L 807 810 L 650 810 L 650 885" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-desired">
+<rect x="37" y="114" width="491.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="45" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Tenant desired state on management OpenShift</text>
+</g>
+<g id="zone-label-runtime">
+<rect x="37" y="429" width="713.7600000000001" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="45" y="451" class="zone-title" style="font-size:18.0px" text-anchor="start">Controller-created runtime inside management OpenShift</text>
+<text x="45" y="473" class="zone-note" style="font-size:14.0px" text-anchor="start">Detailed control-plane-to-worker communication belongs to the network architecture stage.</text>
+</g>
+<g id="zone-label-guest">
+<rect x="157" y="844" width="340.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="165" y="866" class="zone-title" style="font-size:18.0px" text-anchor="start">Logical guest-cluster boundary</text>
+</g>
+</g>
+<g id="nodes">
+<g id="intent">
+<rect x="55" y="165" width="300" height="165" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="71" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">Tenant composition</text>
+<text x="72" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">selected tenant input</text>
+<text x="72" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">replicas, CIDRs + release</text>
+<text x="72" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">network, pool + storage refs</text>
+</g>
+<g id="lifecycle">
+<rect x="420" y="165" width="625" height="165" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="436" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">selected lifecycle namespace lifecycle resources</text>
+<text x="437" y="220" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="456" y="220" class="node-line" style="font-size:14.9px" text-anchor="start">HostedCluster selected tenant defines the hosted API and control plane</text>
+<text x="437" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="456" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">NodePool selected worker NodePool defines KubeVirt compute</text>
+<text x="437" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="456" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">HyperShift and CNV controllers own realization</text>
+</g>
+<g id="control">
+<rect x="55" y="475" width="475" height="260" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="71" y="504" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted control-plane namespace</text>
+<text x="72" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">HyperShift-owned HCP namespace</text>
+<text x="72" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">etcd + kube-apiserver</text>
+<text x="72" y="576" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="576" class="node-line" style="font-size:15.0px" text-anchor="start">controller-manager + scheduler</text>
+<text x="72" y="599" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="599" class="node-line" style="font-size:15.0px" text-anchor="start">OAuth + Konnectivity services</text>
+<text x="72" y="622" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="622" class="node-line" style="font-size:15.0px" text-anchor="start">management pod network</text>
+<text x="72" y="645" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="645" class="node-line" style="font-size:15.0px" text-anchor="start">created and owned by HyperShift</text>
+</g>
+<g id="workers">
+<rect x="570" y="475" width="475" height="260" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="586" y="504" class="node-title" style="font-size:18.0px" text-anchor="start">KubeVirt worker realization</text>
+<text x="587" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">NodePool worker intent</text>
+<text x="587" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">VirtualMachine objects</text>
+<text x="587" y="576" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="576" class="node-line" style="font-size:15.0px" text-anchor="start">virt-launcher pods</text>
+<text x="587" y="599" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="599" class="node-line" style="font-size:15.0px" text-anchor="start">DataVolume root disks</text>
+<text x="587" y="622" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="622" class="node-line" style="font-size:15.0px" text-anchor="start">selected worker interfaces</text>
+<text x="587" y="645" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="606" y="645" class="node-line" style="font-size:15.0px" text-anchor="start">VMs register as guest nodes</text>
+</g>
+<g id="guest">
+<rect x="170" y="885" width="760" height="205" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="186" y="914" class="node-title" style="font-size:18.0px" text-anchor="start">Logical hosted tenant OpenShift cluster</text>
+<text x="187" y="940" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="940" class="node-line" style="font-size:15.0px" text-anchor="start">API endpoint is served by hosted control-plane components</text>
+<text x="187" y="963" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="963" class="node-line" style="font-size:15.0px" text-anchor="start">schedulable nodes are KubeVirt worker VMs</text>
+<text x="187" y="986" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="986" class="node-line" style="font-size:15.0px" text-anchor="start">guest Cilium, catalogs, policy, secrets + observability</text>
+<text x="187" y="1009" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1009" class="node-line" style="font-size:15.0px" text-anchor="start">runtime health requires separate validation</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="355.75" y="211.5" width="62.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="387" y="230" class="edge-label" style="font-size:12.5px" text-anchor="middle">renders</text>
+<rect x="402.25" y="366.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="456" y="385" class="edge-label" style="font-size:12.5px" text-anchor="middle">HostedCluster</text>
+<rect x="768.75" y="366.5" width="152.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="845" y="385" class="edge-label" style="font-size:12.5px" text-anchor="middle">NodePool + KubeVirt</text>
+<rect x="328.5" y="786.5" width="85.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="371" y="805" class="edge-label" style="font-size:12.5px" text-anchor="middle">hosted API</text>
+<rect x="659.25" y="786.5" width="137.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="728" y="805" class="edge-label" style="font-size:12.5px" text-anchor="middle">node registration</text>
+</g>
+<line x1="40" y1="1121" x2="76" y2="1121" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="1126" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+<line x1="290.0" y1="1121" x2="326.0" y2="1121" stroke="#7A5AF8" stroke-width="3"/>
+<text x="336.0" y="1126" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+</svg>

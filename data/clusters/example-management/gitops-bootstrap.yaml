@@ -1,0 +1,42 @@
+kind: GitOpsBootstrap
+metadata:
+  name: example-management
+spec:
+  activation: review-only
+  namespaceStage: namespaces
+  hostedStage: phase0
+  sealedSecrets:
+    controller: sealed-secrets/sealed-secrets-controller
+    publicCertificateFingerprintSha256: 56345181bba176ceb86fef61a21bfb7764cd729640e2cdcf21bfc80a425a9bde
+    scope: strict
+    cloudAuthHostToOmit: cloud.openshift.com
+    sourceNamespaceByRole:
+      multus: clusters-example-shared
+    retainedPullNamespaces: [clusters-example-shared]
+    pullSecretName: pull-secret
+    pullSecretKey: .dockerconfigjson
+    sshSecretName: ssh-key
+    sshPublicKey: id_rsa.pub
+    existingSecretAdoption: managed-skip-owner-reference
+    insightsReporting: disabled
+    preserveOtherRegistryAuth: true
+    preserveLocalMonitoring: true
+    managementGlobalPullSecretAlreadyOptedOut: true
+  managementRegistryTrust:
+    namespace: openshift-config
+    configMapName: hcp-registry-pull-service-ca
+    imageConfigName: cluster
+    internalRegistry: hcp-registry-pull.hcp-image-cache.svc.cluster.local:5000
+    internalPublicCA:
+      sourceConfigMap: hcp-image-cache/openshift-service-ca.crt
+      sourceKey: service-ca.crt
+      file: data/clusters/example-management/public-cas/service-ca-2026.pem
+      fingerprintsSha256: [dec1daa892e9d2d20a198ca5e743566ea88107ef9eaac5aa98a7f10e949638d9]
+      sourceFingerprintSha256: dec1daa892e9d2d20a198ca5e743566ea88107ef9eaac5aa98a7f10e949638d9
+      allowedCurrentTargetFingerprintsSha256: [dec1daa892e9d2d20a198ca5e743566ea88107ef9eaac5aa98a7f10e949638d9]
+    externalPublicCA:
+      addressRef: defaults.registry.url
+      file: data/clusters/example-management/public-cas/site-registry-2026.pem
+      fingerprintSha256: b9ebbafb3fa03545ee2079bbe3d8566acfbb6e7a3d6b9d93d9ca877b0745f208
+    adoption: server-side-apply-owned-keys
+    rotation: reviewed-overlap-before-source-service-ca-rotation

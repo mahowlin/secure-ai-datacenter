@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="808" viewBox="0 0 800 808" role="img" aria-labelledby="title description">
+<title id="title">Cisco Secure AI Datacenter platform</title>
+<desc id="description">Cisco Secure AI Datacenter platform. Conceptual example; configuration detail is linked from the owning README.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5E6C84"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:600 18px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="800" height="808" fill="#F7F9FC"/>
+
+
+<g id="zone-openshift">
+<rect x="140" y="210" width="620" height="480" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5"/>
+</g>
+<g id="zone-tenants">
+<rect x="160" y="350" width="580" height="142" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5"/>
+</g>
+<g id="connections">
+<path d="M 240 148 L 70 148 L 70 752 L 140 752" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 450 690 L 450 716" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-openshift">
+<rect x="152" y="219" width="318.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="160" y="241" class="zone-title" style="font-size:18.0px" text-anchor="start">Management OpenShift cluster</text>
+</g>
+<g id="zone-label-tenants">
+<rect x="172" y="359" width="361.59999999999997" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="180" y="381" class="zone-title" style="font-size:18.0px" text-anchor="start">Nested tenant OpenShift clusters</text>
+</g>
+</g>
+<g id="nodes">
+<g id="datacenter">
+<rect x="40" y="16" width="720" height="72" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="45" class="node-title" style="font-size:18.0px" text-anchor="start">Cisco Secure AI Datacenter</text>
+<text x="56" y="71" class="node-line" style="font-size:18.0px" text-anchor="start">Composes fabric, install and GitOps configuration</text>
+</g>
+<g id="leaves">
+<rect x="240" y="112" width="480" height="72" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="256" y="141" class="node-title" style="font-size:18.0px" text-anchor="start">Cisco ACI fabric</text>
+<text x="256" y="167" class="node-line" style="font-size:18.0px" text-anchor="start">Fabric applies the network configuration</text>
+</g>
+<g id="apps">
+<rect x="160" y="266" width="580" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="295" class="node-title" style="font-size:18.0px" text-anchor="start">Management apps and services</text>
+<text x="176" y="321" class="node-line" style="font-size:18.0px" text-anchor="start">API · DNS · registry · Argo CD</text>
+</g>
+<g id="control-planes">
+<rect x="180" y="400" width="260" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="196" y="429" class="node-title" style="font-size:18.0px" text-anchor="start">Control-plane pods</text>
+<text x="196" y="455" class="node-line" style="font-size:18.0px" text-anchor="start">MCE / HyperShift</text>
+</g>
+<g id="workers">
+<rect x="460" y="400" width="260" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="476" y="429" class="node-title" style="font-size:18.0px" text-anchor="start">KubeVirt worker VMs</text>
+<text x="476" y="455" class="node-line" style="font-size:18.0px" text-anchor="start">Run tenant workloads</text>
+</g>
+<g id="isovalent">
+<rect x="160" y="514" width="580" height="72" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="543" class="node-title" style="font-size:18.0px" text-anchor="start">Isovalent</text>
+<text x="176" y="569" class="node-line" style="font-size:18.0px" text-anchor="start">Cilium networking · Hubble / Timescape</text>
+</g>
+<g id="storage">
+<rect x="160" y="610" width="580" height="72" rx="14" fill="#FFF2DC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="639" class="node-title" style="font-size:18.0px" text-anchor="start">Portworx</text>
+<text x="176" y="665" class="node-line" style="font-size:18.0px" text-anchor="start">Shared persistent storage</text>
+</g>
+<g id="physical">
+<rect x="140" y="716" width="620" height="72" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="156" y="745" class="node-title" style="font-size:18.0px" text-anchor="start">Cisco UCS servers + disks</text>
+<text x="156" y="771" class="node-line" style="font-size:18.0px" text-anchor="start">Compute provisions UCS and installs OpenShift</text>
+</g>
+</g>
+<g id="connection-labels">
+</g>
+</svg>

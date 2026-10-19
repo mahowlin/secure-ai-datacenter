@@ -1,0 +1,12 @@
+kind: NetworkCatalog
+metadata:
+  name: example-federal
+  description: Network catalog for the example site multi-tenant hosted design.
+spec:
+  managementNetworks:
+    Generic-Management:
+      description: Third-party compact cluster machine network, pre-provisioned by
+        site.
+      vlan: 1701
+      cidr: 192.0.2.0/24
+      gateway: 192.0.2.1

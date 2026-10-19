@@ -1,0 +1,232 @@
+# Canonical example-management distribution registry.
+# Values are factual inventory or explicit policy. The renderer does not invent them.
+# Secret values are not here. Service ClusterIPs are not here.
+apiVersion: saif.example.com/v1alpha1
+kind: LocalRegistry
+metadata:
+  name: example-management
+spec:
+  # Safe default: consumers use the preceding site registry; no cache bootstrap cycle.
+  cacheProduction:
+    mode: preceding-registry
+  namespace: hcp-image-cache
+  pullService: hcp-registry-pull
+  syncService: hcp-registry-sync
+  port: 5000
+  workloadName: hcp-distribution-registry
+  listeners: {distribution: 5000, pull: 8080, sync: 8081}
+  # Declared example frontend, not a live address reservation or runtime credential.
+  externalPull:
+    enabled: true
+    name: example-hcp-registry
+    networkRef: tenant-b-kube-api-peering
+    poolRef: tenant-b-hcp-management-services
+    vip: 198.18.13.20
+    allocationEvidence: Synthetic example only; reserve and verify the site address
+      before apply
+    hostnamePrefix: images
+    servicePort: 443
+    listenerPort: 8443
+    externalTrafficPolicy: Cluster
+    tlsSecret: example-hcp-registry-tls
+    runtimeOwner: site-registry-and-trust-pipeline
+    pullClientSecret:
+      namespace: hcp-image-cache
+      name: hcp-registry-pull-client
+    consumer:
+      workerAttachmentKinds:
+      - multus-l2
+      deploymentSubjectRoles:
+      - multus
+      pullSecret: example-hcp-registry-pull
+      trustBundle: example-hcp-registry-ca
+      exporterImagePull: hosted-mirror
+  pvc:
+    name: hcp-distribution-storage
+    size: 100Gi
+    storageClass: px-csi-replicated-default
+  images:
+    distribution: registry.example.com:5000/library/registry@sha256:46faa9a1ae6813194b53921a370f2f4f8c5e1aae228a89bceafef5847a6a3278
+    accessProxy: registry.example.com:5000/nginxinc/nginx-unprivileged@sha256:31effa6a4e07670f7a7602293a7fc73a49b7622a078e5c69ea5c14e548dbe2f0
+  # Synthetic UID example. Replace with the actual namespace/SCC allocation before deployment.
+  podUid: 1000000000
+  resources:
+    distribution:
+      requests: {cpu: 100m, memory: 128Mi}
+      limits: {cpu: "2", memory: 1Gi}
+    accessProxy:
+      requests: {cpu: 100m, memory: 64Mi}
+      limits: {cpu: "1", memory: 256Mi}
+  emptyDir:
+    distributionTmp: 64Mi
+    proxyTmp: 64Mi
+    proxyCache: 256Mi
+  runtimeSecrets:
+    http: hcp-distribution-http-secret
+    pullAuth: hcp-registry-pull-auth
+    syncAuth: hcp-registry-sync-auth
+    pullTls: hcp-registry-pull-tls
+    syncTls: hcp-registry-sync-tls
+  consumer:
+    managementReleaseMode: site-recovery
+  mirrors:
+    - source: quay.io/openshift-release-dev/ocp-release
+      repository: hcp-image-cache/r-1730a2489901a321bfe4e98de75a6a1c745546a487a75426
+    - source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+      repository: hcp-image-cache/r-16e7755ffca21b6e58b2fdfc6d93a5b340edfc1c55200dd9
+    - source: containers.isovalent.com/cilium-ubi
+      repository: hcp-image-cache/r-55209e154baf01d051242160e600822491b1bf81cb303be1
+    - source: containers.isovalent.com/cilium-envoy-ubi
+      repository: hcp-image-cache/r-41487e8534e4774a35fb3872242e0d3e950cca1f05da0848
+    - source: containers.isovalent.com/operator-generic-ubi
+      repository: hcp-image-cache/r-b856bbe1d66c31e531d8b4e89c594862eaf4e1435aa25c21
+    - source: containers.isovalent.com/hubble-relay-ubi
+      repository: hcp-image-cache/r-a52545a12b26ced762ffd47ae0629ea319f205ab6c42b9ce
+    - source: containers.isovalent.com/startup-script-ubi
+      repository: hcp-image-cache/r-e1fec2a8446b9819372ced6d24ff7579345e58dc05823723
+    - source: containers.isovalent.com/hubble-timescape-lite-ubi
+      repository: hcp-image-cache/r-43f208d85227810aab6ddcdca9eb2b133f18687464717ab1
+    - source: containers.isovalent.com/cilium-clickhouse-server
+      repository: hcp-image-cache/r-6a8532aaecf4a8c990c0d7e6ece731ce9e675c733f2ed2e0
+    - source: registry.example.com:5000/cilium-clickhouse-server
+      repository: hcp-image-cache/r-6a8532aaecf4a8c990c0d7e6ece731ce9e675c733f2ed2e0
+    - source: registry.example.com:5000/cilium-envoy-ubi
+      repository: hcp-image-cache/r-41487e8534e4774a35fb3872242e0d3e950cca1f05da0848
+    - source: registry.example.com:5000/cilium-ubi
+      repository: hcp-image-cache/r-55209e154baf01d051242160e600822491b1bf81cb303be1
+    - source: registry.example.com:5000/clife
+      repository: hcp-image-cache/r-76e1be102a479772c4e03f573db45942797081721b7a15dd
+    - source: registry.example.com:5000/hubble-relay-ubi
+      repository: hcp-image-cache/r-a52545a12b26ced762ffd47ae0629ea319f205ab6c42b9ce
+    - source: registry.example.com:5000/hubble-timescape-lite-ubi
+      repository: hcp-image-cache/r-43f208d85227810aab6ddcdca9eb2b133f18687464717ab1
+    - source: registry.example.com:5000/ilb-hcp-backend-adapter
+      repository: hcp-image-cache/r-507934e6cb9201724465348064e91c1f50adeb4007adcc73
+    - source: registry.example.com:5000/openshift/release
+      repository: hcp-image-cache/r-16e7755ffca21b6e58b2fdfc6d93a5b340edfc1c55200dd9
+    - source: registry.example.com:5000/openshift/release-images
+      repository: hcp-image-cache/r-1730a2489901a321bfe4e98de75a6a1c745546a487a75426
+    - source: registry.example.com:5000/openshift4/ose-tools-rhel9
+      repository: hcp-image-cache/r-a48ee80fd96cc216fbba6f10055d5da351504274d2d82368
+    - source: registry.example.com:5000/operator-generic-ubi
+      repository: hcp-image-cache/r-b856bbe1d66c31e531d8b4e89c594862eaf4e1435aa25c21
+    - source: registry.example.com:5000/startup-script-ubi
+      repository: hcp-image-cache/r-e1fec2a8446b9819372ced6d24ff7579345e58dc05823723
+
+  # Optional manual OLM installation and bounded content reconciliation.
+  # Trust/auth ConfigMaps and Secrets are supplied privately before sync.
+  ocMirror:
+    publish: true
+    namespace: oc-mirror-system
+    targetPrefix: hcp-registry-sync.hcp-image-cache.svc:5000/mirror-validation
+    authSecret: mirror-registry-auth
+    caConfigMap: mirror-trusted-ca
+    imageSet: selected-content
+    mirrorTarget: validation-cache
+    applicationName: hcp-oc-mirror
+    syncMode: manual
+    selectedImages:
+    - inventoryName: operator-worker
+      source: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-worker@sha256:1e5e1e70918e03d667bfcff7e85ced9a1bcc34576df122038baea812fe44696d
+      targetRepo: operator-worker
+    resources:
+      controller:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: '1'
+          memory: 1Gi
+      manager:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: '1'
+          memory: 1Gi
+      worker:
+        requests:
+          cpu: 100m
+          memory: 256Mi
+        limits:
+          cpu: '1'
+          memory: 1Gi
+    concurrency: 1
+    batchSize: 1
+    maxRetries: 3
+    expose:
+      type: Service
+    pollInterval: 0s
+    checkExistInterval: 1h
+    release:
+      version: v0.1.7
+      commit: eea10842d7048b61304151ee0b63d2e3b46d6846
+      bootstrapImages:
+      - role: controller
+        source: ghcr.io/mariusbertram/oc-mirror-operator-controller@sha256:47a842697f2a796b20b7ae550a1967fcb8ef0bd559c693dc4cfc6cb7cbd1da5a
+        destination: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-controller:v0.1.7
+        digest: sha256:47a842697f2a796b20b7ae550a1967fcb8ef0bd559c693dc4cfc6cb7cbd1da5a
+      - role: manager
+        source: ghcr.io/mariusbertram/oc-mirror-operator-manager@sha256:07fd1d085da5a7dda4aad21ee196f68da9dbbcccecc8642d43f30b641c72fc7b
+        destination: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-manager:v0.1.7
+        digest: sha256:07fd1d085da5a7dda4aad21ee196f68da9dbbcccecc8642d43f30b641c72fc7b
+      - role: worker
+        source: ghcr.io/mariusbertram/oc-mirror-operator-worker@sha256:1e5e1e70918e03d667bfcff7e85ced9a1bcc34576df122038baea812fe44696d
+        destination: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-worker:v0.1.7
+        digest: sha256:1e5e1e70918e03d667bfcff7e85ced9a1bcc34576df122038baea812fe44696d
+      - role: plugin-4-18
+        source: ghcr.io/mariusbertram/oc-mirror-operator-plugin@sha256:a9623c82e6b45e864efddaaad60a10ab1fe9e7fcf9fa802f8c8481b8cd522c82
+        destination: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-plugin:v0.1.7-ocp4.18
+        digest: sha256:a9623c82e6b45e864efddaaad60a10ab1fe9e7fcf9fa802f8c8481b8cd522c82
+      - role: plugin-4-19
+        source: ghcr.io/mariusbertram/oc-mirror-operator-plugin@sha256:9977c7a3184f60fa7e64eb1d5610ca2fd1759594eadec6452d5e4a2009eee7c4
+        destination: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-plugin:v0.1.7-ocp4.19
+        digest: sha256:9977c7a3184f60fa7e64eb1d5610ca2fd1759594eadec6452d5e4a2009eee7c4
+      - role: plugin-4-20
+        source: ghcr.io/mariusbertram/oc-mirror-operator-plugin@sha256:43bfe8a3cd9b2dfaaad643d7358a963242cb27c2df3f694594a9fb1c07027084
+        destination: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-plugin:v0.1.7-ocp4.20
+        digest: sha256:43bfe8a3cd9b2dfaaad643d7358a963242cb27c2df3f694594a9fb1c07027084
+      - role: plugin-4-21
+        source: ghcr.io/mariusbertram/oc-mirror-operator-plugin@sha256:4f46228343147b22bf147085fef014397c309699e123a73051944fc65c9e2371
+        destination: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-plugin:v0.1.7-ocp4.21
+        digest: sha256:4f46228343147b22bf147085fef014397c309699e123a73051944fc65c9e2371
+      - role: plugin-4-22
+        source: ghcr.io/mariusbertram/oc-mirror-operator-plugin@sha256:51eb6e385906027cef4b1a5fc4b58b353aac493fd3ceea4357153fa6ec4bb0d3
+        destination: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-plugin:v0.1.7-ocp4.22
+        digest: sha256:51eb6e385906027cef4b1a5fc4b58b353aac493fd3ceea4357153fa6ec4bb0d3
+      - role: bundle
+        source: quay.io/operatorhubio/oc-mirror@sha256:7460257327d45be9efb916e97c4b5b763a9fa588541f9f5909991acc987ac33a
+        destination: registry.example.com:5000/quay.io/operatorhubio/oc-mirror:0.1.7
+        digest: sha256:7460257327d45be9efb916e97c4b5b763a9fa588541f9f5909991acc987ac33a
+      - role: catalog
+        source: quay.io/operatorhubio/catalog@sha256:f2fbc3625da08c4d88bc99a1880ded61dc376439ecdc8f7f2759215440f483b6
+        destination: registry.example.com:5000/quay.io/operatorhubio/catalog:oc-mirror-0.1.7-20261016
+        digest: sha256:f2fbc3625da08c4d88bc99a1880ded61dc376439ecdc8f7f2759215440f483b6
+      controller: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-controller@sha256:47a842697f2a796b20b7ae550a1967fcb8ef0bd559c693dc4cfc6cb7cbd1da5a
+      manager: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-manager@sha256:07fd1d085da5a7dda4aad21ee196f68da9dbbcccecc8642d43f30b641c72fc7b
+      worker: registry.example.com:5000/ghcr.io/mariusbertram/oc-mirror-operator-worker@sha256:1e5e1e70918e03d667bfcff7e85ced9a1bcc34576df122038baea812fe44696d
+    installation:
+      method: olm
+      installPlanApproval: Manual
+      mirrorSourcePolicy: NeverContactSource
+      package: oc-mirror
+      channel: alpha
+      startingCSV: oc-mirror.v0.1.7
+      operatorGroup: oc-mirror
+      catalogName: oc-mirror-pinned
+      catalogDisplayName: Pinned community oc-mirror operator
+      catalogImage: registry.example.com:5000/quay.io/operatorhubio/catalog@sha256:f2fbc3625da08c4d88bc99a1880ded61dc376439ecdc8f7f2759215440f483b6
+      catalogMemoryTarget: 512Mi
+      mirrorPolicyName: hcp-oc-mirror-bootstrap
+      artifactDirectory: .artifacts/oc-mirror-operator/v0.1.7
+      artifactContractPath: data/package-contracts/oc-mirror-operator-v0.1.7.json
+      csvPath: .artifacts/oc-mirror-operator/v0.1.7/bundle/manifests/oc-mirror.clusterserviceversion.yaml
+      csvSha256: 77bf6e5c5eae8d5b1e56e7f42da5dca55edc8a675b5c19858f9fd29e307c9a00
+      namespaceBindings:
+      - path: .artifacts/oc-mirror-operator/v0.1.7/bundle/manifests/oc-mirror-manager-pod-rolebinding_rbac.authorization.k8s.io_v1_rolebinding.yaml
+        sha256: f6146ea82cc4698d1ac6d97ce01afcee855e628c7f063f562685ec49856d96f1
+      - path: .artifacts/oc-mirror-operator/v0.1.7/bundle/manifests/oc-mirror-worker-pod-rolebinding_rbac.authorization.k8s.io_v1_rolebinding.yaml
+        sha256: bdfd714abc07e1132e1634933588e1ff3ee937792c4995a9d2f151f1d114b377
+      consolePluginEnabled: true
+    producerTrust:
+      mode: system

@@ -1,0 +1,148 @@
+apiVersion: networking.saif.example.com/v1alpha1
+kind: CiliumConfigProfile
+metadata:
+  name: iep-1.19.5-openshift-ilb
+
+spec:
+  compatibility:
+    ciliumVersions: ["1.19.5"]
+    openshiftMinors: ["4.19"]
+  packageContractSha256: 690681d79f1a386a587ef88d76e3e9e27802c05d467dafd54a1c871ec9648f7c
+
+  # The immutable CLIFE package excludes the management CiliumConfig. These
+  # documented OpenShift ILB values are merged into its verified management
+  # scenario by SAIF before Day 1 and staged Day 2 rendering.
+  values:
+    bpf:
+      lbAlgorithmAnnotation: true
+      lbModeAnnotation: true
+    enterprise:
+      featureGate:
+        minimumMaturity: Alpha
+    loadBalancer:
+      dsrDispatch: ipip
+    envoy:
+      startupProbe:
+        enabled: false
+      livenessProbe:
+        enabled: false
+      dnsPolicy: ClusterFirstWithHostNet
+      extraHostPathMounts:
+        - name: envoy-accesslog
+          mountPath: /var/log/envoy
+          hostPath: /var/log/envoy
+          hostPathType: DirectoryOrCreate
+          readOnly: false
+          mountPropagation: HostToContainer
+    extraConfig:
+      loadbalancer-cp-requestid-generate: "true"
+      loadbalancer-cp-requestid-response: "true"
+      loadbalancer-cp-accesslog-file-path: /var/log/envoy/accesslog.log
+      loadbalancer-cp-accesslog-enable-hc: "true"
+      loadbalancer-cp-t2-use-remote-address: "true"
+      loadbalancer-cp-t2-xff-num-trusted-hops: "0"
+    nodeinit:
+      startup:
+        preScript: |
+          sudo modprobe br_netfilter
+          sudo tee /etc/sysctl.d/kubernetes.conf <<EOF
+          net.ipv4.ip_forward = 1
+          net.ipv4.ip_unprivileged_port_start = 0
+          EOF
+          sudo sysctl --system
+
+  valuesSchema:
+    type: object
+    additionalProperties: false
+    required: [bpf, enterprise, loadBalancer, envoy, extraConfig, nodeinit]
+    properties:
+      bpf:
+        type: object
+        additionalProperties: false
+        required: [lbAlgorithmAnnotation, lbModeAnnotation]
+        properties:
+          lbAlgorithmAnnotation: {const: true}
+          lbModeAnnotation: {const: true}
+      enterprise:
+        type: object
+        additionalProperties: false
+        required: [featureGate]
+        properties:
+          featureGate:
+            type: object
+            additionalProperties: false
+            required: [minimumMaturity]
+            properties:
+              minimumMaturity: {const: Alpha}
+      loadBalancer:
+        type: object
+        additionalProperties: false
+        required: [dsrDispatch]
+        properties:
+          dsrDispatch: {const: ipip}
+      envoy:
+        type: object
+        additionalProperties: false
+        required: [startupProbe, livenessProbe, dnsPolicy, extraHostPathMounts]
+        properties:
+          startupProbe: {$ref: "#/$defs/disabledProbe"}
+          livenessProbe: {$ref: "#/$defs/disabledProbe"}
+          dnsPolicy: {const: ClusterFirstWithHostNet}
+          extraHostPathMounts:
+            type: array
+            minItems: 1
+            maxItems: 1
+            items: {$ref: "#/$defs/accessLogMount"}
+      extraConfig:
+        type: object
+        additionalProperties: false
+        required:
+          - loadbalancer-cp-requestid-generate
+          - loadbalancer-cp-requestid-response
+          - loadbalancer-cp-accesslog-file-path
+          - loadbalancer-cp-accesslog-enable-hc
+          - loadbalancer-cp-t2-use-remote-address
+          - loadbalancer-cp-t2-xff-num-trusted-hops
+        properties:
+          loadbalancer-cp-requestid-generate: {const: "true"}
+          loadbalancer-cp-requestid-response: {const: "true"}
+          loadbalancer-cp-accesslog-file-path: {const: /var/log/envoy/accesslog.log}
+          loadbalancer-cp-accesslog-enable-hc: {const: "true"}
+          loadbalancer-cp-t2-use-remote-address: {const: "true"}
+          loadbalancer-cp-t2-xff-num-trusted-hops: {const: "0"}
+      nodeinit:
+        type: object
+        additionalProperties: false
+        required: [startup]
+        properties:
+          startup:
+            type: object
+            additionalProperties: false
+            required: [preScript]
+            properties:
+              preScript:
+                const: |
+                  sudo modprobe br_netfilter
+                  sudo tee /etc/sysctl.d/kubernetes.conf <<EOF
+                  net.ipv4.ip_forward = 1
+                  net.ipv4.ip_unprivileged_port_start = 0
+                  EOF
+                  sudo sysctl --system
+    $defs:
+      disabledProbe:
+        type: object
+        additionalProperties: false
+        required: [enabled]
+        properties:
+          enabled: {const: false}
+      accessLogMount:
+        type: object
+        additionalProperties: false
+        required: [name, mountPath, hostPath, hostPathType, readOnly, mountPropagation]
+        properties:
+          name: {const: envoy-accesslog}
+          mountPath: {const: /var/log/envoy}
+          hostPath: {const: /var/log/envoy}
+          hostPathType: {const: DirectoryOrCreate}
+          readOnly: {const: false}
+          mountPropagation: {const: HostToContainer}

@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: hcp-distribution-ingress
+  namespace: {{ namespace }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ workload_name }}
+  policyTypes: [Ingress]
+  ingress:
+    - ports: [{protocol: TCP, port: {{ listeners.pull }}}]
+{% if external_pull %}
+    - ports: [{protocol: TCP, port: {{ external_pull.listenerPort }}}]
+{% endif %}
+    - from:
+        - podSelector:
+            matchLabels:
+              app: hcp-registry-sync-runtime
+      ports: [{protocol: TCP, port: {{ listeners.sync }}}]
+{% if oc_mirror_trial.get('publish') %}
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ oc_mirror_trial.namespace }}
+          podSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values: [oc-mirror-worker, oc-mirror-manager]
+      ports: [{protocol: TCP, port: {{ listeners.sync }}}]
+{% endif %}

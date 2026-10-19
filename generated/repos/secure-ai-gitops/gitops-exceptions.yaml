@@ -1,0 +1,250 @@
+apiVersion: saif.example.com/v1alpha1
+kind: GitOpsExceptionRegister
+metadata:
+  name: gitops-exceptions
+spec:
+  exceptions:
+    - path: .github/**
+      category: bootstrap
+      reason: Repository workflows and helper scripts. Not produced by the renderer.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: docs/**
+      category: bootstrap
+      reason: Repository documentation. Not produced by the renderer.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: scripts/**
+      category: bootstrap
+      reason: Repository maintenance scripts. Not produced by the renderer.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: tests/**
+      category: bootstrap
+      reason: Repository tests. Not produced by the renderer.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: .gitignore
+      category: bootstrap
+      reason: Git ignore rules for this repository.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: assistant.md
+      category: bootstrap
+      reason: Repository instructions.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: README.md
+      category: bootstrap
+      reason: Repository readme.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: artifact-manifest.yaml
+      category: bootstrap
+      reason: Generated artifact manifest copied beside the GitOps tree.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: clusters/INVENTORY.md
+      category: bootstrap
+      reason: Hand-written application inventory.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: shared-infrastructure/.gitkeep
+      category: bootstrap
+      reason: Placeholder for a directory that is not rendered.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/hubble-timescape/**
+      category: vendored-chart
+      reason: Vendored upstream chart. The renderer owns the Application values.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/vector/**
+      category: vendored-chart
+      reason: Vendored upstream chart. The renderer owns the Application values.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/altinity-clickhouse-operator/**
+      category: vendored-chart
+      reason: Vendored ClickHouse chart selected by the example-management baseline Application. The renderer does not emit these files.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/Chart.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/templates/bgp-peering-policy.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/templates/ciliumconfig.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/templates/cluster-policy.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/templates/egress-gateway-policy.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/templates/ip-pool.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/templates/l2-announcement-policy.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/templates/postsync-restart-hook.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: charts/cilium-config/values.yaml
+      category: vendored-chart
+      reason: Local Cilium chart file. The renderer owns the resolved templates separately.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: apps/sealed-secrets-controller/**
+      category: downstream-execution
+      reason: Downstream sealed-secrets controller manifests selected by an HCP base Application.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: apps/sealed-secrets/_common/**
+      category: downstream-execution
+      reason: Downstream sealed-secret manifests selected by an HCP base Application.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: apps/sealed-secrets/_gpu/**
+      category: downstream-execution
+      reason: Downstream sealed-secret manifests for the GPU stack.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: apps/sealed-secrets/README.md
+      category: downstream-execution
+      reason: Notes for the downstream sealed-secret manifests.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: apps/sealed-secrets/secrets-manifest.yaml
+      category: downstream-execution
+      reason: Downstream sealed-secret manifest index.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: apps/sealed-secrets/example-multus-a/hubble-timescape/timescape-object-writer.yaml
+      category: downstream-execution
+      reason: Downstream sealed-secret manifest not emitted by the renderer.
+      owner: platform
+      decision:
+        bead: example-note
+    - path: clusters/foundation/core/kustomization.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/core/platform-catalogsources.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/core/sealed-secrets-controller.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/core/sealed-secrets.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/isovalent/cilium.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/isovalent/clickhouse-operator.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/isovalent/hubble-timescape-scc.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/isovalent/hubble-timescape.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/isovalent/tetragon-catalogsource.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: clusters/foundation/isovalent/tetragon.yaml
+      category: waiver
+      reason: Temporary waiver for this HCP base Application. Remove this entry when pull request 255 lands.
+      owner: platform
+      decision:
+        bead: example-note
+      expiry: "2027-01-05"
+    - path: apps/sealed-secrets/*/hubble-timescape/timescape-object-writer.yaml
+      category: downstream-execution
+      reason: Runtime-enrichment ownership for encrypted Timescape writer credentials. The selected enrollment workflow and stager enforce exact namespace, name, AWS key set and live guest/controller/namespace/certificate identity; ciphertext is not renderer output.
+      owner: platform
+      decision:
+        bead: example-note

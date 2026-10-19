@@ -1,0 +1,477 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saif.example.com/schemas/clife-package-contract-v1.schema.json",
+  "title": "CLIFE deployment package contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "apiVersion",
+    "kind",
+    "metadata",
+    "spec"
+  ],
+  "properties": {
+    "apiVersion": {
+      "const": "packaging.saif.example.com/v1alpha1"
+    },
+    "kind": {
+      "const": "ClifePackageContract"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^clife-install-[0-9]+\\.[0-9]+\\.[0-9]+$"
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "release",
+        "source",
+        "chart",
+        "resources",
+        "modes",
+        "transformations",
+        "values",
+        "runtimeImages",
+        "embeddedChartVerification",
+        "receipt"
+      ],
+      "properties": {
+        "release": {
+          "$ref": "#/$defs/release"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "chart": {
+          "$ref": "#/$defs/chart"
+        },
+        "resources": {
+          "$ref": "#/$defs/resources"
+        },
+        "modes": {
+          "$ref": "#/$defs/modes"
+        },
+        "transformations": {
+          "type": "object"
+        },
+        "values": {
+          "$ref": "#/$defs/values"
+        },
+        "runtimeImages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/runtimeImage"
+          }
+        },
+        "embeddedChartVerification": {
+          "$ref": "#/$defs/embeddedChartVerification"
+        },
+        "receipt": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "requiredFields"
+          ],
+          "properties": {
+            "requiredFields": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "apiVersion",
+        "kind",
+        "name"
+      ],
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string",
+          "minLength": 1
+        },
+        "namespace": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "iep",
+        "cilium",
+        "clife",
+        "openshiftCompatibility"
+      ],
+      "properties": {
+        "iep": {
+          "const": "26.05"
+        },
+        "cilium": {
+          "enum": [
+            "1.19.5",
+            "1.19.7"
+          ]
+        },
+        "clife": {
+          "enum": [
+            "1.19.5",
+            "1.19.7"
+          ]
+        },
+        "openshiftCompatibility": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+$"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "sha256",
+        "mediaType",
+        "ephemeralOnly",
+        "persistRawArchive",
+        "publishRawArchiveAsWorkflowArtifact"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "pattern": "^https://artifactory\\.isovalent\\.com/"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "mediaType": {
+          "const": "application/gzip"
+        },
+        "ephemeralOnly": {
+          "const": true
+        },
+        "persistRawArchive": {
+          "const": false
+        },
+        "publishRawArchiveAsWorkflowArtifact": {
+          "const": false
+        }
+      }
+    },
+    "chart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "repository",
+        "versionTemplate",
+        "appVersion",
+        "immutable",
+        "allowOverwrite"
+      ],
+      "properties": {
+        "name": {
+          "const": "clife-install"
+        },
+        "repository": {
+          "type": "string",
+          "pattern": "^registry\\.example\\.com:5000/charts/clife-install$"
+        },
+        "versionTemplate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "appVersion": {
+          "enum": [
+            "1.19.5",
+            "1.19.7"
+          ]
+        },
+        "immutable": {
+          "const": true
+        },
+        "allowOverwrite": {
+          "const": false
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exactSourceInventory",
+        "requiredOutputInventory"
+      ],
+      "properties": {
+        "exactSourceInventory": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/identity"
+          }
+        },
+        "requiredOutputInventory": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/identity"
+          }
+        }
+      }
+    },
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "exclude",
+        "requiredValues"
+      ],
+      "properties": {
+        "exclude": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identity"
+          }
+        },
+        "requiredValues": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "modes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "management",
+        "hosted"
+      ],
+      "properties": {
+        "management": {
+          "$ref": "#/$defs/mode"
+        },
+        "hosted": {
+          "$ref": "#/$defs/mode"
+        }
+      }
+    },
+    "values": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowedTopLevelKeys",
+        "clife",
+        "ciliumConfig",
+        "networkOperator",
+        "forbiddenKeys"
+      ],
+      "properties": {
+        "allowedTopLevelKeys": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "clife": {
+          "$ref": "#/$defs/valueGroup"
+        },
+        "ciliumConfig": {
+          "$ref": "#/$defs/hostedValueGroup"
+        },
+        "networkOperator": {
+          "$ref": "#/$defs/hostedValueGroup"
+        },
+        "forbiddenKeys": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "valueGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requiredKeys",
+        "allowedKeys"
+      ],
+      "properties": {
+        "requiredKeys": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowedKeys": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "hostedValueGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema"
+      ],
+      "properties": {
+        "schema": {
+          "type": "object"
+        }
+      }
+    },
+    "embeddedChartVerification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scenarios"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(\\+[0-9]+)?$"
+        },
+        "scenarios": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/embeddedChartScenario"
+          }
+        }
+      }
+    },
+    "embeddedChartScenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "mode",
+        "values",
+        "renderOverrides",
+        "expectedRuntimeImages"
+      ],
+      "properties": {
+        "name": {
+          "enum": [
+            "management",
+            "tenant-a",
+            "shared-ab"
+          ]
+        },
+        "mode": {
+          "enum": [
+            "management",
+            "hosted"
+          ]
+        },
+        "values": {
+          "type": "object"
+        },
+        "renderOverrides": {
+          "type": "object"
+        },
+        "expectedRuntimeImages": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "serviceNetwork": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "runtimeImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "source",
+        "digest",
+        "mirror"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^containers\\.isovalent\\.com/[^@]+:[^@]+$"
+        },
+        "digest": {
+          "$ref": "#/$defs/digest"
+        },
+        "mirror": {
+          "type": "string",
+          "pattern": "^registry\\.example\\.com:5000/"
+        }
+      }
+    }
+  }
+}

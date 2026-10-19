@@ -1,0 +1,98 @@
+{# OCP Cilium Day 1 CiliumConfig — deploy pipeline input for the cluster-install templates
+   Rendered by render-ocp.py from ResolvedOCPCluster + selected release profile
+
+   Template variables:
+     cluster   — ResolvedOCPCluster
+     defaults  — ResolvedDefaults
+#}
+apiVersion: cilium.io/v1alpha1
+kind: CiliumConfig
+metadata:
+  labels:
+    app.kubernetes.io/name: clife
+    {{ defaults.api_group }}/release-ref: {{ cluster.release_ref }}
+{% if cilium_package %}
+  annotations:
+    {{ defaults.api_group }}/clife-package-digest: {{ cilium_package.oci_digest }}
+    {{ defaults.api_group }}/clife-receipt-sha256: {{ cilium_package.receipt_sha256 }}
+{% if cilium_config_profile %}
+    {{ defaults.api_group }}/cilium-config-profile: {{ cilium_config_profile.name }}
+    {{ defaults.api_group }}/cilium-config-profile-sha256: {{ cilium_config_profile.source_sha256 }}
+{% endif %}
+{% endif %}
+  name: ciliumconfig
+spec:
+{% if cilium_config_spec_yaml %}
+{{ cilium_config_spec_yaml | indent(2, true) }}
+{% else %}
+  cluster:
+    name: {{ cluster.name }}
+
+  version: {{ cluster.release.cilium_day1_version }}
+
+  image:
+    cilium: {{ cluster.release.cilium_image }}
+    operator: {{ cluster.release.cilium_operator_image }}
+    clife: {{ cluster.release.clife_image }}
+
+  securityContext:
+    privileged: true
+
+  devices:
+    - {{ cluster.management_interface.bond }}
+  nodePort:
+    directRoutingDevice: {{ cluster.management_interface.bond }}
+
+  routingMode: tunnel
+  tunnelProtocol: vxlan
+  tunnelPort: 4789
+  autoDirectNodeRoutes: false
+
+  kubeProxyReplacement: true
+  k8sServiceHost: api-int.{{ cluster.name }}.{{ cluster.base_domain }}
+  k8sServicePort: 6443
+  sessionAffinity: true
+
+  socketLB:
+    hostNamespaceOnly: true
+
+  bpf:
+    masquerade: true
+
+  ipam:
+    mode: cluster-pool
+    operator:
+      clusterPoolIPv4PodCIDRList:
+{% for network in defaults.ocp_cluster_network %}
+        - "{{ network.cidr }}"
+{% endfor %}
+      clusterPoolIPv4MaskSize: {{ defaults.ocp_cluster_network[0].hostPrefix }}
+
+  cni:
+    binPath: /var/lib/cni/bin
+    confPath: /var/run/multus/cni/net.d
+    exclusive: false
+
+  clusterHealthPort: 9940
+
+  operator:
+    replicas: 2
+
+  enterprise:
+    featureGate:
+      approved:
+        - EnterpriseBGPControlPlane
+        - EgressGatewayHA
+        - EgressGatewayIPv4
+        - GatewayAPI
+    bgpControlPlane:
+      enabled: true
+      secretsNamespace:
+        create: false
+        name: cilium
+    egressGatewayHA:
+      enabled: true
+
+  gatewayAPI:
+    enabled: true
+{% endif %}

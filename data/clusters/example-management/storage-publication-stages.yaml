@@ -1,0 +1,30 @@
+apiVersion: saif.example.com/v1alpha1
+kind: ScopedPublicationStageSet
+metadata:
+  name: example-management-compact-storage-recovery
+spec:
+  sourceBase: dd7fe2509868e6f35369524293bcf5274ffbed17
+  targetRepo: saif-gitops
+  targetBase: 5b51e6681a2bf667c399d39b88458024a6786dba
+  sharedPaths:
+    - clusters/example-management/kustomization.yaml
+  stages:
+    - name: consumer-hold
+      order: 1
+      purpose: Quiesce disposable compact storage consumers while preserving current networking owners and behavior.
+      allowlist:
+        - path: clusters/example-management/kustomization.yaml
+          state: composed
+          activation: consumer-hold
+        - apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-shared/kustomization.yaml
+        - apps/hcp/management/hosted-cluster-lifecycle/overlays/example-management/example-tenant-a/kustomization.yaml
+    - name: provider-cutover
+      order: 2
+      purpose: Retire held compact LVMS and admit the manual Portworx Application without changing current networking.
+      allowlist:
+        - path: clusters/example-management/kustomization.yaml
+          state: composed
+          activation: provider-cutover
+        - path: clusters/example-management/storage-portworx-staged.yaml
+          state: absent
+        - clusters/example-management/storage-portworx.yaml

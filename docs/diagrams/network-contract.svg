@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="940" viewBox="0 0 900 940" role="img" aria-labelledby="title description">
+<title id="title">Management access and tenant peering are separate</title>
+<desc id="description">The example binds declared host interfaces to ACI domains, attachments and routing. Declared example architecture, not observed deployment. Labels and adjacent ownership tables are the text alternative.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="900" height="940" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Management access and tenant peering are separate</text>
+<text x="36" y="78" class="subheading" text-anchor="start">The example binds declared host interfaces to ACI domains, attachments and routing.</text>
+<g id="zone-aci">
+<rect x="20" y="185" width="860" height="150" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-hosts">
+<rect x="20" y="355" width="860" height="485" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 390 118 L 675 118 L 675 235" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 265 118 L 225 118 L 225 235" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 225 301 L 225 340 L 450 340 L 450 438 L 390 438" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 675 301 L 675 405" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 225 471 L 225 580" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 675 471 L 675 580" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 225 646 L 225 755" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 510 613 L 450 613 L 450 788 L 390 788" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 840 788 L 880 788 L 880 268 L 840 268" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-aci">
+<rect x="32" y="194" width="124.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="216" class="zone-title" style="font-size:18.0px" text-anchor="start">ACI fabric</text>
+</g>
+<g id="zone-label-hosts">
+<rect x="32" y="364" width="275.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="386" class="zone-title" style="font-size:18.0px" text-anchor="start">Physical OpenShift nodes</text>
+</g>
+</g>
+<g id="nodes">
+<g id="site">
+<rect x="265" y="85" width="370" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="281" y="114" class="node-title" style="font-size:18.0px" text-anchor="start">Existing site network</text>
+<text x="281" y="140" class="node-line" style="font-size:16.0px" text-anchor="start">DNS / NTP / registry / client routes</text>
+</g>
+<g id="mgmtleaf">
+<rect x="60" y="235" width="330" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="264" class="node-title" style="font-size:18.0px" text-anchor="start">Management attachment</text>
+<text x="76" y="290" class="node-line" style="font-size:16.0px" text-anchor="start">leaves 103 / 104 · VLAN 2101</text>
+</g>
+<g id="tenantleaf">
+<rect x="510" y="235" width="330" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="526" y="264" class="node-title" style="font-size:18.0px" text-anchor="start">Tenant routing</text>
+<text x="526" y="290" class="node-line" style="font-size:16.0px" text-anchor="start">leaves 101 / 102 · AS 64512</text>
+</g>
+<g id="mgtbond">
+<rect x="60" y="405" width="330" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="434" class="node-title" style="font-size:18.0px" text-anchor="start">bond0</text>
+<text x="76" y="460" class="node-line" style="font-size:16.0px" text-anchor="start">eth0 + eth1 · 198.18.1.0/24</text>
+</g>
+<g id="trunk">
+<rect x="510" y="405" width="330" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="526" y="434" class="node-title" style="font-size:18.0px" text-anchor="start">bond1 · eth2 + eth3</text>
+<text x="526" y="460" class="node-line" style="font-size:16.0px" text-anchor="start">bond1.2113 · node BGP addresses</text>
+</g>
+<g id="api">
+<rect x="60" y="580" width="330" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="609" class="node-title" style="font-size:16.6px" text-anchor="start">Management API / core services</text>
+<text x="76" y="635" class="node-line" style="font-size:16.0px" text-anchor="start">default gateway 198.18.1.1</text>
+</g>
+<g id="cp">
+<rect x="510" y="580" width="330" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="526" y="609" class="node-title" style="font-size:18.0px" text-anchor="start">Management Cilium BGP</text>
+<text x="526" y="635" class="node-line" style="font-size:16.0px" text-anchor="start">AS 64713 · HCP router VIPs</text>
+</g>
+<g id="hcp-pods">
+<rect x="60" y="755" width="330" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="784" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted control-plane pods</text>
+<text x="76" y="810" class="node-line" style="font-size:16.0px" text-anchor="start">management pod network</text>
+</g>
+<g id="vm">
+<rect x="510" y="755" width="330" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="526" y="784" class="node-title" style="font-size:18.0px" text-anchor="start">Guest OpenShift workers</text>
+<text x="526" y="810" class="node-line" style="font-size:16.0px" text-anchor="start">bridge VLAN 2114 · AS 64714</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="497.5" y="156.5" width="205.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="600" y="175" class="edge-label" style="font-size:12.5px" text-anchor="middle">existing site-edge routing</text>
+<rect x="141.25" y="156.5" width="167.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="225" y="175" class="edge-label" style="font-size:12.5px" text-anchor="middle">site management L3Out</text>
+<rect x="268.75" y="326.5" width="122.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="330" y="345" class="edge-label" style="font-size:12.5px" text-anchor="middle">untagged access</text>
+<rect x="610.0" y="341.5" width="130.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="675" y="360" class="edge-label" style="font-size:12.5px" text-anchor="middle">VLAN 2113 · eBGP</text>
+<rect x="122.5" y="511.5" width="205.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="225" y="530" class="edge-label" style="font-size:12.5px" text-anchor="middle">bootstrap / service access</text>
+<rect x="606.25" y="511.5" width="137.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="675" y="530" class="edge-label" style="font-size:12.5px" text-anchor="middle">node BGP sessions</text>
+<rect x="160.0" y="686.5" width="130.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="225" y="705" class="edge-label" style="font-size:12.5px" text-anchor="middle">MCE / HyperShift</text>
+<rect x="366.25" y="686.5" width="167.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="705" class="edge-label" style="font-size:12.5px" text-anchor="middle">router Service → pods</text>
+<rect x="626.25" y="686.5" width="227.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="740" y="705" class="edge-label" style="font-size:12.5px" text-anchor="middle">VLAN 2114 · direct guest eBGP</text>
+</g>
+<line x1="40" y1="880" x2="74" y2="880" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/><text x="84" y="885" font-size="14" fill="#344563">network protocol / transport</text><line x1="470" y1="880" x2="504" y2="880" stroke="#7A5AF8" stroke-width="3"/><text x="514" y="885" font-size="14" fill="#344563">API / controller contract</text></svg>

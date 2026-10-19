@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/agent-inventory-v1.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mode",
+    "rendezvousNode",
+    "managementInterface",
+    "nodes"
+  ],
+  "properties": {
+    "mode": {
+      "enum": [
+        "compact",
+        "sno"
+      ]
+    },
+    "rendezvousNode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "managementInterface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bond",
+        "members",
+        "mode",
+        "options"
+      ],
+      "properties": {
+        "bond": {
+          "type": "string",
+          "minLength": 1
+        },
+        "members": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "mode": {
+          "enum": [
+            "active-backup",
+            "802.3ad"
+          ]
+        },
+        "options": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": false,
+          "properties": {
+            "miimon": {
+              "type": "string",
+              "minLength": 1
+            },
+            "primary": {
+              "type": "string",
+              "minLength": 1
+            },
+            "lacp_rate": {
+              "type": "string",
+              "minLength": 1
+            },
+            "xmit_hash_policy": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "ip",
+          "interfaces",
+          "rootDeviceHints"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ip": {
+            "type": "string",
+            "format": "ipv4"
+          },
+          "interfaces": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "macAddress"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "macAddress": {
+                  "type": "string",
+                  "pattern": "^[0-9A-Fa-f]{2}(:[0-9A-Fa-f]{2}){5}$"
+                }
+              }
+            }
+          },
+          "rootDeviceHints": {
+            "type": "object",
+            "additionalProperties": false,
+            "minProperties": 1,
+            "maxProperties": 1,
+            "properties": {
+              "serialNumber": {
+                "type": "string",
+                "minLength": 1
+              },
+              "deviceName": {
+                "type": "string",
+                "minLength": 1
+              },
+              "wwn": {
+                "type": "string",
+                "minLength": 1
+              },
+              "model": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "compact"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "nodes": {
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "sno"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "nodes": {
+            "minItems": 1,
+            "maxItems": 1
+          }
+        }
+      }
+    }
+  ]
+}

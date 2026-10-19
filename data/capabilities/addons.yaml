@@ -1,0 +1,135 @@
+# Optional add-on catalog. Cluster day2GitOps.addOns selects entries.
+# Switches default false. This file is read only when a switch is true.
+#
+# Intentional differences from saif-gitops 100b353:
+# - Repository URL, revision, and the GitOps namespace come from platform defaults.
+# - The Splunk Application does not inline chart values or an access token.
+#   clusterName is derived from the cluster name and base domain. The token
+#   stays runtime enrichment.
+# - The Intersight blade serial is addonSelections.splunk.bladeSerial.
+#   Image pins are annotations. They are not kustomize patches.
+# - The NIM operator values are the catalog image pin and admissionController
+#   setting.
+# - The recovered DeepSeek Application excludes the model service. This catalog
+#   publishes the selected model.
+# - The recovered Open WebUI image tag main is not a pin. The tag is required
+#   in addonSelections.demoApps.tag.
+# - The GPU channel is a pin annotation. The Subscription stays in the vendored
+#   path. Node Feature Discovery, the GPU cluster policy, the Splunk reporter,
+#   Cisco Boutique, the policy Applications, and mnist are not capabilities.
+# - Tetragon and the ClickHouse operator stay on the Isovalent baseline.
+addons:
+  nvidia:
+    modelSelection: model
+    applications:
+      - name: gpu-operator
+        path: apps/gpu-operator
+        destinationNamespace: nvidia-gpu-operator
+        syncWave: "-2"
+        prune: false
+        selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+          - SkipDryRunOnMissingResource=true
+          - RespectIgnoreDifferences=true
+        retry:
+          limit: 5
+          duration: 30s
+          factor: 2
+          maxDuration: 5m
+        pins:
+          subscriptionChannel: v25.10
+      - name: nim-operator
+        path: charts/k8s-nim-operator
+        destinationNamespace: nim-operator
+        syncWave: "1"
+        chartVersion: "3.0.2"
+        prune: true
+        selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+          - ServerSideApply=true
+        helmValues:
+          operator:
+            image:
+              repository: registry.example.com:5000/nvidia/cloud-native/k8s-nim-operator
+              tag: v3.0.2
+              pullPolicy: IfNotPresent
+            admissionController:
+              enabled: false
+    models:
+      deepseek-r1-14b:
+        name: nim-llm-deepseek
+        path: apps/nim-llm-deepseek
+        destinationNamespace: nim-llm
+        syncWave: "2"
+        prune: true
+        selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        pins:
+          imageRepository: registry.example.com:5000/nim/deepseek-ai/deepseek-r1-distill-qwen-14b
+          imageTag: "1.1.0"
+        ignoreDifferences:
+          - group: apps.nvidia.com
+            kind: NIMService
+            jsonPointers:
+              - /spec
+  demoApps:
+    applications:
+      - name: open-webui
+        path: apps/open-webui
+        destinationNamespace: open-webui
+        syncWave: "5"
+        prune: true
+        selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        imageFromSelection: true
+  saifDemo:
+    applications:
+      - name: saif-agent
+        path: apps/saif-agent
+        destinationNamespace: saif-agent
+        syncWave: "3"
+        prune: true
+        selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+  splunk:
+    applications:
+      - name: splunk-otel
+        path: charts/splunk-otel-collector
+        destinationNamespace: splunk-otel
+        syncWave: "1"
+        chartVersion: "0.143.0"
+        prune: true
+        selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        parameters:
+          - name: clusterName
+            valueFrom: clusterFqdn
+        pins:
+          collectorTag: "0.143.0"
+      - name: intersight-otel
+        path: charts/intersight-otel
+        destinationNamespace: intersight-otel
+        syncWave: "1"
+        chartVersion: "1.0.0"
+        prune: true
+        selfHeal: true
+        syncOptions:
+          - CreateNamespace=true
+        parameters:
+          - name: clusterName
+            valueFrom: clusterFqdn
+          - name: bladeSerial
+            valueFrom: selection
+            selectionKey: bladeSerial
+        pins:
+          collectorRepository: registry.example.com:5000/example/intersight-otel
+          collectorTag: v0.3.0-numeric-fields
+          otelRepository: registry.example.com:5000/otel/opentelemetry-collector-contrib
+          otelTag: "0.127.0"

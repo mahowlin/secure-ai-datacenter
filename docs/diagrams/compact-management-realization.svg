@@ -1,0 +1,256 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1870" viewBox="0 0 1200 1870" role="img" aria-labelledby="title description">
+<title id="title">Compact management cluster: installation, platform layers and tenant handoff</title>
+<desc id="description">The reference composition separates UCS vNIC provisioning from OpenShift installation and Day 2 host networking. Argo CD reconciles management Applications through the local Kubernetes API. HyperShift and KubeVirt create hosted control-plane pods and worker VMs, while guest Applications use a separately registered tenant Kubernetes API.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1200" height="1870" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Compact management cluster: installation, platform layers and tenant handoff</text>
+<text x="36" y="78" class="subheading" text-anchor="start">UCS creates vNICs; AgentConfig creates bond0; GitOps and NMState create bond1 and hosted-cluster state after installation.</text>
+<g id="zone-physical">
+<rect x="20" y="105" width="1160" height="265" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-day1">
+<rect x="40" y="405" width="1120" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-day2">
+<rect x="20" y="700" width="1160" height="555" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-runtime">
+<rect x="45" y="1285" width="1110" height="260" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-guest">
+<rect x="45" y="1580" width="1110" height="255" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 345 252 L 450 252" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 750 252 L 855 252" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 195 340 L 195 450" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 600 340 L 600 400 L 800 400 L 800 450" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 1005 340 L 1005 400 L 1000 400 L 1000 450" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 520 535 L 680 535" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 900 620 L 900 680 L 210 680 L 210 755" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 375 855 L 435 855" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 765 855 L 825 855" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 545 955 L 545 1005 L 325 1005 L 325 1045" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 655 955 L 655 1005 L 875 1005 L 875 1045" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 775 1225 L 775 1270 L 315 1270 L 315 1335" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 975 1225 L 975 1335" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 315 1515 L 315 1580 L 290 1580 L 290 1630" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 885 1515 L 885 1570 L 400 1570 L 400 1630" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 210 955 L 25 955 L 25 1717 L 90 1717" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 490 1717 L 710 1717" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-physical">
+<rect x="32" y="114" width="556.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Physical composition: fabric and server interfaces</text>
+</g>
+<g id="zone-label-day1">
+<rect x="52" y="414" width="448.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="60" y="436" class="zone-title" style="font-size:18.0px" text-anchor="start">Day 1: management OpenShift installation</text>
+</g>
+<g id="zone-label-day2">
+<rect x="32" y="709" width="448.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="731" class="zone-title" style="font-size:18.0px" text-anchor="start">Day 2: GitOps and management controllers</text>
+</g>
+<g id="zone-label-runtime">
+<rect x="57" y="1294" width="512.8" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="65" y="1316" class="zone-title" style="font-size:18.0px" text-anchor="start">Hosted-cluster runtime on management OpenShift</text>
+</g>
+<g id="zone-label-guest">
+<rect x="57" y="1589" width="469.59999999999997" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="65" y="1611" class="zone-title" style="font-size:18.0px" text-anchor="start">Guest-cluster API and Day 2 reconciliation</text>
+</g>
+</g>
+<g id="nodes">
+<g id="intent">
+<rect x="45" y="165" width="300" height="175" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="61" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">Compact composition</text>
+<text x="62" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="81" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">example-management</text>
+<text x="62" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="81" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">example-node-2, 3 and 4</text>
+<text x="62" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="81" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">selected platform layers</text>
+</g>
+<g id="aci">
+<rect x="450" y="165" width="300" height="175" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="466" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">ACI network foundation</text>
+<text x="467" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="486" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">management VLAN 2101</text>
+<text x="467" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="486" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">tenant VLAN allowance</text>
+<text x="467" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="486" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">routing remains fabric-owned</text>
+</g>
+<g id="ucs">
+<rect x="855" y="165" width="300" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="871" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">UCS Day 0 compute</text>
+<text x="872" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="891" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">three server profiles</text>
+<text x="872" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="891" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">management vNICs eth0 + eth1</text>
+<text x="872" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="891" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">tenant vNICs eth2 + eth3</text>
+<text x="872" y="289" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="891" y="289" class="node-line" style="font-size:15.0px" text-anchor="start">does not create host bond1</text>
+</g>
+<g id="day1">
+<rect x="80" y="450" width="440" height="170" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="96" y="479" class="node-title" style="font-size:18.0px" text-anchor="start">Agent-based Day 1</text>
+<text x="97" y="505" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="505" class="node-line" style="font-size:15.0px" text-anchor="start">AgentConfig creates bond0 only</text>
+<text x="97" y="528" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="528" class="node-line" style="font-size:15.0px" text-anchor="start">install-config selects Cilium</text>
+<text x="97" y="551" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="116" y="551" class="node-line" style="font-size:15.0px" text-anchor="start">Agent ISO boots three servers</text>
+</g>
+<g id="ocp">
+<rect x="680" y="450" width="440" height="170" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="696" y="479" class="node-title" style="font-size:18.0px" text-anchor="start">Compact management OpenShift</text>
+<text x="697" y="505" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="716" y="505" class="node-line" style="font-size:15.0px" text-anchor="start">three control-plane and worker nodes</text>
+<text x="697" y="528" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="716" y="528" class="node-line" style="font-size:15.0px" text-anchor="start">bond0 carries management</text>
+<text x="697" y="551" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="716" y="551" class="node-line" style="font-size:15.0px" text-anchor="start">platform services are selected layers</text>
+</g>
+<g id="gitops">
+<rect x="45" y="755" width="330" height="200" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="61" y="784" class="node-title" style="font-size:18.0px" text-anchor="start">Argo CD desired state</text>
+<text x="62" y="810" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="81" y="810" class="node-line" style="font-size:15.0px" text-anchor="start">operator + operand Applications</text>
+<text x="62" y="833" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="81" y="833" class="node-line" style="font-size:15.0px" text-anchor="start">parent network + tenant lifecycle</text>
+<text x="62" y="856" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="81" y="856" class="node-line" style="font-size:15.0px" text-anchor="start">guest apps use a named target</text>
+</g>
+<g id="management-api">
+<rect x="435" y="755" width="330" height="200" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="451" y="784" class="node-title" style="font-size:18.0px" text-anchor="start">Management Kubernetes API</text>
+<text x="452" y="810" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="471" y="810" class="node-line" style="font-size:14.9px" text-anchor="start">destination: kubernetes.default.svc</text>
+<text x="452" y="833" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="471" y="833" class="node-line" style="font-size:15.0px" text-anchor="start">receives management Applications</text>
+<text x="452" y="856" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="471" y="856" class="node-line" style="font-size:14.9px" text-anchor="start">controller readiness stays separate</text>
+</g>
+<g id="controllers">
+<rect x="825" y="755" width="330" height="200" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="841" y="784" class="node-title" style="font-size:17.4px" text-anchor="start">Selected platform controllers</text>
+<text x="842" y="810" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="861" y="810" class="node-line" style="font-size:15.0px" text-anchor="start">OLM + CNV/KubeVirt</text>
+<text x="842" y="833" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="861" y="833" class="node-line" style="font-size:15.0px" text-anchor="start">MCE + HyperShift</text>
+<text x="842" y="856" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="861" y="856" class="node-line" style="font-size:15.0px" text-anchor="start">NMState + Cilium</text>
+</g>
+<g id="nmstate">
+<rect x="120" y="1045" width="410" height="180" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="136" y="1074" class="node-title" style="font-size:18.0px" text-anchor="start">NMState Day 2 host intent</text>
+<text x="137" y="1100" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="156" y="1100" class="node-line" style="font-size:15.0px" text-anchor="start">NNCP bond1-tenant-transport</text>
+<text x="137" y="1123" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="156" y="1123" class="node-line" style="font-size:15.0px" text-anchor="start">eth2 + eth3 become bond1</text>
+<text x="137" y="1146" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="156" y="1146" class="node-line" style="font-size:15.0px" text-anchor="start">VLAN interfaces follow after install</text>
+</g>
+<g id="lifecycle">
+<rect x="670" y="1045" width="410" height="180" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="686" y="1074" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted-cluster desired state</text>
+<text x="687" y="1100" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="706" y="1100" class="node-line" style="font-size:15.0px" text-anchor="start">HostedCluster + NodePool</text>
+<text x="687" y="1123" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="706" y="1123" class="node-line" style="font-size:15.0px" text-anchor="start">release, mirror, storage + network</text>
+<text x="687" y="1146" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="706" y="1146" class="node-line" style="font-size:15.0px" text-anchor="start">bootstrap is controller-owned</text>
+</g>
+<g id="control">
+<rect x="90" y="1335" width="450" height="180" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="106" y="1364" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted control-plane pods</text>
+<text x="107" y="1390" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1390" class="node-line" style="font-size:15.0px" text-anchor="start">created by HyperShift</text>
+<text x="107" y="1413" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1413" class="node-line" style="font-size:15.0px" text-anchor="start">run on management pod networking</text>
+<text x="107" y="1436" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1436" class="node-line" style="font-size:15.0px" text-anchor="start">serve the hosted cluster API</text>
+</g>
+<g id="workers">
+<rect x="660" y="1335" width="450" height="180" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="676" y="1364" class="node-title" style="font-size:18.0px" text-anchor="start">KubeVirt worker VMs</text>
+<text x="677" y="1390" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="696" y="1390" class="node-line" style="font-size:15.0px" text-anchor="start">created from the NodePool</text>
+<text x="677" y="1413" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="696" y="1413" class="node-line" style="font-size:15.0px" text-anchor="start">root volume + worker interfaces</text>
+<text x="677" y="1436" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="696" y="1436" class="node-line" style="font-size:15.0px" text-anchor="start">register as guest nodes</text>
+</g>
+<g id="guest-api">
+<rect x="90" y="1630" width="400" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="106" y="1659" class="node-title" style="font-size:18.0px" text-anchor="start">Tenant Kubernetes API</text>
+<text x="107" y="1685" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1685" class="node-line" style="font-size:15.0px" text-anchor="start">registered in Argo CD as selected tenant</text>
+<text x="107" y="1708" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1708" class="node-line" style="font-size:15.0px" text-anchor="start">separate remote destination</text>
+<text x="107" y="1731" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1731" class="node-line" style="font-size:15.0px" text-anchor="start">available after HCP bootstrap</text>
+</g>
+<g id="guest-apps">
+<rect x="710" y="1630" width="400" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="726" y="1659" class="node-title" style="font-size:18.0px" text-anchor="start">Guest Day 2 applications</text>
+<text x="727" y="1685" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="746" y="1685" class="node-line" style="font-size:15.0px" text-anchor="start">Cilium + catalogs</text>
+<text x="727" y="1708" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="746" y="1708" class="node-line" style="font-size:15.0px" text-anchor="start">policy, secrets + observability</text>
+<text x="727" y="1731" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="746" y="1731" class="node-line" style="font-size:15.0px" text-anchor="start">reconciled through tenant API</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="638.75" y="376.5" width="122.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="700" y="395" class="edge-label" style="font-size:12.5px" text-anchor="middle">fabric contract</text>
+<rect x="937.0" y="376.5" width="130.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="1002" y="395" class="edge-label" style="font-size:12.5px" text-anchor="middle">profiles + vNICs</text>
+<rect x="561.25" y="499.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="600" y="518" class="edge-label" style="font-size:12.5px" text-anchor="middle">Agent ISO</text>
+<rect x="501.25" y="656.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="555" y="675" class="edge-label" style="font-size:12.5px" text-anchor="middle">hosts Argo CD</text>
+<rect x="415.0" y="981.5" width="40.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="435" y="1000" class="edge-label" style="font-size:12.5px" text-anchor="middle">NNCP</text>
+<rect x="670.0" y="981.5" width="190.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="765" y="1000" class="edge-label" style="font-size:12.5px" text-anchor="middle">HostedCluster + NodePool</text>
+<rect x="502.5" y="1246.5" width="85.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="545" y="1265" class="edge-label" style="font-size:12.5px" text-anchor="middle">HyperShift</text>
+<rect x="898.75" y="1246.5" width="152.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="975" y="1265" class="edge-label" style="font-size:12.5px" text-anchor="middle">NodePool + KubeVirt</text>
+<rect x="259.5" y="1556.5" width="85.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="302" y="1575" class="edge-label" style="font-size:12.5px" text-anchor="middle">serves API</text>
+<rect x="584.5" y="1546.5" width="115.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="642" y="1565" class="edge-label" style="font-size:12.5px" text-anchor="middle">nodes register</text>
+<rect x="516.25" y="1681.5" width="167.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="600" y="1700" class="edge-label" style="font-size:12.5px" text-anchor="middle">remote reconciliation</text>
+</g>
+<line x1="40" y1="1831" x2="76" y2="1831" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="1836" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+<line x1="290.0" y1="1831" x2="326.0" y2="1831" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/>
+<text x="336.0" y="1836" class="legend" style="font-size:12.5px" text-anchor="start">network protocol / transport</text>
+<line x1="570.0" y1="1831" x2="606.0" y2="1831" stroke="#7A5AF8" stroke-width="3"/>
+<text x="616.0" y="1836" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+</svg>

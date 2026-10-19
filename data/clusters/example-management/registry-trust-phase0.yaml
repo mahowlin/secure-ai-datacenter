@@ -1,0 +1,15 @@
+kind: HostedRegistryTrustPhase0
+metadata:
+  name: example-management
+spec:
+  targetOwnedConfigMap: registry-ca-bundle
+  expectedPublicCaFingerprintSha256: b9ebbafb3fa03545ee2079bbe3d8566acfbb6e7a3d6b9d93d9ca877b0745f208
+  versionedAdditionalTrustBundle: registry-ca-bundle-local-20260929
+  expectedVersionedPublicCaCertificateCount: 3
+  expectedVersionedPublicCaFingerprintsSha256:
+    - b9ebbafb3fa03545ee2079bbe3d8566acfbb6e7a3d6b9d93d9ca877b0745f208
+    - dec1daa892e9d2d20a198ca5e743566ea88107ef9eaac5aa98a7f10e949638d9
+  sourceOverlayByRole:
+    multus: example-shared
+  additionalTrustByRole:
+    multus: registry-ca-bundle

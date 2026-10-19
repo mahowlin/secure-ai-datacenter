@@ -1,0 +1,38 @@
+#cloud-config
+ssh_pwauth: false
+users:
+- default
+write_files:
+- path: /usr/local/sbin/saif-worker-dhcp-server.py
+  owner: root:root
+  permissions: "0755"
+  content: |
+{{ server_script_indented }}
+- path: /usr/local/sbin/saif-worker-dhcp-lease-disk.sh
+  owner: root:root
+  permissions: "0755"
+  content: |
+{{ lease_mount_script_indented }}
+- path: /etc/systemd/system/saif-worker-dhcp-server.service
+  owner: root:root
+  permissions: "0644"
+  content: |
+    [Unit]
+    Description=SAIF HCP external DHCP authority with retained lease state
+    After=local-fs.target network-online.target
+    Wants=network-online.target
+
+    [Service]
+    Type=simple
+    ExecStartPre=/usr/local/sbin/saif-worker-dhcp-lease-disk.sh --verify
+    ExecStart=/usr/local/sbin/saif-worker-dhcp-server.py
+    Restart=no
+    StandardOutput=journal
+    StandardError=journal
+
+    [Install]
+    WantedBy=multi-user.target
+runcmd:
+- [ bash, -lc, "sysctl -w net.ipv4.ip_forward=0 && sysctl -w net.ipv6.conf.all.forwarding=0" ]
+- [ bash, -lc, "systemctl disable --now firewalld || true" ]
+- [ bash, -lc, "systemctl daemon-reload && systemctl enable --now saif-worker-dhcp-server.service" ]

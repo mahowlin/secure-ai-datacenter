@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+  namespace: ilb-poc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: ilb-poc-echo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ilb-poc-echo
+    spec:
+      containers:
+        - name: echo
+          image: registry.example.com:5000/openshift4/ose-tools-rhel9@sha256:1fb113648f4a12f619c8af09320df108b8a96f102a87544a05e3db468ce2c0b7
+          command: ["/bin/sh", "-c"]
+          args:
+            - >-
+              printf 'example-tenant-a-ilb-poc\n' > /tmp/index.html;
+              exec /usr/bin/python3 -m http.server 8080 --bind 0.0.0.0 --directory /tmp
+          ports:
+            - name: http
+              containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: content
+              mountPath: /tmp
+      volumes:
+        - name: content
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo
+  namespace: ilb-poc
+  labels:
+    poc.isovalent.com/ilb-hcp-pip: "true"
+spec:
+  type: LoadBalancer
+  loadBalancerClass: poc.isovalent.com/ilb-hcp-pip
+  selector:
+    app.kubernetes.io/name: ilb-poc-echo
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: http

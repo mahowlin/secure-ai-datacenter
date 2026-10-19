@@ -1,0 +1,33 @@
+{
+  "image": "registry.example.com:5000/isovalent/vector@sha256:d621ac6a93242dc22b74289887da06ede13b543acfcdc8475e425da5bb8676ab",
+  "platform": "linux/amd64",
+  "threads": 1,
+  "vector_cpus": 1,
+  "sink_cpus": 0.5,
+  "vector_memory_bytes": 1073741824,
+  "sink_memory_bytes": 536870912,
+  "fixture_volume_bytes": 201326592,
+  "buffer_volume_bytes": 402653184,
+  "log_bytes_per_container": 4194304,
+  "deadline_seconds": 480,
+  "cadence_seconds": 10,
+  "drain_seconds": 90,
+  "line_bytes": [
+    3222495,
+    4422561,
+    10542054,
+    16776192,
+    16776192
+  ],
+  "reader_max_line_bytes": 16777216,
+  "http_batch_bytes": 10485760,
+  "disk_buffer_bytes": 268435488,
+  "flow_records_per_second": 400,
+  "cluster_name": "offline-profile",
+  "slow_seconds": 2,
+  "fail_requests": 1,
+  "config": "tests/fixtures/management-vector-profile-config.json",
+  "base_application_sha256": "23b8cc1dc8ff889d3eaaa12b3dfdf3f31f207b821e44777ed2fe5342e96e7a5a",
+  "flow_metadata_labels": 24,
+  "candidate_source": "data/clusters/example-management/cluster.yaml"
+}

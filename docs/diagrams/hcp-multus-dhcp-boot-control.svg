@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1020" viewBox="0 0 1100 1020" role="img" aria-labelledby="title description">
+<title id="title">Multus and DHCP worker boot ordering</title>
+<desc id="description">Validated direct-L2 worker boot ordering from HCP objects through the management-owned Multus NAD, scope-bound DHCP, Ignition, API registration and post-boot Konnectivity.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="1020" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Multus and DHCP worker boot ordering</text>
+<text x="36" y="78" class="subheading" text-anchor="start">The worker and DHCP endpoint share a pre-rendered NAD; boot still needs DORA, Ignition and API before Konnectivity.</text>
+<g id="zone-boot">
+<rect x="20" y="110" width="1060" height="545" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-owners">
+<rect x="20" y="750" width="1060" height="230" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 310 260 L 420 260" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 680 260 L 790 260" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+<path d="M 920 335 L 920 400 L 180 400 L 180 470" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+<path d="M 310 545 L 420 545" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+<path d="M 680 545 L 800 545" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 190 810 L 190 740 L 180 740 L 180 620" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+<path d="M 550 800 L 550 620" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+<path d="M 910 810 L 910 700 L 925 700 L 925 600" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-boot">
+<rect x="32" y="119" width="350.8" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="141" class="zone-title" style="font-size:18.0px" text-anchor="start">Worker-originated boot sequence</text>
+</g>
+<g id="zone-label-owners">
+<rect x="32" y="759" width="253.6" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="781" class="zone-title" style="font-size:18.0px" text-anchor="start">Supporting path owners</text>
+</g>
+</g>
+<g id="nodes">
+<g id="objects">
+<rect x="50" y="185" width="260" height="150" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="66" y="214" class="node-title" style="font-size:18.0px" text-anchor="start">HCP + KubeVirt</text>
+<text x="66" y="240" class="node-line" style="font-size:15.0px" text-anchor="start">NodePool + Machine</text>
+<text x="66" y="263" class="node-line" style="font-size:15.0px" text-anchor="start">VM, disk + user data</text>
+</g>
+<g id="multus">
+<rect x="420" y="185" width="260" height="150" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="436" y="214" class="node-title" style="font-size:18.0px" text-anchor="start">tenant-x-workers NAD</text>
+<text x="436" y="240" class="node-line" style="font-size:13.6px" text-anchor="start">management-rendered Multus NIC</text>
+<text x="436" y="263" class="node-line" style="font-size:15.0px" text-anchor="start">attachment owns bridge/VLAN</text>
+</g>
+<g id="dhcp">
+<rect x="790" y="185" width="260" height="150" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="806" y="214" class="node-title" style="font-size:18.0px" text-anchor="start">DHCP on same NAD</text>
+<text x="806" y="240" class="node-line" style="font-size:15.0px" text-anchor="start">direct broadcast DORA</text>
+<text x="806" y="263" class="node-line" style="font-size:15.0px" text-anchor="start">isolated reservation scope</text>
+</g>
+<g id="ignition">
+<rect x="50" y="470" width="260" height="150" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="66" y="499" class="node-title" style="font-size:18.0px" text-anchor="start">Ignition endpoint</text>
+<text x="66" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">worker-originated TLS</text>
+<text x="66" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">full worker config</text>
+</g>
+<g id="api">
+<rect x="420" y="470" width="260" height="150" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="436" y="499" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted API</text>
+<text x="436" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">bootstrap + CSR</text>
+<text x="436" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">Node registration</text>
+</g>
+<g id="ready">
+<rect x="800" y="490" width="250" height="110" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="816" y="519" class="node-title" style="font-size:18.0px" text-anchor="start">Worker Ready</text>
+<text x="816" y="545" class="node-line" style="font-size:15.0px" text-anchor="start">guest Cilium</text>
+</g>
+<g id="services">
+<rect x="40" y="810" width="300" height="150" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="839" class="node-title" style="font-size:18.0px" text-anchor="start">Boot dependencies</text>
+<text x="56" y="865" class="node-line" style="font-size:15.0px" text-anchor="start">DNS, NTP + registry</text>
+<text x="56" y="888" class="node-line" style="font-size:15.0px" text-anchor="start">tenant route through ACI</text>
+</g>
+<g id="publication">
+<rect x="400" y="800" width="300" height="170" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="416" y="829" class="node-title" style="font-size:18.0px" text-anchor="start">Management publication</text>
+<text x="416" y="855" class="node-line" style="font-size:15.0px" text-anchor="start">API + Ignition VIP</text>
+<text x="416" y="878" class="node-line" style="font-size:15.0px" text-anchor="start">management Service BGP</text>
+<text x="416" y="901" class="node-line" style="font-size:15.0px" text-anchor="start">separate from worker BGP</text>
+</g>
+<g id="konnect">
+<rect x="760" y="810" width="300" height="150" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="776" y="839" class="node-title" style="font-size:18.0px" text-anchor="start">Konnectivity after boot</text>
+<text x="776" y="865" class="node-line" style="font-size:15.0px" text-anchor="start">worker agent dials out</text>
+<text x="776" y="888" class="node-line" style="font-size:15.0px" text-anchor="start">reverse logical requests</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="715.0" y="225.5" width="40.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="735" y="244" class="edge-label" style="font-size:12.5px" text-anchor="middle">DORA</text>
+<rect x="532.0" y="374.5" width="36" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="550" y="393" class="edge-label" style="font-size:12.5px" text-anchor="middle">GET</text>
+<rect x="347.0" y="510.5" width="36" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="365" y="529" class="edge-label" style="font-size:12.5px" text-anchor="middle">TLS</text>
+<rect x="720.0" y="510.5" width="40.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="740" y="529" class="edge-label" style="font-size:12.5px" text-anchor="middle">join</text>
+<rect x="231.25" y="714.5" width="167.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="315" y="733" class="edge-label" style="font-size:12.5px" text-anchor="middle">required before Ready</text>
+<rect x="566.25" y="691.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="620" y="710" class="edge-label" style="font-size:12.5px" text-anchor="middle">published VIP</text>
+<rect x="937.5" y="671.5" width="85.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="980" y="690" class="edge-label" style="font-size:12.5px" text-anchor="middle">after join</text>
+</g>
+<line x1="40" y1="981" x2="76" y2="981" stroke="#7A5AF8" stroke-width="3"/>
+<text x="86" y="986" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+<line x1="297.5" y1="981" x2="333.5" y2="981" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/>
+<text x="343.5" y="986" class="legend" style="font-size:12.5px" text-anchor="start">network protocol / transport</text>
+</svg>

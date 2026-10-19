@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1050" viewBox="0 0 1100 1050" role="img" aria-labelledby="title description">
+<title id="title">SNO composition realized on one example server</title>
+<desc id="description">The reference composition selects ACI VLAN 2101 and a UCS vNIC profile. Rendered install-config, AgentConfig and selected manifests are enriched by the target workflow, built into an Agent ISO, uploaded to the file server, mounted through Intersight vMedia and booted on the selected server.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="1050" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">SNO composition realized on one example server</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Installation input becomes an Agent ISO before HTTP delivery, vMedia mounting and bare-metal boot.</text>
+<g id="zone-contract">
+<rect x="20" y="105" width="1060" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-installation">
+<rect x="15" y="420" width="1070" height="285" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-runtime">
+<rect x="40" y="775" width="1020" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 275 242 L 300 242" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 535 242 L 560 242" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 795 242 L 820 242" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 938 320 L 938 380 L 195 380 L 195 470" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 355 572 L 390 572" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 710 572 L 745 572" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 677 320 L 677 410 L 905 410 L 905 470" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 905 675 L 905 750 L 835 750 L 835 825" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 460 907 L 640 907" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-contract">
+<rect x="32" y="114" width="415.59999999999997" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Composition and installation contract</text>
+</g>
+<g id="zone-label-installation">
+<rect x="27" y="429" width="318.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="35" y="451" class="zone-title" style="font-size:18.0px" text-anchor="start">Agent ISO build and delivery</text>
+</g>
+<g id="zone-label-runtime">
+<rect x="52" y="784" width="458.8" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="60" y="806" class="zone-title" style="font-size:18.0px" text-anchor="start">Installed runtime and shared dependencies</text>
+</g>
+</g>
+<g id="nodes">
+<g id="intent">
+<rect x="40" y="165" width="235" height="155" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">SNO composition</text>
+<text x="57" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="76" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">example-sno</text>
+<text x="57" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="76" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">mode: sno</text>
+<text x="57" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="76" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">one rendezvous node</text>
+</g>
+<g id="aci">
+<rect x="300" y="165" width="235" height="155" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="316" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">ACI VLAN 2101</text>
+<text x="317" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">management network</text>
+<text x="317" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">gateway 198.18.1.1</text>
+<text x="317" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="336" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">existing fabric attachment</text>
+</g>
+<g id="ucs">
+<rect x="560" y="165" width="235" height="155" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="576" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">UCS vNIC identity</text>
+<text x="577" y="220" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="596" y="220" class="node-line" style="font-size:14.9px" text-anchor="start">selected server profile</text>
+<text x="577" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="596" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">vNICs eth0 + eth1</text>
+<text x="577" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="596" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">VLAN 2101 allowed</text>
+</g>
+<g id="inputs">
+<rect x="820" y="165" width="235" height="155" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="836" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">Install inputs</text>
+<text x="837" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="856" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">install-config.yaml</text>
+<text x="837" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="856" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">AgentConfig bond0</text>
+<text x="837" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="856" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">metadata + manifests</text>
+</g>
+<g id="iso">
+<rect x="35" y="470" width="320" height="205" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="51" y="499" class="node-title" style="font-size:18.0px" text-anchor="start">Agent ISO generation</text>
+<text x="52" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">install-config + AgentConfig</text>
+<text x="52" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">runtime secrets + hardware facts</text>
+<text x="52" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">Day 1 + image-policy manifests</text>
+<text x="52" y="594" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="594" class="node-line" style="font-size:15.0px" text-anchor="start">openshift-install build command</text>
+<text x="52" y="617" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="617" class="node-line" style="font-size:15.0px" text-anchor="start">output: Agent ISO</text>
+</g>
+<g id="media">
+<rect x="390" y="470" width="320" height="205" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="406" y="499" class="node-title" style="font-size:18.0px" text-anchor="start">HTTP and vMedia delivery</text>
+<text x="407" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="426" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">upload to the file server</text>
+<text x="407" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="426" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">Intersight vMedia policy</text>
+<text x="407" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="426" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">ISO mounted as boot media</text>
+</g>
+<g id="metal">
+<rect x="745" y="470" width="320" height="205" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="761" y="499" class="node-title" style="font-size:18.0px" text-anchor="start">Selected bare-metal server</text>
+<text x="762" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="781" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">UCS profile attached</text>
+<text x="762" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="781" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">eth0 + eth1 become bond0</text>
+<text x="762" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="781" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">one-time boot from Agent ISO</text>
+</g>
+<g id="services">
+<rect x="70" y="825" width="390" height="165" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="86" y="854" class="node-title" style="font-size:18.0px" text-anchor="start">Shared service dependencies</text>
+<text x="87" y="880" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="106" y="880" class="node-line" style="font-size:15.0px" text-anchor="start">DNS and NTP</text>
+<text x="87" y="903" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="106" y="903" class="node-line" style="font-size:15.0px" text-anchor="start">configured registry</text>
+<text x="87" y="926" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="106" y="926" class="node-line" style="font-size:15.0px" text-anchor="start">release images and catalogs</text>
+</g>
+<g id="sno">
+<rect x="640" y="825" width="390" height="165" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="656" y="854" class="node-title" style="font-size:18.0px" text-anchor="start">Single-node OpenShift</text>
+<text x="657" y="880" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="676" y="880" class="node-line" style="font-size:15.0px" text-anchor="start">example-sno · 198.18.1.69</text>
+<text x="657" y="903" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="676" y="903" class="node-line" style="font-size:15.0px" text-anchor="start">OVN-Kubernetes initially</text>
+<text x="657" y="926" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="676" y="926" class="node-line" style="font-size:15.0px" text-anchor="start">Cilium Day-2 migration selected</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="488.75" y="356.5" width="152.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="565" y="375" class="edge-label" style="font-size:12.5px" text-anchor="middle">installer workspace</text>
+<rect x="333.25" y="436.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="372" y="455" class="edge-label" style="font-size:12.5px" text-anchor="middle">Agent ISO</text>
+<rect x="703.25" y="436.5" width="47.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="727" y="455" class="edge-label" style="font-size:12.5px" text-anchor="middle">mount</text>
+<rect x="728.75" y="386.5" width="122.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="790" y="405" class="edge-label" style="font-size:12.5px" text-anchor="middle">profile + vNICs</text>
+<rect x="797.5" y="726.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="870" y="745" class="edge-label" style="font-size:12.5px" text-anchor="middle">boots and installs</text>
+<rect x="473.75" y="871.5" width="152.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="550" y="890" class="edge-label" style="font-size:12.5px" text-anchor="middle">DNS · time · images</text>
+</g>
+<line x1="40" y1="1011" x2="76" y2="1011" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="1016" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+<line x1="290.0" y1="1011" x2="326.0" y2="1011" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/>
+<text x="336.0" y="1016" class="legend" style="font-size:12.5px" text-anchor="start">network protocol / transport</text>
+<line x1="570.0" y1="1011" x2="606.0" y2="1011" stroke="#D96C00" stroke-width="3" stroke-dasharray="4 5"/>
+<text x="616.0" y="1016" class="legend" style="font-size:12.5px" text-anchor="start">software supply</text>
+</svg>

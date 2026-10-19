@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ cloud_init_secret_name }}
+  namespace: {{ namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ worker_dhcp_sync_wave }}"
+type: Opaque
+stringData:
+  userdata: |
+{{ cloud_init_indented }}

@@ -1,0 +1,893 @@
+apiVersion: packaging.saif.example.com/v1alpha1
+kind: ClifePackageContract
+metadata:
+  name: clife-install-1.19.7
+spec:
+  release:
+    iep: '26.05'
+    cilium: 1.19.7
+    clife: 1.19.7
+    openshiftCompatibility:
+    - '4.19'
+  source:
+    url: https://artifactory.isovalent.com/artifactory/archive/clife-manifests/clife-v1.19.7.tar.gz
+    sha256: f0eb8988a36a25b40fd8d3c60e8bcb4d94f20472e4481a7711d66f51fcd46252
+    mediaType: application/gzip
+    ephemeralOnly: true
+    persistRawArchive: false
+    publishRawArchiveAsWorkflowArtifact: false
+  chart:
+    name: clife-install
+    repository: registry.example.com:5000/charts/clife-install
+    versionTemplate: 1.19.7-clife.{sourceSha12}.{contractSha12}
+    appVersion: 1.19.7
+    immutable: true
+    allowOverwrite: false
+  resources:
+    exactSourceInventory:
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: ciliumconfigs.cilium.io
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: registrycredentials.isovalent.com
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: clife-controller-manager
+      namespace: cilium
+    - apiVersion: cilium.io/v1alpha1
+      kind: CiliumConfig
+      name: ciliumconfig
+    - apiVersion: monitoring.coreos.com/v1
+      kind: ServiceMonitor
+      name: clife-controller-manager-metrics-monitor
+      namespace: cilium
+    - apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      name: dns-default-all-egress
+      namespace: openshift-dns
+    - apiVersion: operators.coreos.com/v1alpha1
+      kind: Subscription
+      name: clife
+      namespace: cilium
+    - apiVersion: operators.coreos.com/v1alpha2
+      kind: OperatorGroup
+      name: clife
+      namespace: cilium
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: clife-ciliumconfig-admin-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: clife-ciliumconfig-editor-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: clife-ciliumconfig-viewer-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: clife-manager-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: clife-metrics-auth-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: clife-metrics-reader
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: clife-manager-rolebinding
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: clife-metrics-auth-rolebinding
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: clife-leader-election-role
+      namespace: cilium
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: Role
+      name: clife-prometheus-k8s
+      namespace: cilium
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: clife-leader-election-rolebinding
+      namespace: cilium
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: RoleBinding
+      name: clife-prometheus-k8s
+      namespace: cilium
+    - apiVersion: v1
+      kind: Namespace
+      name: cilium
+    - apiVersion: v1
+      kind: Service
+      name: clife-metrics
+      namespace: cilium
+    - apiVersion: v1
+      kind: ServiceAccount
+      name: clife-controller-manager
+      namespace: cilium
+    requiredOutputInventory:
+    - apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      name: ciliumconfigs.cilium.io
+    - apiVersion: apps/v1
+      kind: Deployment
+      namespace: cilium
+      name: clife-controller-manager
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRole
+      name: clife-manager-role
+    - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      name: clife-manager-rolebinding
+    - apiVersion: v1
+      kind: ServiceAccount
+      namespace: cilium
+      name: clife-controller-manager
+  modes:
+    management:
+      exclude:
+      - apiVersion: cilium.io/v1alpha1
+        kind: CiliumConfig
+        name: ciliumconfig
+      - apiVersion: operators.coreos.com/v1alpha1
+        kind: Subscription
+        namespace: cilium
+        name: clife
+      - apiVersion: v1
+        kind: Namespace
+        name: cilium
+      requiredValues:
+      - clife.image
+      - clife.kubernetesServiceHost
+      - clife.kubernetesServicePort
+    hosted:
+      exclude:
+      - apiVersion: operators.coreos.com/v1alpha1
+        kind: Subscription
+        namespace: cilium
+        name: clife
+      requiredValues:
+      - clife.image
+      - clife.kubernetesServiceHost
+      - clife.kubernetesServicePort
+      - ciliumConfig
+      - networkOperator
+  transformations:
+    controller:
+      resource:
+        apiVersion: apps/v1
+        kind: Deployment
+        namespace: cilium
+        name: clife-controller-manager
+      container: manager
+      imageValue: clife.image
+      environmentValues:
+        KUBERNETES_SERVICE_HOST: clife.kubernetesServiceHost
+        KUBERNETES_SERVICE_PORT: clife.kubernetesServicePort
+        DEVELOPMENT_MODE: clife.developmentMode
+    managerRole:
+      resource:
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRole
+        name: clife-manager-role
+      admissionResources:
+      - mutatingwebhookconfigurations
+      - validatingadmissionpolicies
+      - validatingadmissionpolicybindings
+      - validatingwebhookconfigurations
+    ciliumConfig:
+      mode: hosted
+      resource:
+        apiVersion: cilium.io/v1alpha1
+        kind: CiliumConfig
+        name: ciliumconfig
+      specValue: ciliumConfig
+    generatedResources:
+    - mode: hosted
+      apiVersion: operator.openshift.io/v1
+      kind: Network
+      name: cluster
+      specValue: networkOperator
+  values:
+    allowedTopLevelKeys:
+    - mode
+    - clife
+    - ciliumConfig
+    - networkOperator
+    clife:
+      requiredKeys:
+      - image
+      - kubernetesServiceHost
+      - kubernetesServicePort
+      allowedKeys:
+      - image
+      - kubernetesServiceHost
+      - kubernetesServicePort
+      - developmentMode
+    ciliumConfig:
+      schema:
+        type: object
+        additionalProperties: false
+        required:
+        - cluster
+        - securityContext
+        - ipam
+        - cni
+        - prometheus
+        - hubble
+        - operator
+        - sessionAffinity
+        - kubeProxyReplacement
+        - clusterHealthPort
+        - tunnelPort
+        - enterprise
+        - k8sServiceHost
+        - k8sServicePort
+        - routingMode
+        - tunnelProtocol
+        - bpf
+        - extraConfig
+        - gatewayAPI
+        properties:
+          cluster:
+            type: object
+            additionalProperties: false
+            required:
+            - name
+            properties:
+              name:
+                type: string
+                minLength: 1
+          securityContext:
+            type: object
+            additionalProperties: false
+            required:
+            - privileged
+            properties:
+              privileged:
+                const: true
+          ipam:
+            type: object
+            additionalProperties: false
+            required:
+            - mode
+            - operator
+            properties:
+              mode:
+                const: cluster-pool
+              operator:
+                type: object
+                additionalProperties: false
+                required:
+                - clusterPoolIPv4PodCIDRList
+                - clusterPoolIPv4MaskSize
+                properties:
+                  clusterPoolIPv4PodCIDRList:
+                    type: array
+                    minItems: 1
+                    uniqueItems: true
+                    items:
+                      type: string
+                      minLength: 1
+                  clusterPoolIPv4MaskSize:
+                    type: integer
+                    minimum: 1
+                    maximum: 32
+          cni:
+            type: object
+            additionalProperties: false
+            required:
+            - binPath
+            - confPath
+            - exclusive
+            properties:
+              binPath:
+                const: /var/lib/cni/bin
+              confPath:
+                const: /var/run/multus/cni/net.d
+              exclusive:
+                const: false
+          prometheus:
+            type: object
+            additionalProperties: false
+            required:
+            - enabled
+            - serviceMonitor
+            properties:
+              enabled:
+                const: true
+              serviceMonitor:
+                type: object
+                additionalProperties: false
+                required:
+                - enabled
+                properties:
+                  enabled:
+                    const: true
+          hubble:
+            type: object
+            additionalProperties: false
+            required:
+            - enabled
+            - tls
+            - timescape
+            - export
+            - connectionLog
+            properties:
+              enabled:
+                const: true
+              tls:
+                type: object
+                additionalProperties: false
+                required:
+                - enabled
+                properties:
+                  enabled:
+                    const: true
+              timescape:
+                type: object
+                additionalProperties: false
+                required:
+                - enabled
+                properties:
+                  enabled:
+                    const: true
+              export:
+                type: object
+                additionalProperties: false
+                required:
+                - static
+                properties:
+                  static:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - enabled
+                    - filePath
+                    - fileMaxSizeMb
+                    - fileMaxBackups
+                    properties:
+                      enabled:
+                        const: true
+                      filePath:
+                        type: string
+                        minLength: 1
+                      fileMaxSizeMb:
+                        type: integer
+                        minimum: 1
+                      fileMaxBackups:
+                        type: integer
+                        minimum: 1
+              connectionLog:
+                type: object
+                additionalProperties: false
+                required:
+                - export
+                properties:
+                  export:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - enabled
+                    - filePath
+                    - fileMaxSizeMb
+                    - fileMaxBackups
+                    properties:
+                      enabled:
+                        const: true
+                      filePath:
+                        type: string
+                        minLength: 1
+                      fileMaxSizeMb:
+                        type: integer
+                        minimum: 1
+                      fileMaxBackups:
+                        type: integer
+                        minimum: 1
+          operator:
+            type: object
+            additionalProperties: false
+            required:
+            - prometheus
+            properties:
+              prometheus:
+                type: object
+                additionalProperties: false
+                required:
+                - enabled
+                - serviceMonitor
+                properties:
+                  enabled:
+                    const: true
+                  serviceMonitor:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - enabled
+                    properties:
+                      enabled:
+                        const: true
+          sessionAffinity:
+            const: true
+          kubeProxyReplacement:
+            const: true
+          clusterHealthPort:
+            const: 9940
+          tunnelPort:
+            const: 4788
+          enterprise:
+            type: object
+            additionalProperties: false
+            required:
+            - featureGate
+            - bgpControlPlane
+            - bfd
+            properties:
+              featureGate:
+                type: object
+                additionalProperties: false
+                required:
+                - approved
+                properties:
+                  approved:
+                    type: array
+                    minItems: 1
+                    uniqueItems: true
+                    items:
+                      type: string
+                      minLength: 1
+              bgpControlPlane:
+                type: object
+                additionalProperties: false
+                required:
+                - enabled
+                - routeImport
+                properties:
+                  enabled:
+                    const: true
+                  routeImport:
+                    type: object
+                    additionalProperties: false
+                    required:
+                    - enabled
+                    properties:
+                      enabled:
+                        const: true
+              bfd:
+                type: object
+                additionalProperties: false
+                required:
+                - enabled
+                properties:
+                  enabled:
+                    const: true
+              egressGatewayHA:
+                type: object
+                additionalProperties: false
+                required:
+                - enabled
+                properties:
+                  enabled:
+                    const: true
+          k8sServiceHost:
+            type: string
+            minLength: 1
+          k8sServicePort:
+            const: 443
+          routingMode:
+            const: tunnel
+          tunnelProtocol:
+            const: vxlan
+          bpf:
+            type: object
+            additionalProperties: false
+            required:
+            - masquerade
+            properties:
+              masquerade:
+                const: true
+          extraConfig:
+            type: object
+            additionalProperties: false
+            required:
+            - local-max-addr-scope
+            - hubble-connectionlog-export-enabled
+            properties:
+              local-max-addr-scope:
+                const: '254'
+              hubble-connectionlog-export-enabled:
+                const: 'true'
+          gatewayAPI:
+            type: object
+            additionalProperties: false
+            required:
+            - enabled
+            properties:
+              enabled:
+                const: false
+    networkOperator:
+      schema:
+        type: object
+        additionalProperties: false
+        required:
+        - managementState
+        - clusterNetwork
+        - serviceNetwork
+        - defaultNetwork
+        - deployKubeProxy
+        properties:
+          managementState:
+            const: Managed
+          clusterNetwork:
+            type: array
+            minItems: 1
+            items:
+              type: object
+              additionalProperties: false
+              required:
+              - cidr
+              - hostPrefix
+              properties:
+                cidr:
+                  type: string
+                  minLength: 1
+                hostPrefix:
+                  type: integer
+                  minimum: 1
+                  maximum: 128
+          serviceNetwork:
+            type: array
+            minItems: 1
+            uniqueItems: true
+            items:
+              type: string
+              minLength: 1
+          defaultNetwork:
+            type: object
+            additionalProperties: false
+            required:
+            - type
+            properties:
+              type:
+                const: Cilium
+          deployKubeProxy:
+            const: false
+    forbiddenKeys:
+    - ciChart
+    - ciCommit
+    - prereleaseVersion
+    - imageOverrides
+  runtimeImages:
+  - name: clife
+    source: containers.isovalent.com/clife:v1.19.7-cee.3
+    digest: sha256:9030cd40156f11115da0f0a5221efa0d6dda6e3d32cd63735ee94c7349496aae
+    mirror: registry.example.com:5000/clife
+  - name: cilium
+    source: containers.isovalent.com/cilium-ubi:v1.19.7-cee.3
+    digest: sha256:dfddee8e69d57bcaaa882d70d506f88e98c76fbf41198e3553a4d67cf9975228
+    mirror: registry.example.com:5000/cilium-ubi
+  - name: cilium-envoy
+    source: containers.isovalent.com/cilium-envoy-ubi:v1.19.7-cee.3
+    digest: sha256:4b7a85313b8f113cc326506eab45f42d1fd9700cf82959ba00f747ad596a9235
+    mirror: registry.example.com:5000/cilium-envoy-ubi
+  - name: operator-generic
+    source: containers.isovalent.com/operator-generic-ubi:v1.19.7-cee.3
+    digest: sha256:c0b7d6666c0b3357a6ea2b8a9b2a07d569b56349ce9fe845dd77e641c4059ed2
+    mirror: registry.example.com:5000/operator-generic-ubi
+  - name: hubble-relay
+    source: containers.isovalent.com/hubble-relay-ubi:v1.19.7-cee.3
+    digest: sha256:efb6dacdf56fac1ffe88c960f602bdcb336870986f2d762963a9922b5e23a742
+    mirror: registry.example.com:5000/hubble-relay-ubi
+  - name: startup-script
+    source: containers.isovalent.com/startup-script-ubi:v1.19.7-cee.3
+    digest: sha256:53c1c703536f4b4bb4cc45a98e998bf148c83c64b922396ee95315a1d428c4ab
+    mirror: registry.example.com:5000/startup-script-ubi
+  - name: hubble-timescape-lite
+    source: containers.isovalent.com/hubble-timescape-lite-ubi:v1.19.5
+    digest: sha256:32cad75c423d493e1218a1b171a458579af6af8e324097c86a107210dede2738
+    mirror: registry.example.com:5000/hubble-timescape-lite-ubi
+  - name: cilium-clickhouse-server
+    source: containers.isovalent.com/cilium-clickhouse-server:v1.19.7-cee.3
+    digest: sha256:8282545285f85be63ebf9e7f37cdc8ebfc7039ab40ec9987adaf053fd76797eb
+    mirror: registry.example.com:5000/cilium-clickhouse-server
+  embeddedChartVerification:
+    version: 1.19.7+3
+    scenarios:
+    - name: management
+      mode: management
+      values:
+        cluster:
+          name: example-management
+        securityContext:
+          privileged: true
+        devices:
+        - bond0
+        nodePort:
+          directRoutingDevice: bond0
+        routingMode: tunnel
+        tunnelProtocol: vxlan
+        tunnelPort: 4789
+        autoDirectNodeRoutes: false
+        kubeProxyReplacement: true
+        k8sServiceHost: api-int.example-management.example.com
+        k8sServicePort: 6443
+        sessionAffinity: true
+        socketLB:
+          hostNamespaceOnly: true
+        bpf:
+          masquerade: true
+        ipam:
+          mode: cluster-pool
+          operator:
+            clusterPoolIPv4PodCIDRList:
+            - 10.192.0.0/14
+            clusterPoolIPv4MaskSize: 23
+        cni:
+          binPath: /var/lib/cni/bin
+          confPath: /var/run/multus/cni/net.d
+          exclusive: false
+        clusterHealthPort: 9940
+        operator:
+          replicas: 2
+        enterprise:
+          featureGate:
+            approved:
+            - EnterpriseBGPControlPlane
+            - EgressGatewayHA
+            - EgressGatewayIPv4
+            - BFD
+            - IPAMMultiPool
+            - PrivateNetworks
+            - PrivateNetworkLocalAccess
+          bgpControlPlane:
+            enabled: true
+            enableServiceHealthChecking: true
+            nodeMaintenance:
+              withdrawTime: 1ms
+              gracefulShutdownCommunity:
+                enabled: false
+            secretsNamespace:
+              create: false
+              name: cilium
+          egressGatewayHA:
+            enabled: true
+          bfd:
+            enabled: true
+          loadbalancer:
+            enabled: true
+            gatewayAPI:
+              enabled: false
+          privateNetworks:
+            enabled: true
+            mode: local-access
+            networkAttachmentDefinitions:
+              enabled: true
+            webhook:
+              enabled: false
+        gatewayAPI:
+          enabled: false
+        loadBalancer:
+          acceleration: disabled
+        envoy:
+          nodeSelector:
+            service.cilium.io/node: t2
+        envoyConfig:
+          enabled: true
+        disableEnvoyVersionCheck: true
+        nodeinit:
+          enabled: true
+        hubble:
+          enabled: true
+          tls:
+            enabled: true
+          relay:
+            enabled: true
+        extraConfig:
+          loadbalancer-extlb-enabled: 'true'
+      renderOverrides: {}
+      expectedRuntimeImages:
+      - cilium
+      - cilium-envoy
+      - operator-generic
+      - hubble-relay
+      - startup-script
+    - name: tenant-a
+      mode: hosted
+      values:
+        cluster:
+          name: tenant-a
+        securityContext:
+          privileged: true
+        ipam:
+          mode: cluster-pool
+          operator:
+            clusterPoolIPv4PodCIDRList:
+            - 10.196.0.0/14
+            clusterPoolIPv4MaskSize: 23
+        cni:
+          binPath: /var/lib/cni/bin
+          confPath: /var/run/multus/cni/net.d
+          exclusive: false
+        prometheus:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+        hubble:
+          enabled: true
+          tls:
+            enabled: true
+          timescape:
+            enabled: true
+          export:
+            static:
+              enabled: true
+              filePath: /var/run/cilium/hubble/hubble.log
+              fileMaxSizeMb: 10
+              fileMaxBackups: 5
+          connectionLog:
+            export:
+              enabled: true
+              filePath: /var/run/cilium/hubble/connectionlog.log
+              fileMaxSizeMb: 10
+              fileMaxBackups: 5
+        operator:
+          prometheus:
+            enabled: true
+            serviceMonitor:
+              enabled: true
+        sessionAffinity: true
+        kubeProxyReplacement: true
+        clusterHealthPort: 9940
+        tunnelPort: 4788
+        enterprise:
+          featureGate:
+            approved:
+            - EnterpriseBGPControlPlane
+            - HubbleTimescape
+            - BFD
+            - BGPRouteImport
+          bgpControlPlane:
+            enabled: true
+            routeImport:
+              enabled: true
+          bfd:
+            enabled: true
+        k8sServiceHost: api.tenant-a.example.com
+        k8sServicePort: 443
+        routingMode: tunnel
+        tunnelProtocol: vxlan
+        bpf:
+          masquerade: true
+        extraConfig:
+          local-max-addr-scope: '254'
+          hubble-connectionlog-export-enabled: 'true'
+        gatewayAPI:
+          enabled: false
+      renderOverrides:
+        prometheus:
+          serviceMonitor:
+            trustCRDsExist: true
+        operator:
+          prometheus:
+            serviceMonitor:
+              trustCRDsExist: true
+      expectedRuntimeImages:
+      - cilium
+      - cilium-envoy
+      - operator-generic
+      - hubble-timescape-lite
+      - cilium-clickhouse-server
+      serviceNetwork:
+      - 172.20.0.0/16
+    - name: shared-ab
+      mode: hosted
+      values:
+        cluster:
+          name: shared-ab
+        securityContext:
+          privileged: true
+        ipam:
+          mode: cluster-pool
+          operator:
+            clusterPoolIPv4PodCIDRList:
+            - 10.200.0.0/14
+            clusterPoolIPv4MaskSize: 23
+        cni:
+          binPath: /var/lib/cni/bin
+          confPath: /var/run/multus/cni/net.d
+          exclusive: false
+        prometheus:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+        hubble:
+          enabled: true
+          tls:
+            enabled: true
+          timescape:
+            enabled: true
+          export:
+            static:
+              enabled: true
+              filePath: /var/run/cilium/hubble/hubble.log
+              fileMaxSizeMb: 10
+              fileMaxBackups: 5
+          connectionLog:
+            export:
+              enabled: true
+              filePath: /var/run/cilium/hubble/connectionlog.log
+              fileMaxSizeMb: 10
+              fileMaxBackups: 5
+        operator:
+          prometheus:
+            enabled: true
+            serviceMonitor:
+              enabled: true
+        sessionAffinity: true
+        kubeProxyReplacement: true
+        clusterHealthPort: 9940
+        tunnelPort: 4788
+        enterprise:
+          featureGate:
+            approved:
+            - EnterpriseBGPControlPlane
+            - HubbleTimescape
+            - BFD
+            - EgressGatewayHA
+            - EgressGatewayIPv4
+            - BGPRouteImport
+          bgpControlPlane:
+            enabled: true
+            routeImport:
+              enabled: true
+          bfd:
+            enabled: true
+          egressGatewayHA:
+            enabled: true
+        k8sServiceHost: api.shared-ab.example.com
+        k8sServicePort: 443
+        routingMode: tunnel
+        tunnelProtocol: vxlan
+        bpf:
+          masquerade: true
+        extraConfig:
+          local-max-addr-scope: '254'
+          hubble-connectionlog-export-enabled: 'true'
+        gatewayAPI:
+          enabled: false
+      renderOverrides:
+        prometheus:
+          serviceMonitor:
+            trustCRDsExist: true
+        operator:
+          prometheus:
+            serviceMonitor:
+              trustCRDsExist: true
+      expectedRuntimeImages:
+      - cilium
+      - cilium-envoy
+      - operator-generic
+      - hubble-timescape-lite
+      - cilium-clickhouse-server
+      serviceNetwork:
+      - 172.20.0.0/16
+  receipt:
+    requiredFields:
+    - source.url
+    - source.sha256
+    - contract.repository
+    - contract.revision
+    - contract.path
+    - contract.sha256
+    - executor.repository
+    - executor.revision
+    - embeddedChart.scenarios
+    - inputInventory
+    - outputInventory
+    - chart.repository
+    - chart.version
+    - chart.packageSha256
+    - chart.ociDigest
+    - runtimeImages
+    - workflow.runId
+    - workflow.createdAt

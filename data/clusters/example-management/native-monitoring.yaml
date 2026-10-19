@@ -1,0 +1,32 @@
+apiVersion: saif.example.com/v1alpha1
+kind: NativeMonitoringPersistence
+metadata:
+  name: example-management
+spec:
+  activation: review-only
+  management:
+    preserveEnableUserWorkload: true
+    storageClassName: px-csi-replicated-default
+    prometheusK8s:
+      observedReplicas: 2
+      retention: 15d
+      storageGi: 150
+    prometheusUserWorkload:
+      observedReplicas: 2
+      retention: 15d
+      storageGi: 20
+    alertmanagerMain:
+      observedReplicas: 2
+      retention: 120h
+      storageGi: 1
+  guests:
+    - targetRef: multus
+      observedReplicas: 1
+      retention: 15d
+      storageClassName: kubevirt-csi-infra-default
+      prometheusK8sStorageGi: 50
+      userWorkload:
+        enable: true
+        retention: 15d
+        storageGi: 20
+  pendingGuestRefs: []

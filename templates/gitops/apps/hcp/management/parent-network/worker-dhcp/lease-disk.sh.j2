@@ -1,0 +1,38 @@
+set -eu
+
+mode=${1:---verify}
+case "$mode" in --verify|--initialize|--prepare-store) ;; *) echo "invalid lease disk mode" >&2; exit 1 ;; esac
+disk=/dev/disk/by-id/virtio-{{ lease_disk_serial }}
+mount_path={{ lease_mount_path }}
+state_file=$mount_path/observed-leases.json
+
+fail() { echo "DHCP lease disk unavailable: $1" >&2; exit 1; }
+[ -b "$disk" ] || fail "serial disk absent"
+[ "$(lsblk -dn -o SERIAL "$disk" | tr -d ' ')" = "{{ lease_disk_serial }}" ] || fail "serial mismatch"
+size=$(blockdev --getsize64 "$disk")
+[ "$size" -ge {{ lease_minimum_bytes }} ] && [ "$size" -le {{ lease_maximum_bytes }} ] || fail "capacity outside qualified filesystem-PVC range"
+
+type=$(blkid -s TYPE -o value "$disk" 2>/dev/null || true)
+if [ "$mode" != --verify ]; then
+  [ "${SAIF_DHCP_INITIALIZE_CONFIRM:-}" = "{{ lease_authority_id }}:{{ lease_claim_name }}" ] || fail "first-provision confirmation absent"
+fi
+if [ "$mode" = --initialize ]; then
+  [ -z "$type" ] || fail "first-provision disk is not blank"
+  [ -z "$(wipefs -n "$disk")" ] || fail "first-provision signature present"
+  [ "$(lsblk -nr -o NAME "$disk" | wc -l | tr -d ' ')" = 1 ] || fail "first-provision partitions present"
+  mkfs.ext4 -q -L {{ lease_filesystem_label }} "$disk"
+  type=ext4
+fi
+[ "$type" = ext4 ] || fail "expected ext4; never auto-format recovery disk"
+[ "$(blkid -s LABEL -o value "$disk")" = "{{ lease_filesystem_label }}" ] || fail "filesystem label mismatch"
+mkdir -p "$mount_path"
+mountpoint -q "$mount_path" || mount -t ext4 -o rw,nodev,nosuid "$disk" "$mount_path"
+uuid=$(blkid -s UUID -o value "$disk")
+[ -n "$uuid" ] && [ "$(findmnt -n -o UUID -M "$mount_path")" = "$uuid" ] || fail "mounted filesystem identity mismatch"
+case "$(findmnt -n -o OPTIONS -M "$mount_path")" in ro,*|*,ro,*|*,ro) fail "read-only mount" ;; esac
+if [ "$mode" = --verify ]; then
+  [ -f "$state_file" ] && [ ! -L "$state_file" ] || fail "expected retained state absent"
+else
+  [ ! -e "$state_file" ] && [ ! -L "$state_file" ] || fail "first-provision state already exists"
+fi
+echo "SAIF_DHCP_DISK_READY:$mode:$uuid:$size"

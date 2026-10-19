@@ -1,0 +1,97 @@
+{# OCP agent-config.yaml — target-native for the cluster-install templates
+   Rendered by render-ocp.py from ResolvedOCPCluster + ResolvedDefaults
+
+   Day 1 uses the management bond only:
+   - bond0 (management): eth0+eth1, active-backup, carries machine network IP
+   Optional tenant vNICs are UCS hardware intent and are configured after install by Day 2/GitOps.
+
+   Template variables:
+     cluster          — ResolvedOCPCluster
+     defaults         — ResolvedDefaults
+     mn_prefix        — machine network prefix length (int)
+     mn_gateway       — machine network gateway IP
+     mgmt_bond        — management bond name (e.g. "bond0")
+     MGMT_NIC_A/B     — physical NIC names for bond0
+     BOND_MODE        — bond mode (e.g. "active-backup")
+     BOND_MIIMON      — MII monitoring interval
+     ROOT_DEVICE_MODEL — REMOVED; rootDeviceHints.model uses BOOT_DISK_MODEL_PLACEHOLDER
+                          enriched at deploy time by the pipeline (live discovery by serial)
+#}
+apiVersion: v1beta1
+kind: AgentConfig
+metadata:
+  name: {{ cluster.name }}
+rendezvousIP: {{ rendezvous_ip }}
+additionalNTPSources:
+{% for ntp in defaults.ntp_servers %}
+- {{ ntp }}
+{% endfor %}
+hosts:
+{% for node in cluster.nodes %}
+- hostname: {{ node.hostname }}
+  role: master
+  rootDeviceHints:
+{% if cluster.inventory_mode == "declared" %}
+{% for key, value in node.root_device_hints.items() %}
+    {{ key }}: {{ value | tojson }}
+{% endfor %}
+  interfaces:
+{% for interface in node.interfaces %}
+  - name: {{ interface.name }}
+    macAddress: {{ interface.macAddress | tojson }}
+{% endfor %}
+{% else %}
+    model: BOOT_DISK_MODEL_PLACEHOLDER
+  interfaces:
+  - name: {{ MGMT_NIC_A }}
+    macAddress: MAC_PLACEHOLDER
+  - name: {{ MGMT_NIC_B }}
+    macAddress: MAC_PLACEHOLDER
+{% endif %}
+  networkConfig:
+    interfaces:
+    - name: {{ mgmt_bond }}
+{% if management_mtu is not none %}
+      mtu: {{ management_mtu }}
+{% endif %}
+      type: bond
+      state: up
+      ipv4:
+        address:
+        - ip: {{ node.ip }}
+          prefix-length: {{ mn_prefix }}
+        enabled: true
+        dhcp: false
+      ipv6:
+        enabled: false
+      link-aggregation:
+        mode: {{ BOND_MODE }}
+        options:
+{% if bond_options_yaml %}
+{{ bond_options_yaml | indent(10, true) }}
+{% else %}
+          miimon: '{{ BOND_MIIMON }}'
+          primary: {{ MGMT_NIC_A }}
+{% endif %}
+        port:
+        - {{ MGMT_NIC_A }}
+        - {{ MGMT_NIC_B }}
+    - name: {{ MGMT_NIC_A }}
+      type: ethernet
+      state: up
+    - name: {{ MGMT_NIC_B }}
+      type: ethernet
+      state: up
+    dns-resolver:
+      config:
+        server:
+{% for dns in defaults.dns_servers %}
+        - {{ dns }}
+{% endfor %}
+    routes:
+      config:
+      - destination: 0.0.0.0/0
+        next-hop-address: {{ mn_gateway }}
+        next-hop-interface: {{ mgmt_bond }}
+        table-id: 254
+{% endfor %}

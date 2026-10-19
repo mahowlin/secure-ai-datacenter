@@ -1,0 +1,59 @@
+kind: HCPCluster
+
+metadata:
+  name: example-shared
+  description: Shared hosted OpenShift cluster with example-tenant-a and Tenant-B workload attachments.
+
+spec:
+  parentCluster: example-management
+  workerNetworkProfileRef: multus-l2-dhcp
+
+  openshift:
+    networkType: Cilium
+
+  # Existing comparison cluster stays on its retained Timescape path until
+  # reviewed retirement; it is not a new writer credential target.
+  timescapeExporter:
+    enrollment: retained
+
+  controlPlaneIngress:
+    loadBalancerVIPRef: example-shared-control-plane-ingress-lb-vip
+
+  # Proposed dedicated guest application-router exposure. This is a separate
+  # owner from the management-hosted control-plane router VIP 198.18.13.18.
+  applicationIngress:
+    mode: direct-bgp-router
+    poolRef: tenant-b-ingress
+    vip: 198.18.14.17
+    dnsWildcard: '*.apps.example-shared.example.com'
+    dnsZone: example.com
+    dnsAuthority: example-dc2.example.com
+    dnsPublication: external-manual
+
+  nodePool:
+    replicas: 3
+
+  networking:
+    clusterNetwork:
+      - cidr: 10.200.0.0/14
+        hostPrefix: 23
+
+    serviceNetwork:
+      - cidr: 172.21.0.0/16
+
+    workerNetworks:
+      - networkRef: tenant-b-workers
+        guestDefaultRoute: true
+
+  cilium:
+    bgp:
+      enabled: true
+      advertiseLoadBalancerIPs: true
+      advertiseEgressIPs: true
+      advertisePodCIDRs: false
+
+    loadBalancerPools:
+      - tenant-b-ingress
+
+    egressGatewayPools:
+      - tenant-b-egress

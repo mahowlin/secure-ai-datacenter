@@ -1,0 +1,77 @@
+{
+  "data_dir": "/buffer",
+  "api": {
+    "enabled": false,
+    "address": "127.0.0.1:8686"
+  },
+  "sources": {
+    "hubble_logs": {
+      "type": "file",
+      "include": [
+        "/fixtures/hubble.log",
+        "/fixtures/k8s-events.log",
+        "/fixtures/application-model.log"
+      ],
+      "read_from": "end",
+      "fingerprint": {
+        "strategy": "device_and_inode"
+      },
+      "max_line_bytes": 1048576,
+      "glob_minimum_cooldown_ms": 1000
+    },
+    "connection_logs": {
+      "type": "file",
+      "include": [
+        "/fixtures/connectionlog.log"
+      ],
+      "read_from": "end",
+      "fingerprint": {
+        "strategy": "device_and_inode"
+      },
+      "max_line_bytes": 16777216,
+      "glob_minimum_cooldown_ms": 1000
+    }
+  },
+  "transforms": {
+    "add_cluster_name": {
+      "type": "remap",
+      "inputs": [
+        "hubble_logs",
+        "connection_logs"
+      ],
+      "source": "cluster_name = get_env_var!(\"CLUSTER_NAME\")\nparsed = parse_json!(string!(.message))\nif exists(parsed.flow) {\n  parsed.flow.source.cluster_name = cluster_name\n  parsed.flow.destination.cluster_name = cluster_name\n}\nif exists(parsed.k8s_event) {\n  parsed.k8s_event.cluster = cluster_name\n}\n.message = encode_json(parsed)\n"
+    }
+  },
+  "sinks": {
+    "timescape_push_api": {
+      "type": "http",
+      "inputs": [
+        "add_cluster_name"
+      ],
+      "uri": "http://sink:8080/push",
+      "method": "post",
+      "encoding": {
+        "codec": "raw_message"
+      },
+      "framing": {
+        "method": "newline_delimited"
+      },
+      "batch": {
+        "max_bytes": 10485760,
+        "timeout_secs": 5
+      },
+      "request": {
+        "timeout_secs": 60,
+        "retry_attempts": 5,
+        "concurrency": 1
+      },
+      "healthcheck": {
+        "enabled": false
+      },
+      "buffer": {
+        "type": "disk",
+        "max_size": 268435488
+      }
+    }
+  }
+}

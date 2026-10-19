@@ -1,0 +1,82 @@
+# Minimal standalone inputs; synthetic addresses and hardware, replace for your site.
+kind: PlatformDefaults
+metadata:
+  name: example
+spec:
+  day1Compatibility:
+  - openshiftMinor: '4.19'
+    ciliumChannel: '1.18'
+    evidence: https://access.redhat.com/articles/5436171
+  - openshiftMinor: '4.19'
+    ciliumChannel: '1.19'
+    evidence: https://access.redhat.com/articles/5436171
+  - openshiftMinor: '4.20'
+    ciliumChannel: '1.19'
+    evidence: https://access.redhat.com/articles/5436171
+  identity:
+    apiGroup: saif.example.com
+    baseDomain: example.com
+    chartRepository: registry.example.com:5000/charts/clife-install
+    sourceRepositories:
+      sysAdmin: mahowlin/secure-ai-airgap
+      gitops: mahowlin/secure-ai-gitops
+      platform: mahowlin/secure-ai-datacenter
+      aci: mahowlin/secure-ai-fabric
+      openshift: mahowlin/secure-ai-compute
+    templateRoots:
+      clusterInstall: cluster-install
+      gitops: gitops
+    generatedRepos:
+      aci: secure-ai-fabric
+      openshift: secure-ai-compute
+      gitops: secure-ai-gitops
+    labelDomains:
+      poc: poc.isovalent.com
+      scaffold: platform.example.com
+    derivationOwner: secure-ai-datacenter resolver and renderer
+    publicImageRegistries:
+    - quay.io/
+    - registry.redhat.io/
+    - registry.connect.redhat.com/
+    - docker.io/
+    - ghcr.io/
+    - gcr.io/
+    - nvcr.io/
+  dns:
+    servers:
+    - 198.19.3.188
+    - 198.19.3.189
+  ntp:
+    servers:
+    - 198.19.49.151
+  registry:
+    url: registry.example.com:5000
+  releaseImageRepository: registry.example.com:5000/openshift/release-images
+  imageDigestSources:
+  - source: quay.io/openshift-release-dev/ocp-release
+    mirrors:
+    - registry.example.com:5000/openshift/release-images
+  - source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+    mirrors:
+    - registry.example.com:5000/openshift/release
+  openshift:
+    clusterNetwork:
+    - cidr: 10.192.0.0/14
+      hostPrefix: 23
+    serviceNetwork:
+    - 172.19.0.0/16
+  gitops:
+    repoURL: https://github.com/mahowlin/secure-ai-gitops.git
+    targetRevision: main
+    namespaces:
+      operators: openshift-operators
+      marketplace: openshift-marketplace
+    catalogSourceAliases:
+      redhat: redhat-operators
+    operatorSubscriptions:
+      openshift-gitops-operator:
+        channel: latest
+        namespaceRef: gitops.namespaces.operators
+        sourceRef: gitops.catalogSourceAliases.redhat
+        sourceNamespaceRef: gitops.namespaces.marketplace
+        installPlanApproval: Automatic

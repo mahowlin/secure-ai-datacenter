@@ -1,0 +1,43 @@
+{
+  "activation": "review-only",
+  "management": {
+    "alertmanagerMain": {
+      "replicas": 2,
+      "sizeGiPerReplica": 1
+    },
+    "platformPrometheus": {
+      "replicas": 2,
+      "sizeGiPerReplica": 150
+    },
+    "preserveEnableUserWorkload": true,
+    "storageClassName": "px-csi-replicated-default",
+    "userWorkloadPrometheus": {
+      "replicas": 2,
+      "sizeGiPerReplica": 20
+    }
+  },
+  "managementCluster": "example-management",
+  "observedState": "not-applied",
+  "pendingGuestRefs": [],
+  "rollout": [
+    "platform-prometheus",
+    "user-workload",
+    "platform-final-alertmanager",
+    "each-guest-user-workload-persistence-before-enablement",
+    "one-guest-platform-prometheus-and-enable-uwm-at-a-time"
+  ],
+  "selectedGuests": [
+    {
+      "cluster": "example-multus-a",
+      "observedReplicas": 1,
+      "sizeGiPerReplica": 50,
+      "storageClassName": "kubevirt-csi-infra-default",
+      "userWorkload": {
+        "enabled": true,
+        "observedReplicas": null,
+        "sizeGiPerReplica": 20
+      }
+    }
+  ],
+  "source": "data/clusters/example-management/native-monitoring.yaml"
+}

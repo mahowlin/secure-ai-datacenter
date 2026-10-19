@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="850" viewBox="0 0 1100 850" role="img" aria-labelledby="title description">
+<title id="title">Management Service BGP for hosted control endpoints</title>
+<desc id="description">Hosted control Services feed a management router LoadBalancer Service. Management LB-IPAM and Cilium BGP advertise the control VIP to ACI. This BGP domain is separate from direct guest-worker application Service BGP.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="850" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Management Service BGP for hosted control endpoints</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Management Cilium publishes the control VIP; hosted workers consume it but do not advertise it.</text>
+<g id="zone-control">
+<rect x="20" y="110" width="1060" height="505" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-consumer">
+<rect x="720" y="625" width="360" height="185" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 340 257 L 420 257" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 570 350 L 570 385 L 200 385 L 200 420" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 340 497 L 400 497" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 700 497 L 760 497" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+<path d="M 900 665 L 900 575" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-control">
+<rect x="32" y="119" width="318.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="141" class="zone-title" style="font-size:18.0px" text-anchor="start">Management-cluster ownership</text>
+</g>
+<g id="zone-label-consumer">
+<rect x="732" y="634" width="329.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="740" y="656" class="zone-title" style="font-size:18.0px" text-anchor="start">Worker-originated consumption</text>
+</g>
+</g>
+<g id="nodes">
+<g id="services">
+<rect x="60" y="175" width="280" height="165" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="204" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted control Services</text>
+<text x="76" y="230" class="node-line" style="font-size:15.0px" text-anchor="start">API + Ignition</text>
+<text x="76" y="253" class="node-line" style="font-size:15.0px" text-anchor="start">Konnectivity + OAuth</text>
+<text x="76" y="276" class="node-line" style="font-size:15.0px" text-anchor="start">management pod network</text>
+</g>
+<g id="router">
+<rect x="420" y="165" width="300" height="185" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="436" y="194" class="node-title" style="font-size:17.9px" text-anchor="start">Management router Service</text>
+<text x="436" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">LoadBalancer VIP</text>
+<text x="436" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">SNI routes to control Services</text>
+<text x="436" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">VIP from maintained input</text>
+</g>
+<g id="ipam">
+<rect x="60" y="420" width="280" height="155" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="449" class="node-title" style="font-size:18.0px" text-anchor="start">Management LB-IPAM</text>
+<text x="76" y="475" class="node-line" style="font-size:15.0px" text-anchor="start">control VIP pool</text>
+<text x="76" y="498" class="node-line" style="font-size:15.0px" text-anchor="start">Service status</text>
+</g>
+<g id="bgp">
+<rect x="400" y="410" width="300" height="175" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="416" y="439" class="node-title" style="font-size:18.0px" text-anchor="start">Management Cilium BGP</text>
+<text x="416" y="465" class="node-line" style="font-size:15.0px" text-anchor="start">advertisement policy</text>
+<text x="416" y="488" class="node-line" style="font-size:15.0px" text-anchor="start">selected control-plane VLAN</text>
+<text x="416" y="511" class="node-line" style="font-size:15.0px" text-anchor="start">control VIP /32 only</text>
+</g>
+<g id="aci">
+<rect x="760" y="420" width="280" height="155" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="776" y="449" class="node-title" style="font-size:18.0px" text-anchor="start">ACI tenant / VRF</text>
+<text x="776" y="475" class="node-line" style="font-size:15.0px" text-anchor="start">prefix filter</text>
+<text x="776" y="498" class="node-line" style="font-size:15.0px" text-anchor="start">control VIP route</text>
+</g>
+<g id="worker">
+<rect x="760" y="665" width="280" height="125" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="776" y="694" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted worker</text>
+<text x="776" y="720" class="node-line" style="font-size:15.0px" text-anchor="start">API/Ignition client</text>
+<text x="776" y="743" class="node-line" style="font-size:15.0px" text-anchor="start">not a BGP peer here</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="908.75" y="606.5" width="122.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="970" y="625" class="edge-label" style="font-size:12.5px" text-anchor="middle">control traffic</text>
+</g>
+<line x1="40" y1="811" x2="76" y2="811" stroke="#7A5AF8" stroke-width="3"/>
+<text x="86" y="816" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+<line x1="297.5" y1="811" x2="333.5" y2="811" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/>
+<text x="343.5" y="816" class="legend" style="font-size:12.5px" text-anchor="start">network protocol / transport</text>
+</svg>

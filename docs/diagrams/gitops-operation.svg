@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="670" viewBox="0 0 900 670" role="img" aria-labelledby="title description">
+<title id="title">Configuration becomes reconciled cluster objects</title>
+<desc id="description">Shared inputs → reviewed GitOps roots → Argo CD → management and hosted APIs. Declared example architecture, not observed deployment. Labels and adjacent ownership tables are the text alternative.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="900" height="670" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Configuration becomes reconciled cluster objects</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Shared inputs → reviewed GitOps roots → Argo CD → management and hosted APIs.</text>
+<g id="connections">
+<path d="M 380 133 L 520 133" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 690 166 L 690 245 L 450 245 L 450 290" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 350 356 L 210 356 L 210 480" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 550 356 L 690 356 L 690 480" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+</g>
+<g id="zone-labels">
+</g>
+<g id="nodes">
+<g id="dc">
+<rect x="40" y="100" width="340" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="129" class="node-title" style="font-size:18.0px" text-anchor="start">secure-ai-datacenter</text>
+<text x="56" y="155" class="node-line" style="font-size:15.0px" text-anchor="start">validate + generate application values</text>
+</g>
+<g id="git">
+<rect x="520" y="100" width="340" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="536" y="129" class="node-title" style="font-size:18.0px" text-anchor="start">GitOps repository</text>
+<text x="536" y="155" class="node-line" style="font-size:15.0px" text-anchor="start">bases / charts + generated cluster roots</text>
+</g>
+<g id="argo">
+<rect x="285" y="290" width="330" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="301" y="319" class="node-title" style="font-size:18.0px" text-anchor="start">Argo CD</text>
+<text x="301" y="345" class="node-line" style="font-size:15.0px" text-anchor="start">reads reviewed repository / ref / path</text>
+</g>
+<g id="mgmt">
+<rect x="40" y="480" width="340" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="509" class="node-title" style="font-size:18.0px" text-anchor="start">Management Kubernetes API</text>
+<text x="56" y="535" class="node-line" style="font-size:16.0px" text-anchor="start">operators · networking · CSI · HCP</text>
+</g>
+<g id="guest">
+<rect x="520" y="480" width="340" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="536" y="509" class="node-title" style="font-size:18.0px" text-anchor="start">Registered hosted APIs</text>
+<text x="536" y="535" class="node-line" style="font-size:16.0px" text-anchor="start">guest CNI · policy · applications</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="392.5" y="99.5" width="115.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="118" class="edge-label" style="font-size:12.5px" text-anchor="middle">reviewed files</text>
+<rect x="535.0" y="206.5" width="70.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="570" y="225" class="edge-label" style="font-size:12.5px" text-anchor="middle">Git pull</text>
+<rect x="122.5" y="406.5" width="175.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="210" y="425" class="edge-label" style="font-size:12.5px" text-anchor="middle">management destination</text>
+<rect x="621.25" y="406.5" width="137.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="690" y="425" class="edge-label" style="font-size:12.5px" text-anchor="middle">guest destination</text>
+</g>
+<line x1="40" y1="610" x2="74" y2="610" stroke="#4C6FFF" stroke-width="3"/><text x="84" y="615" font-size="14" fill="#344563">desired state / artifact</text><line x1="470" y1="610" x2="504" y2="610" stroke="#7A5AF8" stroke-width="3"/><text x="514" y="615" font-size="14" fill="#344563">API / controller contract</text></svg>

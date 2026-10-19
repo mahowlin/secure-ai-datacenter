@@ -1,0 +1,81 @@
+{{- with .Values.renderedCiliumConfig }}
+{{- if .enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cilium-restart-resolved-{{ $.Release.Revision }}
+  namespace: cilium
+  annotations:
+    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+spec:
+  activeDeadlineSeconds: 660
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      serviceAccountName: cilium-restart-resolved-sa
+      restartPolicy: Never
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      containers:
+        - name: restart
+          image: {{ required "renderedCiliumConfig.restartJobImage is required" .restartJobImage }}
+          env:
+            - name: HOME
+              value: /tmp
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              oc rollout restart daemonset/cilium -n cilium
+              oc rollout status daemonset/cilium -n cilium --timeout=300s
+              oc rollout restart deployment/cilium-operator -n cilium
+              oc rollout status deployment/cilium-operator -n cilium --timeout=300s
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cilium-restart-resolved-sa
+  namespace: cilium
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: cilium-restart-resolved-role
+  namespace: cilium
+rules:
+  - apiGroups: ["apps"]
+    resources: ["daemonsets", "deployments"]
+    verbs: ["get", "list", "watch", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: cilium-restart-resolved-binding
+  namespace: cilium
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cilium-restart-resolved-role
+subjects:
+  - kind: ServiceAccount
+    name: cilium-restart-resolved-sa
+    namespace: cilium
+{{- end }}
+{{- end }}

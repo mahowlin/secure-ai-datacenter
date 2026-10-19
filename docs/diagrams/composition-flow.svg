@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1610" viewBox="0 0 1100 1610" role="img" aria-labelledby="title description">
+<title id="title">Reference composition to deployed configuration</title>
+<desc id="description">Example site cluster, network, default and release input is combined into one resolved composition, then translated in parallel into exact ACI, UCS, OpenShift and GitOps repository paths. Each target repository owns its deployment mechanism. Portable installation hands the Agent ISO to the site-owned boot process; the UCS automation variant uses Intersight vMedia.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="1610" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Reference composition to deployed configuration</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Maintained intent becomes exact target files; each destination owns how those files are applied.</text>
+<g id="zone-input">
+<rect x="25" y="105" width="1050" height="250" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-resolve">
+<rect x="145" y="375" width="810" height="285" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-targets">
+<rect x="145" y="700" width="810" height="870" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 205 330 L 205 360 L 500 360 L 500 445" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 550 330 L 550 445" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 895 330 L 895 375 L 675 375 L 675 445" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 550 640 L 550 700 L 120 700 L 120 1458" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 120 858 L 170 858" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 120 1058 L 170 1058" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 120 1258 L 170 1258" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 120 1458 L 170 1458" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-input">
+<rect x="37" y="114" width="455.04" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="45" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">1. Example site input</text>
+<text x="45" y="158" class="zone-note" style="font-size:14.0px" text-anchor="start">Choose a composition; its names select the related data.</text>
+</g>
+<g id="zone-label-resolve">
+<rect x="157" y="384" width="264.4" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="165" y="406" class="zone-title" style="font-size:18.0px" text-anchor="start">2. Combine and validate</text>
+<text x="165" y="428" class="zone-note" style="font-size:14.0px" text-anchor="start">One complete model.</text>
+</g>
+<g id="zone-label-targets">
+<rect x="157" y="709" width="611.84" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="165" y="731" class="zone-title" style="font-size:18.0px" text-anchor="start">3. Translate, review and deploy in each owning system</text>
+<text x="165" y="753" class="zone-note" style="font-size:14.0px" text-anchor="start">These four deliveries are parallel outputs of the same resolved composition.</text>
+</g>
+</g>
+<g id="nodes">
+<g id="clusters">
+<rect x="50" y="170" width="310" height="160" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="66" y="199" class="node-title" style="font-size:17.4px" text-anchor="start">Cluster and tenant selection</text>
+<text x="67" y="225" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="86" y="225" class="node-line" style="font-size:14.9px" text-anchor="start">clusters/example-sno/cluster.yaml</text>
+<text x="67" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="86" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">clusters/example-management/</text>
+<text x="67" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="86" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">selected hosted clusters</text>
+</g>
+<g id="network-defaults">
+<rect x="395" y="170" width="310" height="160" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="411" y="199" class="node-title" style="font-size:17.4px" text-anchor="start">Named networks and defaults</text>
+<text x="412" y="225" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="431" y="225" class="node-line" style="font-size:15.0px" text-anchor="start">networks/example-federal.yaml</text>
+<text x="412" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="431" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">defaults/example, ACI and UCS</text>
+<text x="412" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="431" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">parent, network and pool names</text>
+</g>
+<g id="release">
+<rect x="740" y="170" width="310" height="160" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="756" y="199" class="node-title" style="font-size:17.4px" text-anchor="start">Release and asset selection</text>
+<text x="757" y="225" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="776" y="225" class="node-line" style="font-size:15.0px" text-anchor="start">platform-release.yaml</text>
+<text x="757" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="776" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">bundles and CRD catalogues</text>
+<text x="757" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="776" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">selected by releaseRef</text>
+</g>
+<g id="combine">
+<rect x="170" y="445" width="760" height="195" rx="14" fill="#EAF7F1" stroke="#7A869A" stroke-width="1.6"/>
+<text x="186" y="474" class="node-title" style="font-size:18.0px" text-anchor="start">Combine and validate the reference composition</text>
+<text x="187" y="500" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="500" class="node-line" style="font-size:15.0px" text-anchor="start">Select the cluster and its hosted tenants.</text>
+<text x="187" y="523" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="523" class="node-line" style="font-size:15.0px" text-anchor="start">Resolve parent, network, pool and release references.</text>
+<text x="187" y="546" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="546" class="node-line" style="font-size:15.0px" text-anchor="start">Apply the example site, ACI and UCS defaults.</text>
+<text x="187" y="569" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="569" class="node-line" style="font-size:15.0px" text-anchor="start">Reject missing names, duplicates and incompatible combinations.</text>
+<text x="187" y="592" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="592" class="node-line" style="font-size:15.0px" text-anchor="start">Authorize only the selected target outputs.</text>
+<text x="187" y="615" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="615" class="node-line" style="font-size:15.0px" text-anchor="start">Executable contract: scripts/resolver.py</text>
+</g>
+<g id="aci-target">
+<rect x="170" y="770" width="760" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="186" y="799" class="node-title" style="font-size:18.0px" text-anchor="start">ACI target</text>
+<text x="187" y="825" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="825" class="node-line" style="font-size:15.0px" text-anchor="start">Render: render-aci.py creates the review copy.</text>
+<text x="187" y="848" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="848" class="node-line" style="font-size:15.0px" text-anchor="start">Destination: secure-ai-fabric → data/ tenant + access</text>
+<text x="187" y="871" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="871" class="node-line" style="font-size:15.0px" text-anchor="start">Deploy: owning ACI pipeline validates, plans and applies reviewed NAC-ACI intent.</text>
+<text x="187" y="894" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="894" class="node-line" style="font-size:15.0px" text-anchor="start">Outcome: tenant, VRF, bridge-domain and contract configuration.</text>
+</g>
+<g id="ucs-target">
+<rect x="170" y="970" width="760" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="186" y="999" class="node-title" style="font-size:18.0px" text-anchor="start">UCS target</text>
+<text x="187" y="1025" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1025" class="node-line" style="font-size:15.0px" text-anchor="start">Render: render-ucs.py creates the review copy.</text>
+<text x="187" y="1048" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1048" class="node-line" style="font-size:15.0px" text-anchor="start">Destination: secure-ai-compute → data/ucs/*.ezi.yaml</text>
+<text x="187" y="1071" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1071" class="node-line" style="font-size:15.0px" text-anchor="start">Deploy: GitHub Actions sends Easy-IMM intent to Intersight.</text>
+<text x="187" y="1094" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1094" class="node-line" style="font-size:15.0px" text-anchor="start">Outcome: UCS policies and server profiles on the selected hardware.</text>
+</g>
+<g id="ocp-target">
+<rect x="170" y="1170" width="760" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="186" y="1199" class="node-title" style="font-size:18.0px" text-anchor="start">OpenShift installation: portable or UCS</text>
+<text x="187" y="1225" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1225" class="node-line" style="font-size:15.0px" text-anchor="start">Render: render-ocp.py creates the review copy.</text>
+<text x="187" y="1248" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1248" class="node-line" style="font-size:15.0px" text-anchor="start">Destination: secure-ai-compute → data/openshift/&lt;cluster&gt;/</text>
+<text x="187" y="1271" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1271" class="node-line" style="font-size:15.0px" text-anchor="start">Portable: Agent ISO → site-owned boot or virtual media.</text>
+<text x="187" y="1294" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1294" class="node-line" style="font-size:15.0px" text-anchor="start">UCS variant: GitHub Actions → Intersight vMedia.</text>
+<text x="187" y="1317" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1317" class="node-line" style="font-size:15.0px" text-anchor="start">Outcome: selected bare-metal servers boot and install OpenShift.</text>
+</g>
+<g id="gitops-target">
+<rect x="170" y="1370" width="760" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="186" y="1399" class="node-title" style="font-size:18.0px" text-anchor="start">Kubernetes and Argo CD target</text>
+<text x="187" y="1425" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1425" class="node-line" style="font-size:15.0px" text-anchor="start">Render: render-gitops.py creates the review copy.</text>
+<text x="187" y="1448" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1448" class="node-line" style="font-size:15.0px" text-anchor="start">Destination: secure-ai-gitops → apps/ and clusters/</text>
+<text x="187" y="1471" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="206" y="1471" class="node-line" style="font-size:14.9px" text-anchor="start">Deploy: Argo CD follows cluster entrypoints and reconciles the selected applications.</text>
+<text x="187" y="1494" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="1494" class="node-line" style="font-size:15.0px" text-anchor="start">Outcome: Kubernetes desired state converges continuously.</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="238.75" y="676.5" width="242.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="360" y="695" class="edge-label" style="font-size:12.5px" text-anchor="middle">four parallel target deliveries</text>
+</g>
+<line x1="40" y1="1571" x2="76" y2="1571" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="1576" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+</svg>

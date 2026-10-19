@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="730" viewBox="0 0 1600 730" role="img" aria-labelledby="title description">
+<title id="title">How the example inputs become a render</title>
+<desc id="description">Cluster, network and release files go through the legacy adapter into a typed intent. The versioned schema describes a separate document shape the current render does not load.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1600" height="730" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">How the example inputs become a render</text>
+<text x="36" y="78" class="subheading" text-anchor="start">The data tree is what the renderers read. The versioned schema is checked, and it is not an input.</text>
+<g id="zone-current">
+<rect x="32" y="112" width="1518" height="280" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-future">
+<rect x="32" y="418" width="928" height="260" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 320 250 L 390 250" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 620 250 L 690 250" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 920 250 L 965 250 L 965 367 L 1010 367" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 1250 367 L 1320 367" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 320 559 L 390 559" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 620 559 L 690 559" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 920 559 L 965 559 L 965 432 L 1010 432" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-current">
+<rect x="44" y="121" width="384.48" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="52" y="143" class="zone-title" style="font-size:18.0px" text-anchor="start">Current composition path</text>
+<text x="52" y="165" class="zone-note" style="font-size:14.0px" text-anchor="start">Maintained input can authorize target rendering</text>
+</g>
+<g id="zone-label-future">
+<rect x="44" y="427" width="340.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="52" y="449" class="zone-title" style="font-size:18.0px" text-anchor="start">Versioned schema, not rendered</text>
+</g>
+</g>
+<g id="nodes">
+<g id="current">
+<rect x="60" y="170" width="260" height="160" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="199" class="node-title" style="font-size:18.0px" text-anchor="start">Example inputs</text>
+<text x="76" y="225" class="node-line" style="font-size:15.0px" text-anchor="start">data/clusters + networks</text>
+<text x="76" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">data/defaults</text>
+<text x="76" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">platform-release.yaml</text>
+<rect x="198.3" y="300" width="109.7" height="21" rx="11" fill="#FFFFFF" stroke="#A5ADBA" stroke-width="1"/>
+<text x="253.14999999999998" y="314.5" class="badge" style="font-size:11.5px" text-anchor="middle">what you edit</text>
+</g>
+<g id="catalog-check">
+<rect x="390" y="170" width="230" height="160" rx="14" fill="#EAF7F1" stroke="#7A869A" stroke-width="1.6"/>
+<text x="406" y="199" class="node-title" style="font-size:18.0px" text-anchor="start">Profile loader</text>
+<text x="406" y="225" class="node-line" style="font-size:15.0px" text-anchor="start">look for data/catalogs/</text>
+<text x="406" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">directory is absent</text>
+<text x="406" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">select legacy adapter</text>
+</g>
+<g id="legacy">
+<rect x="690" y="170" width="230" height="160" rx="14" fill="#EAF7F1" stroke="#7A869A" stroke-width="1.6"/>
+<text x="706" y="199" class="node-title" style="font-size:15.7px" text-anchor="start">Strict legacy adapter</text>
+<text x="706" y="225" class="node-line" style="font-size:15.0px" text-anchor="start">validate current shape</text>
+<text x="706" y="248" class="node-line" style="font-size:15.0px" text-anchor="start">preserve value origins</text>
+<text x="706" y="271" class="node-line" style="font-size:15.0px" text-anchor="start">build typed intent</text>
+</g>
+<g id="resolved">
+<rect x="1010" y="282" width="240" height="170" rx="14" fill="#EAF7F1" stroke="#7A869A" stroke-width="1.6"/>
+<text x="1026" y="311" class="node-title" style="font-size:18.0px" text-anchor="start">Resolved intent</text>
+<text x="1026" y="337" class="node-line" style="font-size:15.0px" text-anchor="start">clusters + releases</text>
+<text x="1026" y="360" class="node-line" style="font-size:15.0px" text-anchor="start">networks + profiles</text>
+<text x="1026" y="383" class="node-line" style="font-size:15.0px" text-anchor="start">renderer authorization</text>
+</g>
+<g id="renderers">
+<rect x="1320" y="282" width="220" height="170" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="1336" y="311" class="node-title" style="font-size:18.0px" text-anchor="start">Current renderers</text>
+<text x="1336" y="337" class="node-line" style="font-size:15.0px" text-anchor="start">ACI · UCS · OCP</text>
+<text x="1336" y="360" class="node-line" style="font-size:15.0px" text-anchor="start">GitOps</text>
+<text x="1336" y="383" class="node-line" style="font-size:15.0px" text-anchor="start">repo-shaped output</text>
+</g>
+<g id="v2">
+<rect x="60" y="470" width="260" height="178" rx="14" fill="#FFF0F0" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="499" class="node-title" style="font-size:18.0px" text-anchor="start">Versioned schema</text>
+<text x="76" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">schemas/saif-platform-v2</text>
+<text x="76" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">separate release documents</text>
+<text x="76" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">not loaded by the render</text>
+<rect x="205.2" y="618" width="102.8" height="21" rx="11" fill="#FFFFFF" stroke="#A5ADBA" stroke-width="1"/>
+<text x="256.6" y="632.5" class="badge" style="font-size:11.5px" text-anchor="middle">not an input</text>
+</g>
+<g id="schema">
+<rect x="390" y="470" width="230" height="178" rx="14" fill="#FFF0F0" stroke="#7A869A" stroke-width="1.6"/>
+<text x="406" y="499" class="node-title" style="font-size:18.0px" text-anchor="start">V2 schema</text>
+<text x="406" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">saif-platform-v2</text>
+<text x="406" y="548" class="node-line" style="font-size:15.0px" text-anchor="start">independent OCP + IEP</text>
+<text x="406" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">strict document shapes</text>
+</g>
+<g id="tests">
+<rect x="690" y="470" width="230" height="178" rx="14" fill="#FFF0F0" stroke="#7A869A" stroke-width="1.6"/>
+<text x="706" y="499" class="node-title" style="font-size:18.0px" text-anchor="start">Profile test suite</text>
+<text x="706" y="525" class="node-line" style="font-size:15.0px" text-anchor="start">schema + compatibility</text>
+<text x="706" y="548" class="node-line" style="font-size:13.1px" text-anchor="start">authorization + transitions</text>
+<text x="706" y="571" class="node-line" style="font-size:15.0px" text-anchor="start">resolver behavior</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="335.0" y="213.5" width="40.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="355" y="232" class="edge-label" style="font-size:12.5px" text-anchor="middle">load</text>
+<rect x="620.0" y="213.5" width="70.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="655" y="232" class="edge-label" style="font-size:12.5px" text-anchor="middle">fallback</text>
+<rect x="924.7" y="331.0" width="82.6" height="19.0" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="966" y="348" class="edge-label" style="font-size:11.0px" text-anchor="middle">typed model</text>
+<rect x="1250.3" y="332.0" width="69.4" height="19.0" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="1285" y="349" class="edge-label" style="font-size:11.0px" text-anchor="middle">authorize</text>
+<rect x="320.3" y="524.0" width="69.4" height="19.0" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="355" y="541" class="edge-label" style="font-size:11.0px" text-anchor="middle">validates</text>
+<rect x="631.25" y="522.5" width="47.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="655" y="541" class="edge-label" style="font-size:12.5px" text-anchor="middle">tests</text>
+<rect x="926.25" y="481.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="965" y="500" class="edge-label" style="font-size:12.5px" text-anchor="middle">test-only</text>
+</g>
+<line x1="40" y1="691" x2="76" y2="691" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="696" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+<line x1="290.0" y1="691" x2="326.0" y2="691" stroke="#7A5AF8" stroke-width="3"/>
+<text x="336.0" y="696" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+</svg>

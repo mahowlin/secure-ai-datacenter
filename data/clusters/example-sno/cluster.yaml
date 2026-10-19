@@ -1,0 +1,79 @@
+kind: OCPCluster
+
+metadata:
+  name: example-sno
+  description: Single-node OpenShift cluster for the example site.
+
+spec:
+  releaseRef: saif-ocp-4.19-cilium-1.18
+  mode: sno
+  features:
+    hostedControlPlanes: false
+    KubeVirt: false
+
+  # Day 1: renders install-config.yaml.
+  installConfig:
+    openshift:
+      registryTrustPolicy: additional-ca
+      imageDelivery:
+        mode: mirrored
+        scopes: [ocp-install-core, gitops-bootstrap, platform-day2]
+      baseDomain: example.com
+      networkCatalog: example-federal
+      networkType: OVNKubernetes
+      ciliumDay2Migration: true
+
+    networking:
+      machineNetwork: Management
+
+    capabilities:
+      disconnectedCatalogs: true
+      mdadm: true
+
+  # Day 1: renders agent-config.yaml.
+  agentConfig:
+    rendezvousNode: example-sno
+    managementInterface:
+      bond: bond0
+      members: [eth0, eth1]
+
+    nodes:
+      - name: example-sno
+        ip: 198.18.1.69
+        serial: EXAMPLE97G7B
+
+  # Day 2 storage is topology-selected and GitOps-owned. These stable IDs are
+  # installation inventory, never kernel-order names. The future live SNO bead
+  # must revalidate them before the first (destructive) array creation.
+  day2GitOps:
+    storage:
+      profile: sno-mdadm-lvms
+      activation: active
+      maturity: partial
+      array:
+        name: nvme-data
+        level: raid10
+        raidDevices: 4
+        spareDevices: 1
+        devicePath: /dev/md/nvme-data
+        devices:
+          - /dev/disk/by-id/nvme-EXAMPLE-SNO-01
+          - /dev/disk/by-id/nvme-EXAMPLE-SNO-02
+          - /dev/disk/by-id/nvme-EXAMPLE-SNO-03
+          - /dev/disk/by-id/nvme-EXAMPLE-SNO-04
+          - /dev/disk/by-id/nvme-EXAMPLE-SNO-05
+      storageClass: lvms-nvme-raid10
+
+    addOns:
+      nvidia: false
+      splunk: false
+      demoApps: false
+      saifDemo: false
+
+  # Day 0/UCS: physical vNIC inventory and VLAN allowance.
+  ucs:
+    profileNameTemplate: "saif-{node.name}"
+    hostNetworking:
+      managementVNICPair:
+        names: [eth0, eth1]
+        nativeNetworkRef: Management

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="670" viewBox="0 0 900 670" role="img" aria-labelledby="title description">
+<title id="title">From site network to a running OpenShift cluster</title>
+<desc id="description">Three compact servers: site-owned ISO boot, with UCS automation as an option. Declared example architecture, not observed deployment. Labels and adjacent ownership tables are the text alternative.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="900" height="670" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">From site network to a running OpenShift cluster</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Three compact servers: site-owned ISO boot, with UCS automation as an option.</text>
+<g id="connections">
+<path d="M 690 166 L 690 290" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 520 323 L 380 323" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 210 166 L 210 290" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 210 356 L 210 480" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 380 513 L 520 513" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+</g>
+<g id="zone-labels">
+</g>
+<g id="nodes">
+<g id="services">
+<rect x="40" y="100" width="340" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="129" class="node-title" style="font-size:18.0px" text-anchor="start">Before first boot</text>
+<text x="56" y="155" class="node-line" style="font-size:15.7px" text-anchor="start">network · DNS · time · image access</text>
+</g>
+<g id="inputs">
+<rect x="520" y="100" width="340" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="536" y="129" class="node-title" style="font-size:18.0px" text-anchor="start">Declared site inputs</text>
+<text x="536" y="155" class="node-line" style="font-size:16.0px" text-anchor="start">hosts · NICs · disks · release</text>
+</g>
+<g id="iso">
+<rect x="520" y="290" width="340" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="536" y="319" class="node-title" style="font-size:18.0px" text-anchor="start">Compute: Agent ISO</text>
+<text x="536" y="345" class="node-line" style="font-size:16.0px" text-anchor="start">official installer + CLife archive</text>
+</g>
+<g id="hosts">
+<rect x="40" y="290" width="340" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="319" class="node-title" style="font-size:18.0px" text-anchor="start">Three bare-metal servers</text>
+<text x="56" y="345" class="node-line" style="font-size:16.0px" text-anchor="start">site BMC / media; UCS optional</text>
+</g>
+<g id="ocp">
+<rect x="40" y="480" width="340" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="509" class="node-title" style="font-size:18.0px" text-anchor="start">OpenShift + Isovalent CNI</text>
+<text x="56" y="535" class="node-line" style="font-size:16.0px" text-anchor="start">nodes Ready · core operators</text>
+</g>
+<g id="argo">
+<rect x="520" y="480" width="340" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="536" y="509" class="node-title" style="font-size:18.0px" text-anchor="start">Optional Argo CD bootstrap</text>
+<text x="536" y="535" class="node-line" style="font-size:15.7px" text-anchor="start">reviewed GitOps root + private refs</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="561.25" y="216.5" width="257.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="690" y="235" class="edge-label" style="font-size:12.5px" text-anchor="middle">validate → render → private stage</text>
+<rect x="415.0" y="289.5" width="70.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="308" class="edge-label" style="font-size:12.5px" text-anchor="middle">boot ISO</text>
+<rect x="81.25" y="216.5" width="257.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="210" y="235" class="edge-label" style="font-size:12.5px" text-anchor="middle">working before the cluster exists</text>
+<rect x="171.25" y="406.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="210" y="425" class="edge-label" style="font-size:12.5px" text-anchor="middle">bootstrap</text>
+<rect x="343.75" y="431.5" width="212.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="450" class="edge-label" style="font-size:12.5px" text-anchor="middle">then reconcile applications</text>
+</g>
+<line x1="40" y1="610" x2="74" y2="610" stroke="#4C6FFF" stroke-width="3"/><text x="84" y="615" font-size="14" fill="#344563">desired state / artifact</text><line x1="470" y1="610" x2="504" y2="610" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/><text x="514" y="615" font-size="14" fill="#344563">network protocol / transport</text><line x1="40" y1="637" x2="74" y2="637" stroke="#7A5AF8" stroke-width="3"/><text x="84" y="642" font-size="14" fill="#344563">API / controller contract</text></svg>

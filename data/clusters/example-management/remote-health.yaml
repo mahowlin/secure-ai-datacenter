@@ -1,0 +1,19 @@
+kind: RemoteHealthPolicy
+metadata:
+  name: example-management
+spec:
+  reporting: disabled
+  supportedMethod: remove-cloud-auth-from-global-pull-secret
+  cloudAuthHost: cloud.openshift.com
+  managementPullSecret:
+    namespace: openshift-config
+    name: pull-secret
+  hostedPullSecret:
+    name: pull-secret
+  existingHostedClusters: [example-tenant-a, example-shared]
+  runtimeOwner: saif-sys-admin
+  activation: after-registry-maintenance
+  verification:
+    preserveOtherRegistryAuth: true
+    confirmNoNewUploads: true
+    preserveLocalMonitoring: true

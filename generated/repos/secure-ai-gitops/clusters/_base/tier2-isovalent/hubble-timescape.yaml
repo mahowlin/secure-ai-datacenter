@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hubble-timescape
+  namespace: openshift-gitops
+  annotations:
+    argocd.argoproj.io/sync-wave: '0'
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/mahowlin/secure-ai-gitops.git
+    targetRevision: main
+    path: charts/hubble-timescape
+    helm:
+      values: "ingester:\n  image:\n    repository: registry.example.com:5000/isovalent/hubble-timescape\n\
+        \    tag: v1.18.2\n  connectionLogs:\n    enabled: true\n    pattern: connectionlog\\\
+        .log\n  server:\n    http:\n      enabled: true\n      basicAuth:\n      \
+        \  username: timescape_push_api\n        secretName: hubble-timescape-ingester-creds\n\
+        \    authMethod: basic-auth\n    grpc:\n      enabled: false\nserver:\n  image:\n\
+        \    repository: registry.example.com:5000/isovalent/hubble-timescape\n    tag: v1.18.2\n\
+        migrate:\n  image:\n    repository: registry.example.com:5000/isovalent/hubble-timescape\n\
+        \    tag: v1.18.2\n  ttl: 6h\nui:\n  image:\n    repository: registry.example.com:5000/isovalent/hubble-timescape-ui\n\
+        \    tag: v1.18.2\n  service:\n    type: LoadBalancer\n  ingress:\n    enabled:\
+        \ false\n  observability:\n    connections:\n      enabled: true\n    explorer:\n\
+        \      enabled: true\n  networkSecurity:\n    assessment:\n      enabled:\
+        \ true\n    enforcementPoints:\n      enabled: true\nclickhouse:\n  cluster:\n\
+        \    enabled: true\n    image:\n      repository: registry.example.com:5000/isovalent/clickhouse-server\n\
+        \      tag: 25.8.12.129-alpine\n    resources:\n      requests:\n        cpu:\
+        \ 1000m\n        memory: 8Gi\n      limits:\n        cpu: 4000m\n        memory:\
+        \ 32Gi\n    volumes:\n      data:\n        size: 100Gi\n        storageClassName:\
+        \ lvms-nvme-raid10\nk8sExporter:\n  enabled: true\n  image:\n    repository:\
+        \ registry.example.com:5000/isovalent/hubble-k8s-exporter\n    tag: v1.18.2\n  securityContext:\n\
+        \    privileged: true\n    runAsUser: 0\n  extraVolumes:\n  - name: hubble-logs\n\
+        \    hostPath:\n      path: /var/run/cilium/hubble\n      type: DirectoryOrCreate\n\
+        \  extraVolumeMounts:\n  - name: hubble-logs\n    mountPath: /var/run/cilium/hubble\n\
+        trimmer:\n  enabled: true\n  flowsCount: 30000000\n  trimIntervalMinutes:\
+        \ 60\ncertgen:\n  image:\n    repository: registry.example.com:5000/isovalent/certgen\n\
+        \    tag: v0.2.4\n"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: hubble-timescape
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true

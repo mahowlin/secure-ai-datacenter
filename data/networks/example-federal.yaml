@@ -1,0 +1,261 @@
+kind: NetworkCatalog
+
+metadata:
+  name: example-federal
+  description: Network catalog for the example site multi-tenant hosted design.
+
+spec:
+  domainVLANs:
+    default:
+      description: Default/native VLAN on UCS FI uplinks.
+      vlan: 1
+      native: true
+    imc-inband:
+      description: IMC inband management VLAN for CIMC access.
+      vlan: 2134
+
+  fabric:
+    fabricASN: 64512
+
+    aci:
+      borderLeafNodes:
+        - nodeId: 101
+        - nodeId: 102
+
+      # ACI physical domain used by NAC when rendering L3Out SVI paths.
+      physicalDomain: saif-ai-pod
+
+      # Existing shared AAEP for generic lab L2 attachments.
+      sharedAAEP: example-L2_AttEntityP
+
+      # Shared example AAEP for UCS tenant floating SVI domains on leaf pair 101/102.
+      aiPodAAEP: saif-ai-pod_AttEntityP
+
+      # Fabric-transit attachment entity. Required when a fabricTransit network is rendered.
+      transitAAEP: example-l3o-01-rd_AttEntityP
+      tenantPorts:
+      - host: example-node-2
+        podId: 1
+        nodeId: 101
+        module: 1
+        port: 11
+      - host: example-node-2
+        podId: 1
+        nodeId: 102
+        module: 1
+        port: 11
+      - host: example-node-3
+        podId: 1
+        nodeId: 101
+        module: 1
+        port: 12
+      - host: example-node-3
+        podId: 1
+        nodeId: 102
+        module: 1
+        port: 12
+      - host: example-node-4
+        podId: 1
+        nodeId: 101
+        module: 1
+        port: 13
+      - host: example-node-4
+        podId: 1
+        nodeId: 102
+        module: 1
+        port: 13
+
+  managementNetworks:
+    Management:
+      description: Management/bootstrap network for nodes, API/apps VIPs and default-route service access.
+      vlan: 2101
+      cidr: 198.18.1.0/24
+      gateway: 198.18.1.1
+      mtu: 1500
+      aciAttachment:
+        cluster: example-management
+        tenant: platform-management
+        vrf: Management
+        bridgeDomain: BD-management
+        applicationProfile: OpenShift
+        endpointGroup: management
+        physicalDomain: platform-management-phys
+        aaep: platform-management-aaep
+        siteL3Out: site-management-uplink
+        siteContract: site-management-services
+        serverPorts:
+        - host: example-node-2
+          podId: 1
+          nodeId: 103
+          module: 1
+          port: 1
+        - host: example-node-2
+          podId: 1
+          nodeId: 104
+          module: 1
+          port: 1
+        - host: example-node-3
+          podId: 1
+          nodeId: 103
+          module: 1
+          port: 2
+        - host: example-node-3
+          podId: 1
+          nodeId: 104
+          module: 1
+          port: 2
+        - host: example-node-4
+          podId: 1
+          nodeId: 103
+          module: 1
+          port: 3
+        - host: example-node-4
+          podId: 1
+          nodeId: 104
+          module: 1
+          port: 3
+
+    Generic-Management:
+      description: Third-party compact cluster machine network, pre-provisioned by site.
+      vlan: 1701
+      cidr: 192.0.2.0/24
+      gateway: 192.0.2.1
+
+  kubeAPINetworks:
+    example-tenant-a-kube-api-peering:
+      description: example-tenant-a tenant HCP management-services peering network.
+      vlan: 2111
+      mtu: 1500
+      peeringSubnet:
+        cidr: 198.18.11.0/28
+      bgp:
+        ciliumASN: 64711
+      aci:
+        tenant: example-tenant-a
+        routerIds:
+          101: 101.11.0.1
+          102: 102.11.0.1
+        floatingSvi:
+          ipShared: 198.18.11.3/28
+          pathFloatingIp: 198.18.11.4/28
+      hcpManagementServices:
+        - name: example-tenant-a-hcp-management-services
+          cidr: 198.18.11.16/28
+          description: example-tenant-a HCP management-services VIP pool.
+      controlPlaneIngressLoadBalancerVIPs:
+        - name: example-tenant-a-control-plane-ingress-lb-vip
+          cidr: 198.18.11.18/32
+          description: example-tenant-a all-Route HCP control-plane ingress router VIP.
+    tenant-b-kube-api-peering:
+      description: Tenant-B tenant HCP management-services peering network.
+      vlan: 2113
+      mtu: 1500
+      peeringSubnet:
+        cidr: 198.18.13.0/28
+      bgp:
+        ciliumASN: 64713
+      aci:
+        tenant: tenant-workloads
+        routerIds:
+          101: 101.13.0.1
+          102: 102.13.0.1
+        floatingSvi:
+          ipShared: 198.18.13.3/28
+          pathFloatingIp: 198.18.13.4/28
+      hcpManagementServices:
+        - name: tenant-b-hcp-management-services
+          cidr: 198.18.13.16/28
+          description: Tenant-B/example-shared HCP management-services VIP pool.
+      controlPlaneIngressLoadBalancerVIPs:
+        - name: example-shared-control-plane-ingress-lb-vip
+          cidr: 198.18.13.18/32
+          description: example-shared all-Route HCP control-plane ingress router VIP.
+        - name: example-multus-a-control-plane-ingress-lb-vip
+          cidr: 198.18.13.19/32
+          description: example-multus-a all-Route HCP control-plane ingress router VIP inside the existing Tenant-B management-services pool.
+
+  # Optional endpoint and OSPF transit fragments live in examples/optional-aci-transit/.
+  endpointNetworks: {}
+
+  # Multus implementations of the logical worker networks.  The neutral
+  # network identity does not select how services are exposed; BGP, ILB, or L2
+  # announcement are independent realization choices.
+  tenantNetworks:
+    example-tenant-a-workers:
+      description: example-tenant-a Multus L2 worker network for demos and testing.
+      vlan: 2112
+      mtu: 1500
+      tenantSupernet: 198.18.12.0/24
+      subnets:
+        workers:
+          cidr: 198.18.12.0/28
+          dhcp:
+            serverAddress: 198.18.12.5
+            pool:
+              start: 198.18.12.6
+              end: 198.18.12.14
+      bgp:
+        ciliumASN: 64712
+      aci:
+        tenant: example-tenant-a
+        routerIds:
+          101: 101.11.0.1
+          102: 102.11.0.1
+        floatingSvi:
+          ipShared: 198.18.12.3/28
+          pathFloatingIp: 198.18.12.4/28
+      pools:
+        loadBalancer:
+          - name: example-tenant-a-ingress
+            cidr: 198.18.12.16/28
+            description: example-tenant-a Cilium LB-IPAM pool.
+        egress:
+          - name: example-tenant-a-egress
+            cidr: 198.18.12.32/28
+            description: example-tenant-a Cilium Egress Gateway SNAT pool.
+
+    tenant-b-workers:
+      description: Tenant-B Multus L2 worker network for demos and testing.
+      vlan: 2114
+      mtu: 1500
+      tenantSupernet: 198.18.14.0/24
+      subnets:
+        workers:
+          cidr: 198.18.14.0/28
+          dhcp:
+            serverAddress: 198.18.14.5
+            pool:
+              start: 198.18.14.6
+              end: 198.18.14.14
+      bgp:
+        ciliumASN: 64714
+      aci:
+        tenant: tenant-workloads
+        routerIds:
+          101: 101.13.0.1
+          102: 102.13.0.1
+        floatingSvi:
+          ipShared: 198.18.14.3/28
+          pathFloatingIp: 198.18.14.4/28
+      pools:
+        loadBalancer:
+          # Parent prefix stays 198.18.14.16/28. Allocatable slices are disjoint
+          # so example-shared cannot be given .18 and example-multus-a cannot be given .17.
+          - name: tenant-b-ingress
+            cidr: 198.18.14.16/28
+            allocation:
+              start: 198.18.14.17
+              stop: 198.18.14.17
+            description: example-shared apps VIP. The rendered block is only 198.18.14.17.
+          - name: tenant-b-ingress-example-multus-a
+            cidr: 198.18.14.16/28
+            allocation:
+              start: 198.18.14.18
+              stop: 198.18.14.18
+            description: example-multus-a apps VIP. The rendered block is only 198.18.14.18.
+        egress:
+          - name: tenant-b-egress
+            cidr: 198.18.14.32/28
+            description: Tenant-B Cilium Egress Gateway SNAT pool.
+
+  fabricNetworks: {}

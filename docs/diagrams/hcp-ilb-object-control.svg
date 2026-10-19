@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="900" viewBox="0 0 1100 900" role="img" aria-labelledby="title description">
+<title id="title">Management ILB discovery and generated state</title>
+<desc id="description">The management ILB controller reaches the hosted kube-apiserver Service backed by HCP API pods. Dedicated RBAC exposes opted-in Services and Nodes. A per-cluster registration and kubeconfig let the controller create ILB state, allocate a VIP and select it for BGP publication. The generated state and route remain subject to validation.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="900" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Management ILB discovery and generated state</text>
+<text x="36" y="78" class="subheading" text-anchor="start">The controller reaches hosted kube-apiserver; object reconciliation precedes backend traffic proof.</text>
+<g id="zone-remote">
+<rect x="20" y="110" width="310" height="710" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-management">
+<rect x="345" y="110" width="735" height="710" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 180 410 L 180 330" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 690 275 L 740 275" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 900 350 L 900 430" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 740 320 L 710 320 L 710 375 L 180 375 L 180 330" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 650 512 L 695 512 L 695 535 L 740 535" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 900 680 L 900 610" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-remote">
+<rect x="32" y="119" width="286" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="141" class="zone-title" style="font-size:18.0px" text-anchor="start">Hosted tenant API</text>
+<text x="40" y="163" class="zone-note" style="font-size:11.8px" text-anchor="start">Discovery endpoint; not an ILB proxy node</text>
+</g>
+<g id="zone-label-management">
+<rect x="357" y="119" width="478.56000000000006" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="365" y="141" class="zone-title" style="font-size:18.0px" text-anchor="start">Management cluster / ILB</text>
+<text x="365" y="163" class="zone-note" style="font-size:14.0px" text-anchor="start">Registration, controller and generated service-edge objects</text>
+</g>
+</g>
+<g id="nodes">
+<g id="remote-api">
+<rect x="45" y="180" width="270" height="150" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="61" y="209" class="node-title" style="font-size:13.7px" text-anchor="start">Hosted kube-apiserver Service</text>
+<text x="61" y="235" class="node-line" style="font-size:15.0px" text-anchor="start">backed by HCP API pods</text>
+<text x="61" y="258" class="node-line" style="font-size:15.0px" text-anchor="start">opted-in Services + Nodes</text>
+<text x="61" y="281" class="node-line" style="font-size:15.0px" text-anchor="start">Service status</text>
+</g>
+<g id="remote-rbac">
+<rect x="45" y="410" width="270" height="125" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="61" y="439" class="node-title" style="font-size:18.0px" text-anchor="start">Dedicated RBAC</text>
+<text x="61" y="465" class="node-line" style="font-size:15.0px" text-anchor="start">ServiceAccount</text>
+<text x="61" y="488" class="node-line" style="font-size:15.0px" text-anchor="start">read + status permissions</text>
+</g>
+<g id="registration">
+<rect x="370" y="200" width="320" height="150" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="386" y="229" class="node-title" style="font-size:18.0px" text-anchor="start">Cluster registration</text>
+<text x="386" y="255" class="node-line" style="font-size:15.0px" text-anchor="start">LBK8sBackendCluster</text>
+<text x="386" y="278" class="node-line" style="font-size:15.0px" text-anchor="start">kubeconfig Secret</text>
+<text x="386" y="301" class="node-line" style="font-size:15.0px" text-anchor="start">one per hosted cluster</text>
+</g>
+<g id="controller">
+<rect x="740" y="200" width="320" height="150" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="756" y="229" class="node-title" style="font-size:17.8px" text-anchor="start">External-cluster controller</text>
+<text x="756" y="255" class="node-line" style="font-size:15.0px" text-anchor="start">uses registration</text>
+<text x="756" y="278" class="node-line" style="font-size:15.0px" text-anchor="start">watches remote objects</text>
+<text x="756" y="301" class="node-line" style="font-size:15.0px" text-anchor="start">updates Service status</text>
+</g>
+<g id="generated">
+<rect x="740" y="430" width="320" height="180" rx="14" fill="#FFF0F0" stroke="#7A869A" stroke-width="1.6"/>
+<text x="756" y="459" class="node-title" style="font-size:18.0px" text-anchor="start">Generated ILB state</text>
+<text x="756" y="485" class="node-line" style="font-size:15.0px" text-anchor="start">per-cluster namespace</text>
+<text x="756" y="508" class="node-line" style="font-size:15.0px" text-anchor="start">LBVIP + LBService</text>
+<text x="756" y="531" class="node-line" style="font-size:15.0px" text-anchor="start">LBBackendPool</text>
+<rect x="938.3" y="580" width="109.7" height="21" rx="11" fill="#FFFFFF" stroke="#A5ADBA" stroke-width="1"/>
+<text x="993.15" y="594.5" class="badge" style="font-size:11.5px" text-anchor="middle">must validate</text>
+</g>
+<g id="vip-pool">
+<rect x="370" y="450" width="280" height="125" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="386" y="479" class="node-title" style="font-size:18.0px" text-anchor="start">ILB VIP pool</text>
+<text x="386" y="505" class="node-line" style="font-size:15.0px" text-anchor="start">allocates service VIP</text>
+<text x="386" y="528" class="node-line" style="font-size:15.0px" text-anchor="start">tenant-scoped range</text>
+</g>
+<g id="bgp-policy">
+<rect x="740" y="680" width="320" height="125" rx="14" fill="#FFF0F0" stroke="#7A869A" stroke-width="1.6"/>
+<text x="756" y="709" class="node-title" style="font-size:18.0px" text-anchor="start">ILB BGP policy</text>
+<text x="756" y="735" class="node-line" style="font-size:15.0px" text-anchor="start">selects ILB VIP</text>
+<text x="756" y="758" class="node-line" style="font-size:15.0px" text-anchor="start">publishes service /32</text>
+<rect x="938.3" y="775" width="109.7" height="21" rx="11" fill="#FFFFFF" stroke="#A5ADBA" stroke-width="1"/>
+<text x="993.15" y="789.5" class="badge" style="font-size:11.5px" text-anchor="middle">must validate</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="335.0" y="349.5" width="220.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="445" y="368" class="edge-label" style="font-size:12.5px" text-anchor="middle">watch objects + patch status</text>
+<rect x="645.0" y="486.5" width="100.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="695" y="505" class="edge-label" style="font-size:12.5px" text-anchor="middle">allocate VIP</text>
+</g>
+<line x1="40" y1="861" x2="76" y2="861" stroke="#7A5AF8" stroke-width="3"/>
+<text x="86" y="866" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+</svg>

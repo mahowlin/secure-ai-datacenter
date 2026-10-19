@@ -1,0 +1,95 @@
+# ACI desired-state values for SAIF platform rendering
+#
+# Consumed by resolver.py → exposed as ResolvedAciDefaults to render-aci.py.
+# Contains all ACI-specific policy, naming, and protocol values that the
+# platform generates into NAC YAML for secure-ai-fabric.
+#
+# Ownership: saif-platform owns these values.
+# secure-ai-fabric consumes the generated NAC YAML and should not supplement
+# missing values with local defaults.
+
+kind: AciDefaults
+metadata:
+  name: example-aci
+
+spec:
+  # VRF name is local to each ACI tenant. example-tenant-a and Tenant-B both use
+  # VRF-1 inside their tenant namespace.
+  vrfName: VRF-1
+
+  # --- Interface / transport ---
+  mtu: 9000
+
+  # --- BFD policy ---
+  bfdPolicy:
+    name: cilium-bfd
+    description: Cilium optimised BFD values
+    subinterfaceOptimization: false
+    detectionMultiplier: 5
+    echoAdminState: false
+    echoRxInterval: 50
+    minRxInterval: 999
+    minTxInterval: 999
+
+  # --- BGP best-path policy ---
+  bgpBestPathPolicy:
+    name: cilium-bp
+    ignoreIgpMetric: true
+
+  # --- BGP peer prefix policy ---
+  bgpPeerPrefixPolicy:
+    name: cilium-cni
+    description: BGP prefix policies for Cilium CNI
+    action: reject
+    threshold: 75
+    maxPrefixes: 500
+
+  # --- OSPF interface policy ---
+  ospfInterfacePolicy:
+    name: ospf-p2p
+    description: OSPF point-to-point policy for N5K Lab Core transit links
+    networkType: p2p
+    mtuIgnore: true
+    advertiseSubnet: true
+
+  # --- Filters (contract subjects) ---
+  filters:
+    - name: tcp-src-any-to-dst-any
+      entries:
+        - name: src-any-to-dst-any
+          ethertype: ip
+          protocol: tcp
+    - name: tcp-dst-ssh
+      entries:
+        - name: dst-ssh
+          ethertype: ip
+          protocol: tcp
+          destination_from_port: ssh
+          destination_to_port: ssh
+    - name: udp-src-any-to-dst-any
+      entries:
+        - name: src-any-to-dst-any
+          ethertype: ip
+          protocol: udp
+    - name: icmp-src-any-to-dst-any
+      entries:
+        - name: src-any-to-dst-any
+          ethertype: ipv4
+          protocol: icmp
+
+  # --- Contract subject templates (reference above filters) ---
+  # The renderer applies this one subject. ssh-icmp stays available and is not attached.
+  renderedContractSubject: all-entries
+  contractSubjects:
+    - name: all-entries
+      filters:
+        - filter: tcp-src-any-to-dst-any
+        - filter: udp-src-any-to-dst-any
+        - filter: icmp-src-any-to-dst-any
+    - name: ssh-icmp
+      filters:
+        - filter: tcp-dst-ssh
+        - filter: icmp-src-any-to-dst-any
+
+  # --- Contract scope ---
+  contractScope: global

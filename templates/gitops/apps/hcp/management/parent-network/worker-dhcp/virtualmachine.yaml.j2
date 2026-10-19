@@ -1,0 +1,63 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: {{ server_name }}
+  namespace: {{ namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "{{ worker_dhcp_sync_wave }}"
+  labels:
+    app.kubernetes.io/name: {{ server_name }}
+spec:
+  runStrategy: {{ vm_run_strategy }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ server_name }}
+    spec:
+      terminationGracePeriodSeconds: 60
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+{% for nameserver in dns_servers %}
+        - {{ nameserver }}
+{% endfor %}
+      domain:
+        resources:
+          requests:
+            memory: 1Gi
+        devices:
+          disks:
+          - name: containerdisk
+            disk:
+              bus: virtio
+          - name: lease-state
+            disk:
+              bus: virtio
+            serial: {{ lease_disk_serial }}
+          - name: cloudinit
+            disk:
+              bus: virtio
+          interfaces:
+{% for network in networks %}
+          - name: {{ network.name }}
+            bridge: {}
+{% endfor %}
+      networks:
+{% for network in networks %}
+      - name: {{ network.name }}
+        multus:
+          networkName: {{ namespace }}/{{ network.nad }}
+{% endfor %}
+      volumes:
+      - name: containerdisk
+        containerDisk:
+          image: {{ dhcp_image }}
+      - name: lease-state
+        persistentVolumeClaim:
+          claimName: {{ lease_claim_name }}
+      - name: cloudinit
+        cloudInitNoCloud:
+          networkData: |
+{{ network_data_indented }}
+          secretRef:
+            name: {{ cloud_init_secret_name }}

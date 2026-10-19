@@ -1,0 +1,195 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1535" viewBox="0 0 1200 1535" role="img" aria-labelledby="title description">
+<title id="title">Hosted-cluster reconciliation contracts: local API, registration and tenant API</title>
+<desc id="description">Argo CD reads cluster entrypoints from secure-ai-gitops and reconciles management desired state to the local Kubernetes API. Management controllers realize operators, parent networking, HostedCluster and NodePool resources. HyperShift produces an admin kubeconfig Secret; a least-privilege Sync hook Job registers the tenant API with Argo CD. Guest Applications then use destination name selected tenant. These are desired-state and API contracts, not workload traffic paths.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1200" height="1535" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Hosted-cluster reconciliation contracts: local API, registration and tenant API</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Argo CD uses the management API for platform state and a separately registered tenant API for guest Day 2 state.</text>
+<g id="zone-source">
+<rect x="35" y="105" width="1130" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-management">
+<rect x="20" y="385" width="1160" height="520" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-registration">
+<rect x="55" y="940" width="1090" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-guest">
+<rect x="55" y="1240" width="1090" height="255" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 430 242 L 770 242" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 950 320 L 950 365 L 750 365 L 750 425" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 500 590 L 500 635 L 215 635 L 215 690" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 600 590 L 600 690" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 700 590 L 700 635 L 985 635 L 985 690" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 985 875 L 985 930 L 300 930 L 300 990" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 510 1072 L 690 1072" fill="none" stroke="#C93756" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2 5" marker-end="url(#arrow-trust)"/>
+<path d="M 950 320 L 1170 320 L 1170 1240 L 300 1240 L 300 1290" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 510 1377 L 690 1377" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-source">
+<rect x="47" y="114" width="437.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="55" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Git desired-state source and reconciler</text>
+</g>
+<g id="zone-label-management">
+<rect x="32" y="394" width="642.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="416" class="zone-title" style="font-size:18.0px" text-anchor="start">Management-cluster Kubernetes API and controller contracts</text>
+</g>
+<g id="zone-label-registration">
+<rect x="67" y="949" width="685.6" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="75" y="971" class="zone-title" style="font-size:18.0px" text-anchor="start">Tenant API registration without committing kubeconfig material</text>
+</g>
+<g id="zone-label-guest">
+<rect x="67" y="1249" width="383.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="75" y="1271" class="zone-title" style="font-size:18.0px" text-anchor="start">Guest-cluster Day 2 reconciliation</text>
+</g>
+</g>
+<g id="nodes">
+<g id="repo">
+<rect x="70" y="165" width="360" height="155" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="86" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">secure-ai-gitops</text>
+<text x="87" y="220" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="106" y="220" class="node-line" style="font-size:14.9px" text-anchor="start">clusters/example-management entrypoints</text>
+<text x="87" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="106" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">operators, network + lifecycle paths</text>
+<text x="87" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="106" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">guest application paths</text>
+</g>
+<g id="argo">
+<rect x="770" y="165" width="360" height="155" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="786" y="194" class="node-title" style="font-size:17.6px" text-anchor="start">Argo CD on management OpenShift</text>
+<text x="787" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="806" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">pulls desired state from Git</text>
+<text x="787" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="806" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">sync waves order Applications</text>
+<text x="787" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="806" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">local and named remote targets</text>
+</g>
+<g id="management-api">
+<rect x="410" y="425" width="380" height="165" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="426" y="454" class="node-title" style="font-size:18.0px" text-anchor="start">Management Kubernetes API</text>
+<text x="427" y="480" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="446" y="480" class="node-line" style="font-size:15.0px" text-anchor="start">server: kubernetes.default.svc</text>
+<text x="427" y="503" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="446" y="503" class="node-line" style="font-size:15.0px" text-anchor="start">accepts management desired state</text>
+<text x="427" y="526" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="446" y="526" class="node-line" style="font-size:15.0px" text-anchor="start">controllers own readiness</text>
+</g>
+<g id="operators">
+<rect x="45" y="690" width="340" height="185" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="61" y="719" class="node-title" style="font-size:18.0px" text-anchor="start">Operators and operands</text>
+<text x="62" y="745" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="81" y="745" class="node-line" style="font-size:15.0px" text-anchor="start">Subscriptions + operands</text>
+<text x="62" y="768" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="81" y="768" class="node-line" style="font-size:15.0px" text-anchor="start">CNV, MCE/HyperShift + NMState</text>
+<text x="62" y="791" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="81" y="791" class="node-line" style="font-size:14.9px" text-anchor="start">OLM and operator controllers reconcile</text>
+</g>
+<g id="network">
+<rect x="430" y="690" width="340" height="185" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="446" y="719" class="node-title" style="font-size:18.0px" text-anchor="start">Parent network desired state</text>
+<text x="447" y="745" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="466" y="745" class="node-line" style="font-size:15.0px" text-anchor="start">NNCP, NAD + Cilium resources</text>
+<text x="447" y="768" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="466" y="768" class="node-line" style="font-size:15.0px" text-anchor="start">NMState and Cilium reconcile</text>
+<text x="447" y="791" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="466" y="791" class="node-line" style="font-size:15.0px" text-anchor="start">runtime health remains separate</text>
+</g>
+<g id="lifecycle">
+<rect x="815" y="690" width="340" height="185" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="831" y="719" class="node-title" style="font-size:18.0px" text-anchor="start">HostedCluster and NodePool</text>
+<text x="832" y="745" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="851" y="745" class="node-line" style="font-size:15.0px" text-anchor="start">selected lifecycle namespace</text>
+<text x="832" y="768" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="851" y="768" class="node-line" style="font-size:15.0px" text-anchor="start">HyperShift + KubeVirt watch APIs</text>
+<text x="832" y="791" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="851" y="791" class="node-line" style="font-size:14.9px" text-anchor="start">bootstrap + runtime are controller-owned</text>
+</g>
+<g id="kubeconfig">
+<rect x="90" y="990" width="420" height="165" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="106" y="1019" class="node-title" style="font-size:18.0px" text-anchor="start">HyperShift admin kubeconfig Secret</text>
+<text x="107" y="1045" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1045" class="node-line" style="font-size:15.0px" text-anchor="start">created in selected lifecycle namespace</text>
+<text x="107" y="1068" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1068" class="node-line" style="font-size:15.0px" text-anchor="start">contains tenant API endpoint + trust</text>
+<text x="107" y="1091" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1091" class="node-line" style="font-size:15.0px" text-anchor="start">secret value never enters Git</text>
+</g>
+<g id="registration">
+<rect x="690" y="990" width="420" height="165" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="706" y="1019" class="node-title" style="font-size:18.0px" text-anchor="start">Argo cluster registration</text>
+<text x="707" y="1045" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="726" y="1045" class="node-line" style="font-size:15.0px" text-anchor="start">Sync hook Job reads the kubeconfig</text>
+<text x="707" y="1068" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="726" y="1068" class="node-line" style="font-size:15.0px" text-anchor="start">creates named cluster Secret</text>
+<text x="707" y="1091" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="726" y="1091" class="node-line" style="font-size:15.0px" text-anchor="start">registers destination selected tenant</text>
+</g>
+<g id="tenant-api">
+<rect x="90" y="1290" width="420" height="175" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="106" y="1319" class="node-title" style="font-size:18.0px" text-anchor="start">selected tenant Kubernetes API</text>
+<text x="107" y="1345" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1345" class="node-line" style="font-size:15.0px" text-anchor="start">separate remote API endpoint</text>
+<text x="107" y="1368" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1368" class="node-line" style="font-size:15.0px" text-anchor="start">selected by destination.name</text>
+<text x="107" y="1391" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="126" y="1391" class="node-line" style="font-size:15.0px" text-anchor="start">available only after HCP bootstrap</text>
+</g>
+<g id="guest-apps">
+<rect x="690" y="1290" width="420" height="175" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="706" y="1319" class="node-title" style="font-size:18.0px" text-anchor="start">Guest Day 2 desired state</text>
+<text x="707" y="1345" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="726" y="1345" class="node-line" style="font-size:15.0px" text-anchor="start">Cilium + catalogs</text>
+<text x="707" y="1368" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="726" y="1368" class="node-line" style="font-size:15.0px" text-anchor="start">policy, secrets + observability</text>
+<text x="707" y="1391" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="726" y="1391" class="node-line" style="font-size:15.0px" text-anchor="start">reconciled through tenant API</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="565.0" y="206.5" width="70.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="600" y="225" class="edge-label" style="font-size:12.5px" text-anchor="middle">Git pull</text>
+<rect x="695.0" y="341.5" width="160.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="775" y="360" class="edge-label" style="font-size:12.5px" text-anchor="middle">local reconciliation</text>
+<rect x="284.5" y="611.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="357" y="630" class="edge-label" style="font-size:12.5px" text-anchor="middle">Kubernetes objects</text>
+<rect x="527.5" y="611.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="600" y="630" class="edge-label" style="font-size:12.5px" text-anchor="middle">Kubernetes objects</text>
+<rect x="769.5" y="611.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="842" y="630" class="edge-label" style="font-size:12.5px" text-anchor="middle">Kubernetes objects</text>
+<rect x="577.0" y="906.5" width="130.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="642" y="925" class="edge-label" style="font-size:12.5px" text-anchor="middle">admin kubeconfig</text>
+<rect x="520.0" y="1036.5" width="160.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="600" y="1055" class="edge-label" style="font-size:12.5px" text-anchor="middle">least-privilege read</text>
+<rect x="580.0" y="1216.5" width="310.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="735" y="1235" class="edge-label" style="font-size:12.5px" text-anchor="middle">remote reconciliation after registration</text>
+<rect x="490.0" y="1341.5" width="220.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="600" y="1360" class="edge-label" style="font-size:12.5px" text-anchor="middle">destination: selected tenant</text>
+</g>
+<line x1="40" y1="1496" x2="76" y2="1496" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="1501" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+<line x1="290.0" y1="1496" x2="326.0" y2="1496" stroke="#7A5AF8" stroke-width="3"/>
+<text x="336.0" y="1501" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+<line x1="547.5" y1="1496" x2="583.5" y2="1496" stroke="#C93756" stroke-width="3" stroke-dasharray="2 5"/>
+<text x="593.5" y="1501" class="legend" style="font-size:12.5px" text-anchor="start">trust / credential boundary</text>
+</svg>

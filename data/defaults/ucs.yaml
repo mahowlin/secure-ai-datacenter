@@ -1,0 +1,35 @@
+# UCS target-repo convention map for SAIF platform rendering
+#
+# Consumed by resolver.py → exposed as ResolvedUcsDefaults to render-ucs.py.
+# Documents stable naming conventions used by saif-ai-pod (the target
+# execution repo). These are NOT SAIF-owned values — they are traceable
+# references to saif-ai-pod policy names.
+#
+# If saif-ai-pod renames policies, update this file.
+#
+# Ownership: saif-platform owns the mapping; saif-ai-pod owns the
+# actual policy objects these names refer to.
+
+kind: UcsDefaults
+metadata:
+  name: saif-ai-pod
+
+spec:
+  # Intersight organization
+  org: cpa-infra
+
+  # VLAN policies
+  domainVlanPolicy: saif-example-node-dom-vlan
+  serverVlanPolicy: saif-example-node-vlan
+  multicastPolicy: saif-example-node-multicast
+
+  # Ethernet Network Group policies (SAIF-generated in data/ucs/ from selected VLAN intent)
+  managementEngPolicy: saif-example-node-eth-net-group
+  tenantEngPolicy: saif-example-node-tenant-eng
+
+  # LAN connectivity
+  lanPolicyTemplate: "saif-{node_name}-lan"
+  macPool: saif-example-node-mac-pool
+  ethernetAdapterPolicy: saif-example-node-eth-adapter
+  ethernetQosPolicy: saif-example-node-eth-qos
+  ethernetNetworkControlPolicy: saif-example-node-eth-ctrl

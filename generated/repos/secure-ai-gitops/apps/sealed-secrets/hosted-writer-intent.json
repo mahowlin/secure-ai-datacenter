@@ -1,0 +1,43 @@
+{
+  "activation": "manual",
+  "enrollments": [
+    {
+      "centralIngest": true,
+      "cluster": "example-multus-a",
+      "enrollment": "selected"
+    },
+    {
+      "centralIngest": true,
+      "cluster": "example-shared",
+      "enrollment": "retained"
+    }
+  ],
+  "executionPolicy": {
+    "commandTimeoutSeconds": 30,
+    "jobTimeoutMinutes": 10
+  },
+  "managementApiEndpoint": "https://api.example-management.example.com:6443",
+  "managementCluster": "example-management",
+  "retainedExternal": [
+    "example-tenant-a"
+  ],
+  "source": "HCPCluster spec.timescapeExporter.enrollment",
+  "targets": [
+    {
+      "adminKubeconfigSecretKey": "kubeconfig",
+      "adminKubeconfigSecretName": "example-multus-a-admin-kubeconfig",
+      "cluster": "example-multus-a",
+      "controllerName": "sealed-secrets-controller",
+      "controllerNamespace": "sealed-secrets",
+      "hostedClusterName": "example-multus-a",
+      "hostedClusterNamespace": "clusters-example-multus-a",
+      "keys": [
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY"
+      ],
+      "namespace": "hubble-timescape",
+      "sealedPath": "apps/sealed-secrets/example-multus-a/hubble-timescape/timescape-object-writer.yaml",
+      "secretName": "timescape-object-writer"
+    }
+  ]
+}

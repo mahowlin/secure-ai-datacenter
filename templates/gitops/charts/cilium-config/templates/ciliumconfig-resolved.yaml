@@ -1,0 +1,28 @@
+{{- with .Values.renderedCiliumConfig }}
+{{- if .enabled }}
+{{- if and (not .packageDigest) (not .sourceContractSha256) }}
+{{- fail "renderedCiliumConfig requires packageDigest or sourceContractSha256" }}
+{{- end }}
+apiVersion: cilium.io/v1alpha1
+kind: CiliumConfig
+metadata:
+  name: ciliumconfig
+  labels:
+    app.kubernetes.io/name: clife
+    app.kubernetes.io/managed-by: argocd
+  annotations:
+    {{- if .packageDigest }}
+    __SAIF_API_GROUP__/clife-package-digest: {{ required "renderedCiliumConfig.packageDigest is required" .packageDigest }}
+    __SAIF_API_GROUP__/clife-receipt-sha256: {{ required "renderedCiliumConfig.receiptSha256 is required" .receiptSha256 }}
+    {{- else }}
+    __SAIF_API_GROUP__/source-repository: {{ required "renderedCiliumConfig.sourceRepository is required" .sourceRepository }}
+    __SAIF_API_GROUP__/source-revision: {{ required "renderedCiliumConfig.sourceRevision is required" .sourceRevision }}
+    __SAIF_API_GROUP__/source-contract-sha256: {{ required "renderedCiliumConfig.sourceContractSha256 is required" .sourceContractSha256 }}
+    __SAIF_API_GROUP__/receipt-state: {{ required "renderedCiliumConfig.receiptState is required" .receiptState }}
+    {{- end }}
+    __SAIF_API_GROUP__/cilium-config-profile: {{ required "renderedCiliumConfig.profileRef is required" .profileRef }}
+    __SAIF_API_GROUP__/cilium-config-profile-sha256: {{ required "renderedCiliumConfig.profileSha256 is required" .profileSha256 }}
+spec:
+{{ toYaml .spec | nindent 2 }}
+{{- end }}
+{{- end }}

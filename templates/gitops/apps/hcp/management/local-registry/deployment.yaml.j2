@@ -1,0 +1,114 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ workload_name }}
+  namespace: {{ namespace }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ workload_name }}
+  template:
+    metadata:
+      labels:
+        app: {{ workload_name }}
+    spec:
+      serviceAccountName: hcp-distribution-service
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: {{ pod_uid }}
+        runAsGroup: {{ pod_uid }}
+        fsGroup: {{ pod_uid }}
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: distribution
+          image: {{ distribution_image }}
+          imagePullPolicy: IfNotPresent
+          command: [/bin/registry, serve, /run/distribution/config.yml]
+          env:
+            - name: REGISTRY_HTTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ http_secret }}
+                  key: secret
+          resources:
+            requests:
+              cpu: {{ distribution_requests.cpu }}
+              memory: {{ distribution_requests.memory }}
+            limits:
+              cpu: "{{ distribution_limits.cpu }}"
+              memory: {{ distribution_limits.memory }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: storage, mountPath: /var/lib/registry}
+            - {name: config, mountPath: /run/distribution/config.yml, subPath: config.yml, readOnly: true}
+            - {name: distribution-tmp, mountPath: /tmp}
+          readinessProbe:
+            exec:
+              command: [/bin/sh, -ec, "wget -q -O /dev/null http://127.0.0.1:{{ listeners.distribution }}/v2/"]
+            periodSeconds: 10
+        - name: access-proxy
+          image: {{ proxy_image }}
+          imagePullPolicy: IfNotPresent
+          command: [nginx, -c, /run/access/nginx.conf, -g, "daemon off;"]
+          ports:
+            - {name: pull-https, containerPort: {{ listeners.pull }}}
+            - {name: sync-https, containerPort: {{ listeners.sync }}}
+{% if external_pull %}
+            - {name: external-https, containerPort: {{ external_pull.listenerPort }}}
+{% endif %}
+          resources:
+            requests:
+              cpu: {{ proxy_requests.cpu }}
+              memory: {{ proxy_requests.memory }}
+            limits:
+              cpu: "{{ proxy_limits.cpu }}"
+              memory: {{ proxy_limits.memory }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          volumeMounts:
+            - {name: config, mountPath: /run/access/nginx.conf, subPath: nginx.conf, readOnly: true}
+            - {name: pull-auth, mountPath: /run/pull-auth, readOnly: true}
+            - {name: sync-auth, mountPath: /run/sync-auth, readOnly: true}
+            - {name: pull-tls, mountPath: /run/pull-tls, readOnly: true}
+            - {name: sync-tls, mountPath: /run/sync-tls, readOnly: true}
+{% if external_pull %}
+            - {name: external-tls, mountPath: /run/external-tls, readOnly: true}
+{% endif %}
+            - {name: proxy-tmp, mountPath: /tmp}
+            - {name: proxy-cache, mountPath: /var/cache/nginx}
+          readinessProbe:
+            tcpSocket: {port: pull-https}
+            periodSeconds: 10
+      volumes:
+        - name: storage
+          persistentVolumeClaim: {claimName: {{ pvc_name }}}
+        - name: config
+          configMap: {name: hcp-distribution-config}
+        - name: pull-auth
+          secret: {secretName: {{ pull_auth_secret }}}
+        - name: sync-auth
+          secret: {secretName: {{ sync_auth_secret }}}
+        - name: pull-tls
+          secret: {secretName: {{ pull_tls_secret }}}
+        - name: sync-tls
+          secret: {secretName: {{ sync_tls_secret }}}
+{% if external_pull %}
+        - name: external-tls
+          secret: {secretName: {{ external_pull.tlsSecret }}}
+{% endif %}
+        - name: distribution-tmp
+          emptyDir: {sizeLimit: {{ empty_dir.distributionTmp }}}
+        - name: proxy-tmp
+          emptyDir: {sizeLimit: {{ empty_dir.proxyTmp }}}
+        - name: proxy-cache
+          emptyDir: {sizeLimit: {{ empty_dir.proxyCache }}}

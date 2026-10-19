@@ -1,0 +1,28 @@
+{# Target-native Easy-IMM Ethernet Network Group policies
+   Rendered by render-ucs.py from NetworkCatalog + OCPCluster
+
+   ENGs are SAIF-generated because their VLAN membership is derived from
+   selected cluster/network intent.
+
+   Template variables:
+     target       — target-repo convention references
+     mgmt_vlans   — aggregate management/native VLANs selected by SAIF clusters
+     tenant_vlans — aggregate tenant VLANs selected by SAIF clusters
+#}
+---
+{{ target.org }}:
+  policies:
+    ethernet_network_group:
+{% if mgmt_vlans %}
+      - name: {{ target.mgmt_eng_policy }}
+        description: "Management vNIC ENG - native VLAN {{ mgmt_vlans | map(attribute='vlan') | sort | join(',') }}"
+        allowed_vlans: "{{ mgmt_vlans | map(attribute='vlan') | sort | join(',') }}"
+{% if mgmt_vlans | length == 1 %}
+        native_vlan: {{ mgmt_vlans[0].vlan }}
+{% endif %}
+{% endif %}
+{% if tenant_vlans %}
+      - name: {{ target.tenant_eng_policy }}
+        description: "Tenant vNIC ENG - tagged VLANs {{ tenant_vlans | map(attribute='vlan') | sort | join(',') }}"
+        allowed_vlans: "{{ tenant_vlans | map(attribute='vlan') | sort | join(',') }}"
+{% endif %}

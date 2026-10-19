@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ sync_service }}
+  namespace: {{ namespace }}
+  annotations:
+    service.beta.openshift.io/serving-cert-secret-name: {{ sync_tls_secret }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ workload_name }}
+  ports:
+    - name: https
+      port: 5000
+      targetPort: sync-https

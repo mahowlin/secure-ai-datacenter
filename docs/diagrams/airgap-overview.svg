@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="880" viewBox="0 0 800 880" role="img" aria-labelledby="title description">
+<title id="title">Cisco Secure AI Airgap services and image architecture</title>
+<desc id="description">Cisco Secure AI Airgap services and image architecture. Conceptual example; configuration detail is linked from the owning README.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5E6C84"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:600 18px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="800" height="880" fill="#F7F9FC"/>
+
+
+<g id="zone-services">
+<rect x="380" y="112" width="400" height="250" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5"/>
+</g>
+<g id="zone-management">
+<rect x="20" y="440" width="760" height="420" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5"/>
+</g>
+<g id="connections">
+<path d="M 330 204 L 400 204" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-supply)"/>
+<path d="M 400 220 L 370 220 L 370 486 L 195 486 L 195 510" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-supply)"/>
+<path d="M 760 204 L 790 204 L 790 486 L 590 486 L 590 510" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-supply)"/>
+<path d="M 590 582 L 590 626" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-supply)"/>
+<path d="M 590 698 L 590 720 L 400 720 L 400 744" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-supply)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-services">
+<rect x="392" y="121" width="329.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="400" y="143" class="zone-title" style="font-size:18.0px" text-anchor="start">Shared external services host</text>
+</g>
+<g id="zone-label-management">
+<rect x="32" y="449" width="318.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="471" class="zone-title" style="font-size:18.0px" text-anchor="start">Management OpenShift cluster</text>
+</g>
+</g>
+<g id="nodes">
+<g id="airgap">
+<rect x="20" y="16" width="760" height="72" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="36" y="45" class="node-title" style="font-size:18.0px" text-anchor="start">Cisco Secure AI Airgap</text>
+<text x="36" y="71" class="node-line" style="font-size:18.0px" text-anchor="start">Configures site services and mirrors selected images</text>
+</g>
+<g id="sources">
+<rect x="20" y="168" width="310" height="72" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="36" y="197" class="node-title" style="font-size:18.0px" text-anchor="start">Vendor image sources</text>
+<text x="36" y="223" class="node-line" style="font-size:18.0px" text-anchor="start">Red Hat · Isovalent · NVIDIA</text>
+</g>
+<g id="registry">
+<rect x="400" y="168" width="360" height="72" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="416" y="197" class="node-title" style="font-size:18.0px" text-anchor="start">Site registry</text>
+<text x="416" y="223" class="node-line" style="font-size:18.0px" text-anchor="start">Bootstrap + runtime images</text>
+</g>
+<g id="services">
+<rect x="400" y="270" width="360" height="72" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="416" y="299" class="node-title" style="font-size:18.0px" text-anchor="start">Shared services</text>
+<text x="416" y="325" class="node-line" style="font-size:18.0px" text-anchor="start">Runners · media · state · S3</text>
+</g>
+<g id="management">
+<rect x="40" y="510" width="310" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="539" class="node-title" style="font-size:18.0px" text-anchor="start">Management components</text>
+<text x="56" y="565" class="node-line" style="font-size:18.0px" text-anchor="start">Boot + platform images</text>
+</g>
+<g id="operator">
+<rect x="420" y="510" width="340" height="72" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="436" y="539" class="node-title" style="font-size:18.0px" text-anchor="start">Kubernetes mirror operator</text>
+<text x="436" y="565" class="node-line" style="font-size:18.0px" text-anchor="start">Copies selected images</text>
+</g>
+<g id="cache">
+<rect x="420" y="626" width="340" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="436" y="655" class="node-title" style="font-size:18.0px" text-anchor="start">In-cluster registry/cache</text>
+<text x="436" y="681" class="node-line" style="font-size:18.0px" text-anchor="start">PVC on shared storage</text>
+</g>
+<g id="tenants">
+<rect x="40" y="744" width="720" height="96" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="773" class="node-title" style="font-size:18.0px" text-anchor="start">Nested tenant OpenShift clusters</text>
+<text x="56" y="799" class="node-line" style="font-size:18.0px" text-anchor="start">HyperShift control-plane pods + KubeVirt worker VMs</text>
+</g>
+</g>
+<g id="connection-labels">
+</g>
+</svg>

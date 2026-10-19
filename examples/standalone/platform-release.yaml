@@ -1,0 +1,30 @@
+# Existing exact pins; render-only, not installed/support qualification.
+version: 1.0.0
+releases:
+  saif-ocp-4.19-cilium-1.19.7-stable:
+    openshift:
+      major: '4'
+      minor: '19'
+      version: 4.19.21
+      installer: agent-based
+      image_policy_bundle: ocp-install-core
+      kubernetes: '1.32'
+      rhcos: 419.96.202501071851-0
+    cilium:
+      version: 1.19.7
+      channel: '1.19'
+      image: containers.isovalent.com/cilium-ubi:v1.19.7-cee.3@sha256:dfddee8e69d57bcaaa882d70d506f88e98c76fbf41198e3553a4d67cf9975228
+      operator_image: containers.isovalent.com/operator-generic-ubi:v1.19.7-cee.3@sha256:c0b7d6666c0b3357a6ea2b8a9b2a07d569b56349ce9fe845dd77e641c4059ed2
+      clife_image: containers.isovalent.com/clife:v1.19.7-cee.3@sha256:9030cd40156f11115da0f0a5221efa0d6dda6e3d32cd63735ee94c7349496aae
+      clife_manifest_bundle: ''
+      manifestArchive:
+        url: https://artifactory.isovalent.com/artifactory/archive/clife-manifests/clife-v1.19.7.tar.gz
+        sha256: f0eb8988a36a25b40fd8d3c60e8bcb4d94f20472e4481a7711d66f51fcd46252
+      image_policy_bundle: cilium-day1
+    gitops_bootstrap:
+      image_policy_bundle: gitops-bootstrap
+    platform_day2:
+      image_policy_bundle: platform-day2
+    qualification:
+      supportStatus: supported
+      validationStatus: render-only

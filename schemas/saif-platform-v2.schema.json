@@ -1,0 +1,572 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/schemas/saif-platform-v2.schema.json",
+  "title": "SAIF Platform Contract v2alpha1",
+  "description": "Human-authored SAIF release, profile, cluster, and transition contract. Renderer authorization comes only from complete named profiles.",
+  "oneOf": [
+    {"$ref": "#/$defs/managementCluster"},
+    {"$ref": "#/$defs/hostedCluster"},
+    {"$ref": "#/$defs/releaseTransition"},
+    {"$ref": "#/$defs/openShiftReleaseCatalog"},
+    {"$ref": "#/$defs/iepReleaseCatalog"},
+    {"$ref": "#/$defs/releaseCompatibilityCatalog"},
+    {"$ref": "#/$defs/managementProfileCatalog"},
+    {"$ref": "#/$defs/workerProfileCatalog"},
+    {"$ref": "#/$defs/authorizationGateCatalog"}
+  ],
+  "$defs": {
+    "schemaVersion": {
+      "const": "saif.example.com/v2alpha1"
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "description": {"type": "string"}
+      }
+    },
+    "releaseRefs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["openshift", "iep"],
+      "properties": {
+        "openshift": {"type": "string", "minLength": 1},
+        "iep": {"type": "string", "minLength": 1}
+      }
+    },
+    "catalogOwnership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "purpose"],
+      "properties": {
+        "owner": {"type": "string", "minLength": 1},
+        "purpose": {"type": "string", "minLength": 1}
+      }
+    },
+    "validationStatus": {
+      "enum": ["settled", "active-test", "candidate", "invalid"]
+    },
+    "selectionPolicy": {
+      "enum": ["normal", "legacy-only", "active-test-only", "requires-gate"]
+    },
+    "intentState": {
+      "enum": ["settled", "active-test", "candidate", "legacy"]
+    },
+    "sha256Digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "immutableOciReference": {
+      "type": "string",
+      "pattern": "^[^\\s@]+@sha256:[0-9a-f]{64}$"
+    },
+    "artifactReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "digest"],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "digest": {"$ref": "#/$defs/sha256Digest"}
+      }
+    },
+    "chartReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "version", "digest"],
+      "properties": {
+        "ref": {"type": "string", "pattern": "^oci://[^\\s]+$"},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][A-Za-z0-9._-]+)?$"},
+        "digest": {"$ref": "#/$defs/sha256Digest"}
+      }
+    },
+    "managementCluster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "identity", "spec"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "ManagementCluster"},
+        "identity": {"$ref": "#/$defs/identity"},
+        "spec": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["role", "mode", "intentState", "releaseRefs", "topologyRefs"],
+          "properties": {
+            "role": {"enum": ["standalone", "hcp-management"]},
+            "mode": {"enum": ["sno", "compact"]},
+            "intentState": {"$ref": "#/$defs/intentState"},
+            "releaseRefs": {"$ref": "#/$defs/releaseRefs"},
+            "managementPlatformProfileRef": {"type": "string", "minLength": 1},
+            "storageProfileRef": {
+              "enum": ["sno-mdadm-lvms", "portworx-local"]
+            },
+            "profileGateRef": {"type": "string", "minLength": 1},
+            "topologyRefs": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["networkCatalog"],
+              "properties": {
+                "networkCatalog": {"type": "string", "minLength": 1},
+                "defaults": {"type": "string", "minLength": 1}
+              }
+            }
+          }
+        }
+      }
+    },
+    "workerNetwork": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["networkRef", "guestDefaultRoute"],
+      "properties": {
+        "networkRef": {"type": "string", "minLength": 1},
+        "subnetRef": {"type": "string", "minLength": 1},
+        "guestDefaultRoute": {"type": "boolean"}
+      }
+    },
+    "hostedCluster": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "identity", "spec"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "HostedCluster"},
+        "identity": {"$ref": "#/$defs/identity"},
+        "spec": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "parentRef",
+            "intentState",
+            "releaseRefs",
+            "workerNetworkProfileRef",
+            "workerNetworks"
+          ],
+          "properties": {
+            "parentRef": {"type": "string", "minLength": 1},
+            "intentState": {"$ref": "#/$defs/intentState"},
+            "releaseRefs": {"$ref": "#/$defs/releaseRefs"},
+            "workerNetworkProfileRef": {
+              "enum": [
+                "multus-l2-dhcp"
+              ]
+            },
+            "profileGateRef": {"type": "string", "minLength": 1},
+            "workerNetworks": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 1,
+              "items": {"$ref": "#/$defs/workerNetwork"}
+            }
+          }
+        }
+      }
+    },
+    "transitionState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["releaseRefs"],
+      "properties": {
+        "releaseRefs": {"$ref": "#/$defs/releaseRefs"}
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["releaseRefs", "method"],
+      "properties": {
+        "releaseRefs": {"$ref": "#/$defs/releaseRefs"},
+        "method": {"type": "string", "minLength": 1}
+      }
+    },
+    "releaseTransition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "identity", "spec"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "ReleaseTransition"},
+        "identity": {"$ref": "#/$defs/identity"},
+        "spec": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["clusterRef", "current", "target", "sequence", "healthGates", "rollback"],
+          "properties": {
+            "clusterRef": {"type": "string", "minLength": 1},
+            "current": {"$ref": "#/$defs/transitionState"},
+            "target": {"$ref": "#/$defs/transitionState"},
+            "coordinatedChangeApprovalRef": {"type": "string", "minLength": 1},
+            "sequence": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"enum": ["openshift", "iep"]}
+            },
+            "healthGates": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "minLength": 1}
+            },
+            "rollback": {"$ref": "#/$defs/rollback"}
+          }
+        }
+      }
+    },
+    "openShiftRelease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "version",
+        "releaseImage",
+        "installer",
+        "rhcos",
+        "constraints",
+        "artifactBundle",
+        "lifecycle"
+      ],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "releaseImage": {"$ref": "#/$defs/immutableOciReference"},
+        "installer": {"type": "string", "minLength": 1},
+        "rhcos": {"type": "string", "minLength": 1},
+        "constraints": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hypershift", "cnv"],
+          "properties": {
+            "hypershift": {"type": "string", "minLength": 1},
+            "cnv": {"type": "string", "minLength": 1}
+          }
+        },
+        "artifactBundle": {"$ref": "#/$defs/artifactReference"},
+        "lifecycle": {"$ref": "#/$defs/validationStatus"}
+      }
+    },
+    "openShiftReleaseCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "ownership", "releases"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "OpenShiftReleaseCatalog"},
+        "ownership": {"$ref": "#/$defs/catalogOwnership"},
+        "releases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/openShiftRelease"}
+        }
+      }
+    },
+    "iepImages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cilium", "operator", "clife", "envoy", "relay"],
+      "properties": {
+        "cilium": {"$ref": "#/$defs/immutableOciReference"},
+        "operator": {"$ref": "#/$defs/immutableOciReference"},
+        "clife": {"$ref": "#/$defs/immutableOciReference"},
+        "envoy": {"$ref": "#/$defs/immutableOciReference"},
+        "relay": {"$ref": "#/$defs/immutableOciReference"}
+      }
+    },
+    "iepRelease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "version",
+        "channel",
+        "images",
+        "chart",
+        "clifeManifestBundle",
+        "crdBundle",
+        "artifactBundle",
+        "lifecycle"
+      ],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "minLength": 1},
+        "channel": {"type": "string", "minLength": 1},
+        "images": {"$ref": "#/$defs/iepImages"},
+        "chart": {"$ref": "#/$defs/chartReference"},
+        "clifeManifestBundle": {"$ref": "#/$defs/artifactReference"},
+        "crdBundle": {"$ref": "#/$defs/artifactReference"},
+        "artifactBundle": {"$ref": "#/$defs/artifactReference"},
+        "lifecycle": {"$ref": "#/$defs/validationStatus"}
+      }
+    },
+    "iepReleaseCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "ownership", "releases"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "IEPReleaseCatalog"},
+        "ownership": {"$ref": "#/$defs/catalogOwnership"},
+        "releases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/iepRelease"}
+        }
+      }
+    },
+    "compatibilityPair": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["openshiftRef", "iepRef", "support", "validation", "reason", "evidence"],
+      "properties": {
+        "openshiftRef": {"type": "string", "minLength": 1},
+        "iepRef": {"type": "string", "minLength": 1},
+        "support": {"enum": ["supported", "unsupported", "unknown"]},
+        "validation": {"$ref": "#/$defs/validationStatus"},
+        "reason": {"type": "string", "minLength": 1},
+        "evidence": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "releaseCompatibilityCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "ownership", "pairs"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "ReleaseCompatibilityCatalog"},
+        "ownership": {"$ref": "#/$defs/catalogOwnership"},
+        "pairs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/compatibilityPair"}
+        }
+      }
+    },
+    "managementProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "roles",
+        "modes",
+        "openshiftRefs",
+        "iepRefs",
+        "lifecycle",
+        "selectionPolicy",
+        "components",
+        "rendererAuthorizations"
+      ],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "roles": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["standalone", "hcp-management"]}
+        },
+        "modes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["sno", "compact"]}
+        },
+        "openshiftRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "iepRefs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "lifecycle": {"$ref": "#/$defs/validationStatus"},
+        "selectionPolicy": {"$ref": "#/$defs/selectionPolicy"},
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "rendererAuthorizations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "managementProfileCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "ownership", "profiles"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "ManagementPlatformProfileCatalog"},
+        "ownership": {"$ref": "#/$defs/catalogOwnership"},
+        "profiles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/managementProfile"}
+        }
+      }
+    },
+    "workerProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "attachment",
+        "allocator",
+        "stage",
+        "egressGatewayPlacement",
+        "bgpOwners",
+        "validation",
+        "selectionPolicy",
+        "rendererAuthorizations"
+      ],
+      "properties": {
+        "ref": {
+          "enum": [
+            "multus-l2-dhcp"
+          ]
+        },
+        "attachment": {"enum": ["multus-l2"]},
+        "allocator": {"enum": ["central-dhcp", "admission-lease"]},
+        "stage": {"enum": ["legacy", "interim", "fixture", "final"]},
+        "egressGatewayPlacement": {"enum": ["management", "hosted-worker"]},
+        "bgpOwners": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": ["management", "hosted-worker"]}
+        },
+        "validation": {"$ref": "#/$defs/validationStatus"},
+        "selectionPolicy": {"$ref": "#/$defs/selectionPolicy"},
+        "rendererAuthorizations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "workerProfileCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "ownership", "profiles"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "WorkerNetworkProfileCatalog"},
+        "ownership": {"$ref": "#/$defs/catalogOwnership"},
+        "profiles": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"$ref": "#/$defs/workerProfile"}
+        }
+      }
+    },
+    "gateDecision": {
+      "enum": ["accepted", "revoked"]
+    },
+    "profileAuthorizationGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "decision",
+        "owner",
+        "clusterRef",
+        "profileKind",
+        "profileRef",
+        "intentState",
+        "releaseRefs",
+        "decidedBy",
+        "decidedAt",
+        "evidence"
+      ],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "decision": {"$ref": "#/$defs/gateDecision"},
+        "owner": {"type": "string", "minLength": 1},
+        "clusterRef": {"type": "string", "minLength": 1},
+        "profileKind": {"enum": ["management-platform-profile", "worker-network-profile"]},
+        "profileRef": {"type": "string", "minLength": 1},
+        "intentState": {"const": "active-test"},
+        "releaseRefs": {"$ref": "#/$defs/releaseRefs"},
+        "decidedBy": {"type": "string", "minLength": 1},
+        "decidedAt": {"type": "string", "format": "date-time"},
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "transitionAuthorizationGate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "decision",
+        "owner",
+        "transitionRef",
+        "clusterRef",
+        "current",
+        "target",
+        "sequence",
+        "decidedBy",
+        "decidedAt",
+        "evidence"
+      ],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "decision": {"$ref": "#/$defs/gateDecision"},
+        "owner": {"type": "string", "minLength": 1},
+        "transitionRef": {"type": "string", "minLength": 1},
+        "clusterRef": {"type": "string", "minLength": 1},
+        "current": {"$ref": "#/$defs/transitionState"},
+        "target": {"$ref": "#/$defs/transitionState"},
+        "sequence": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {"enum": ["openshift", "iep"]}
+        },
+        "decidedBy": {"type": "string", "minLength": 1},
+        "decidedAt": {"type": "string", "format": "date-time"},
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "authorizationGateCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "kind", "ownership", "profileGates", "transitionGates"],
+      "properties": {
+        "schemaVersion": {"$ref": "#/$defs/schemaVersion"},
+        "kind": {"const": "AuthorizationGateCatalog"},
+        "ownership": {"$ref": "#/$defs/catalogOwnership"},
+        "profileGates": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/profileAuthorizationGate"}
+        },
+        "transitionGates": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/transitionAuthorizationGate"}
+        }
+      }
+    }
+  }
+}

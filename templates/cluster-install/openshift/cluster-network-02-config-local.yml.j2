@@ -1,0 +1,21 @@
+{# OpenShift Network Operator contract for Cilium kube-proxy replacement.
+   The values must match install-config.yaml and CiliumConfig.
+#}
+apiVersion: operator.openshift.io/v1
+kind: Network
+metadata:
+  name: cluster
+spec:
+  deployKubeProxy: false
+  clusterNetwork:
+{% for network in defaults.ocp_cluster_network %}
+  - cidr: {{ network.cidr }}
+    hostPrefix: {{ network.hostPrefix }}
+{% endfor %}
+  externalIP:
+    policy: {}
+  networkType: Cilium
+  serviceNetwork:
+{% for network in defaults.ocp_service_network %}
+  - {{ network }}
+{% endfor %}

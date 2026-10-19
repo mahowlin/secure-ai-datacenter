@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700" role="img" aria-labelledby="title description">
+<title id="title">Repository handoffs</title>
+<desc id="description">secure-ai-datacenter renders fabric YAML for secure-ai-fabric, UCS/install data for secure-ai-compute and application manifests for secure-ai-gitops. Fabric configures ACI; existing NAC repositories can consume the same YAML. Compute installs OpenShift and bootstraps Argo CD; Argo CD synchronizes the GitOps root. Optional Airgap supplies registry images to installation. Existing site services can replace Airgap.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#4C6FFF"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#D96C00"/></marker>
+<style>.node-title{font:700 20px system-ui;fill:#172B4D}.node-line{font:500 18px system-ui;fill:#344563}.edge-label{font:600 18px system-ui;fill:#344563}</style></defs>
+<rect width="900" height="700" fill="#F7F9FC"/>
+<text x="24" y="37" font-family="system-ui" font-size="24" font-weight="700" fill="#172B4D">Repository handoffs</text>
+<g id="connections">
+<path d="M 750 155 L 750 205 L 450 205 L 450 245" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 450 315 L 450 350 L 150 350 L 150 390" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 450 315 L 450 390" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 450 315 L 450 350 L 750 350 L 750 390" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 150 460 L 150 550" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 450 460 L 450 550" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 750 460 L 750 550" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 270 120 L 300 120 L 300 425 L 330 425" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+</g><g id="nodes">
+<g id="airgap">
+<rect x="30" y="85" width="240" height="70" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="46" y="114" class="node-title" style="font-size:18.0px" text-anchor="start">secure-ai-airgap</text>
+<text x="46" y="140" class="node-line" style="font-size:16.0px" text-anchor="start">services + image supply</text>
+</g>
+<g id="inputs">
+<rect x="630" y="85" width="240" height="70" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="646" y="114" class="node-title" style="font-size:18.0px" text-anchor="start">Your site inputs</text>
+<text x="646" y="140" class="node-line" style="font-size:15.0px" text-anchor="start">hosts · networks · release</text>
+</g>
+<g id="datacenter">
+<rect x="330" y="245" width="240" height="70" rx="14" fill="#EAF7F1" stroke="#7A869A" stroke-width="1.6"/>
+<text x="346" y="274" class="node-title" style="font-size:17.3px" text-anchor="start">secure-ai-datacenter</text>
+<text x="346" y="300" class="node-line" style="font-size:15.5px" text-anchor="start">inputs → generated files</text>
+</g>
+<g id="fabric">
+<rect x="30" y="390" width="240" height="70" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="46" y="419" class="node-title" style="font-size:18.0px" text-anchor="start">secure-ai-fabric</text>
+<text x="46" y="445" class="node-line" style="font-size:16.0px" text-anchor="start">NAC-ACI / Terraform</text>
+</g>
+<g id="compute">
+<rect x="330" y="390" width="240" height="70" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="346" y="419" class="node-title" style="font-size:18.0px" text-anchor="start">secure-ai-compute</text>
+<text x="346" y="445" class="node-line" style="font-size:16.0px" text-anchor="start">UCS + OpenShift</text>
+</g>
+<g id="gitops">
+<rect x="630" y="390" width="240" height="70" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="646" y="419" class="node-title" style="font-size:18.0px" text-anchor="start">secure-ai-gitops</text>
+<text x="646" y="445" class="node-line" style="font-size:16.0px" text-anchor="start">Argo CD configuration</text>
+</g>
+<g id="aci">
+<rect x="30" y="550" width="240" height="70" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="46" y="579" class="node-title" style="font-size:18.0px" text-anchor="start">ACI fabric</text>
+<text x="46" y="605" class="node-line" style="font-size:15.0px" text-anchor="start">management + tenant paths</text>
+</g>
+<g id="cluster">
+<rect x="330" y="550" width="540" height="70" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="346" y="579" class="node-title" style="font-size:18.0px" text-anchor="start">OpenShift + Argo CD</text>
+<text x="346" y="605" class="node-line" style="font-size:16.0px" text-anchor="start">installed cluster and reconciled applications</text>
+</g>
+</g><g id="connection-labels">
+<rect x="546.25" y="181.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="600" y="200" class="edge-label" style="font-size:12.5px" text-anchor="middle">configuration</text>
+<rect x="103.75" y="316.5" width="92.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="150" y="335" class="edge-label" style="font-size:12.5px" text-anchor="middle">fabric YAML</text>
+<rect x="377.5" y="316.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="335" class="edge-label" style="font-size:12.5px" text-anchor="middle">UCS + install data</text>
+<rect x="696.25" y="316.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="750" y="335" class="edge-label" style="font-size:12.5px" text-anchor="middle">app manifests</text>
+<rect x="111.25" y="496.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="150" y="515" class="edge-label" style="font-size:12.5px" text-anchor="middle">Terraform</text>
+<rect x="418.75" y="496.5" width="62.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="515" class="edge-label" style="font-size:12.5px" text-anchor="middle">install</text>
+<rect x="696.25" y="496.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="750" y="515" class="edge-label" style="font-size:12.5px" text-anchor="middle">Argo CD syncs</text>
+<rect x="272.5" y="211.5" width="55.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="300" y="230" class="edge-label" style="font-size:12.5px" text-anchor="middle">images</text>
+</g>
+<text x="24" y="660" font-family="system-ui" font-size="17" fill="#344563">Solid arrows: configuration or reconciliation</text>
+<text x="24" y="685" font-family="system-ui" font-size="17" fill="#344563">Dotted arrow: optional image supply</text>
+</svg>

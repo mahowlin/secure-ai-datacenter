@@ -1,0 +1,89 @@
+{# Target-native Easy-IMM LAN Connectivity policies — generated per node
+   Rendered by render-ucs.py from NetworkCatalog + OCPCluster
+
+   vNIC model:
+     management pair — management ENG, native management VLAN
+     tenant pair     — tenant ENG, tagged tenant VLANs, optional
+
+   Template variables:
+     target       — target-repo convention references
+     lan_policies — [{node, mgmt_pair, tenant_pair}], one LAN policy per node
+#}
+---
+{{ target.org }}:
+  policies:
+    lan_connectivity:
+{% for policy in lan_policies %}
+      - name: {{ target.lan_policy_for(policy.node.name) }}
+        description: "{{ policy.node.name }} LAN Connectivity - {{ 'Quad' if policy.tenant_pair else 'Dual' }} vNIC"
+        target_platform: FIAttached
+        iqn_allocation_type: None
+        vnics:
+          - names:
+{% for name in policy.mgmt_pair.names %}
+              - {{ name }}
+{% endfor %}
+            cdn_source: vnic
+            enable_failover: false
+            mac_address_pools:
+{% for _ in policy.mgmt_pair.names %}
+              - {{ target.mac_pool }}
+{% endfor %}
+            ethernet_adapter_policy: {{ target.eth_adapter }}
+            ethernet_qos_policy: {{ target.eth_qos }}
+            ethernet_network_control_policy: {{ target.eth_ctrl }}
+            ethernet_network_group_policies:
+              - {{ target.mgmt_eng_policy }}
+            placement:
+              pci_order:
+{% for i in range(policy.mgmt_pair.names | length) %}
+                - {{ i }}
+{% endfor %}
+              switch_ids:
+{% for fabric in ['A', 'B'] %}
+{% if loop.index <= policy.mgmt_pair.names | length %}
+                - {{ fabric }}
+{% endif %}
+{% endfor %}
+              automatic_slot_id_assignment: true
+              automatic_pci_link_assignment: true
+            vmq:
+              enabled: true
+              number_of_interrupts: 16
+              number_of_virtual_machine_queues: 4
+{% if policy.tenant_pair %}
+
+          - names:
+{% for name in policy.tenant_pair.names %}
+              - {{ name }}
+{% endfor %}
+            cdn_source: vnic
+            enable_failover: false
+            mac_address_pools:
+{% for _ in policy.tenant_pair.names %}
+              - {{ target.mac_pool }}
+{% endfor %}
+            ethernet_adapter_policy: {{ target.eth_adapter }}
+            ethernet_qos_policy: {{ target.eth_qos }}
+            ethernet_network_control_policy: {{ target.eth_ctrl }}
+            ethernet_network_group_policies:
+              - {{ target.tenant_eng_policy }}
+            placement:
+              pci_order:
+{% for i in range(policy.tenant_pair.names | length) %}
+                - {{ policy.mgmt_pair.names | length + i }}
+{% endfor %}
+              switch_ids:
+{% for fabric in ['A', 'B'] %}
+{% if loop.index <= policy.tenant_pair.names | length %}
+                - {{ fabric }}
+{% endif %}
+{% endfor %}
+              automatic_slot_id_assignment: true
+              automatic_pci_link_assignment: true
+            vmq:
+              enabled: true
+              number_of_interrupts: 16
+              number_of_virtual_machine_queues: 4
+{% endif %}
+{% endfor %}

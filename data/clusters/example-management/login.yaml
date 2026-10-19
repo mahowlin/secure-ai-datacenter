@@ -1,0 +1,23 @@
+kind: ConsoleLogin
+metadata:
+  name: example-management
+spec:
+  # Htpasswd only. The password is not stored here. A sealed secret for each
+  # selected target is produced outside Git and committed as ciphertext.
+  # Management is this cluster's OAuth object. Hosted targets are the
+  # deployment subjects that are still rendered hosted clusters. A subject
+  # listed as staged-only, or removed by retirement, is not a target.
+  # The group is bound to cluster-admin because the maintainer chose that role.
+  type: HTPasswd
+  providerName: maintainer-htpasswd
+  mappingMethod: claim
+  username: admin
+  group: maintainer-console-admins
+  role: cluster-admin
+  secretName: maintainer-htpasswd
+  secretKey: htpasswd
+  credentialRef:
+    keychainService: example-ocp-console-htpasswd
+    keychainAccount: admin
+  managementSecretNamespace: openshift-config
+  hostedTargets: deployment-subjects

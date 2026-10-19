@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1240" viewBox="0 0 1100 1240" role="img" aria-labelledby="title description">
+<title id="title">HCP with Multus, DHCP and direct worker BGP</title>
+<desc id="description">Management OpenShift hosts separate HyperShift control-plane pods and KubeVirt workers. An in-cluster KubeVirt DHCP service supplies guest networking over the Multus tenant VLAN, and guest Cilium workers peer directly with ACI for application Service VIPs.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="1240" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">HCP with Multus, DHCP and direct worker BGP</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Validated composition: hosted control-plane pods stay on management networking; only guest workers join tenant BGP.</text>
+<g id="zone-fabric">
+<rect x="210" y="105" width="680" height="200" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-services">
+<rect x="20" y="295" width="1060" height="215" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-tenant">
+<rect x="20" y="540" width="1060" height="250" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-substrate">
+<rect x="210" y="805" width="680" height="405" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 400 265 L 400 300 L 275 300 L 275 335" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 700 265 L 700 300 L 825 300 L 825 335" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 275 480 L 275 530 L 825 530 L 825 590" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+<path d="M 825 480 L 825 590" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6" marker-end="url(#arrow-protocol)"/>
+<path d="M 400 855 L 400 810 L 275 810 L 275 760" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 700 855 L 700 810 L 825 810 L 825 760" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 490 675 L 610 675" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 550 1065 L 550 985" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-fabric">
+<rect x="222" y="114" width="156.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="230" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Tenant fabric</text>
+</g>
+<g id="zone-label-services">
+<rect x="32" y="304" width="394.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="326" class="zone-title" style="font-size:18.0px" text-anchor="start">Distinct address and Service owners</text>
+</g>
+<g id="zone-label-tenant">
+<rect x="32" y="549" width="372.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="571" class="zone-title" style="font-size:18.0px" text-anchor="start">Sibling HCP and KubeVirt services</text>
+</g>
+<g id="zone-label-substrate">
+<rect x="222" y="814" width="221.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="230" y="836" class="zone-title" style="font-size:18.0px" text-anchor="start">OpenShift substrate</text>
+</g>
+</g>
+<g id="nodes">
+<g id="aci">
+<rect x="250" y="145" width="600" height="120" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="266" y="174" class="node-title" style="font-size:18.0px" text-anchor="start">ACI tenant / VRF</text>
+<text x="267" y="200" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="286" y="200" class="node-line" style="font-size:15.0px" text-anchor="start">tenant VLAN, gateway and route-policy boundary</text>
+<text x="267" y="223" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="286" y="223" class="node-line" style="font-size:15.0px" text-anchor="start">leaf SVI peers with guest Cilium workers</text>
+</g>
+<g id="dhcp">
+<rect x="60" y="335" width="430" height="145" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="364" class="node-title" style="font-size:18.0px" text-anchor="start">KubeVirt DHCP service</text>
+<text x="77" y="390" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="96" y="390" class="node-line" style="font-size:15.0px" text-anchor="start">management-cluster VM</text>
+<text x="77" y="413" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="96" y="413" class="node-line" style="font-size:15.0px" text-anchor="start">DORA supplies address, route, DNS and MTU</text>
+</g>
+<g id="bgp">
+<rect x="610" y="335" width="430" height="145" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="626" y="364" class="node-title" style="font-size:18.0px" text-anchor="start">Direct worker BGP</text>
+<text x="627" y="390" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="646" y="390" class="node-line" style="font-size:15.0px" text-anchor="start">guest Cilium advertises Service /32s</text>
+<text x="627" y="413" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="646" y="413" class="node-line" style="font-size:15.0px" text-anchor="start">ACI imports only approved tenant prefixes</text>
+</g>
+<g id="control">
+<rect x="60" y="590" width="430" height="170" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="619" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted control-plane pods</text>
+<text x="77" y="645" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="96" y="645" class="node-line" style="font-size:15.0px" text-anchor="start">management pod network</text>
+<text x="77" y="668" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="96" y="668" class="node-line" style="font-size:15.0px" text-anchor="start">API, Ignition, Konnectivity and OAuth</text>
+<text x="77" y="691" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="96" y="691" class="node-line" style="font-size:15.0px" text-anchor="start">never peer with ACI</text>
+</g>
+<g id="workers">
+<rect x="610" y="590" width="430" height="170" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="626" y="619" class="node-title" style="font-size:18.0px" text-anchor="start">KubeVirt worker VMs</text>
+<text x="627" y="645" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="646" y="645" class="node-line" style="font-size:15.0px" text-anchor="start">Multus L2 bridge tenant NIC</text>
+<text x="627" y="668" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="646" y="668" class="node-line" style="font-size:15.0px" text-anchor="start">DHCP guest configuration</text>
+<text x="627" y="691" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="646" y="691" class="node-line" style="font-size:15.0px" text-anchor="start">guest Cilium peers with ACI</text>
+<rect x="911.4" y="730" width="116.6" height="21" rx="11" fill="#FFFFFF" stroke="#A5ADBA" stroke-width="1"/>
+<text x="969.7" y="744.5" class="badge" style="font-size:11.5px" text-anchor="middle">declared model</text>
+</g>
+<g id="ocp">
+<rect x="250" y="855" width="600" height="130" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="266" y="884" class="node-title" style="font-size:18.0px" text-anchor="start">Management OpenShift</text>
+<text x="267" y="910" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="286" y="910" class="node-line" style="font-size:15.0px" text-anchor="start">runs HyperShift and KubeVirt</text>
+<text x="267" y="933" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="286" y="933" class="node-line" style="font-size:15.0px" text-anchor="start">hosts control pods, VM lifecycle and tenant bridge</text>
+</g>
+<g id="metal">
+<rect x="250" y="1065" width="600" height="115" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="266" y="1094" class="node-title" style="font-size:18.0px" text-anchor="start">Bare metal</text>
+<text x="267" y="1120" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="286" y="1120" class="node-line" style="font-size:15.0px" text-anchor="start">management-cluster nodes</text>
+<text x="267" y="1143" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="286" y="1143" class="node-line" style="font-size:15.0px" text-anchor="start">tenant VLAN transport reaches the host bridge</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="296.25" y="275.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="335" y="294" class="edge-label" style="font-size:12.5px" text-anchor="middle">tenant L2</text>
+<rect x="742.0" y="275.5" width="40.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="762" y="294" class="edge-label" style="font-size:12.5px" text-anchor="middle">eBGP</text>
+<rect x="511.25" y="503.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="550" y="522" class="edge-label" style="font-size:12.5px" text-anchor="middle">DHCP DORA</text>
+<rect x="845.0" y="526.5" width="100.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="895" y="545" class="edge-label" style="font-size:12.5px" text-anchor="middle">workers only</text>
+<rect x="294.5" y="786.5" width="85.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="337" y="805" class="edge-label" style="font-size:12.5px" text-anchor="middle">hosts pods</text>
+<rect x="723.25" y="786.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="762" y="805" class="edge-label" style="font-size:12.5px" text-anchor="middle">hosts VMs</text>
+<rect x="477.5" y="640.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="550" y="659" class="edge-label" style="font-size:12.5px" text-anchor="middle">API + Konnectivity</text>
+<rect x="583.75" y="1016.5" width="62.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="615" y="1035" class="edge-label" style="font-size:12.5px" text-anchor="middle">runs on</text>
+</g>
+<line x1="40" y1="1201" x2="76" y2="1201" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="1206" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+<line x1="290.0" y1="1201" x2="326.0" y2="1201" stroke="#7A5AF8" stroke-width="3"/>
+<text x="336.0" y="1206" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+<line x1="547.5" y1="1201" x2="583.5" y2="1201" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/>
+<text x="593.5" y="1206" class="legend" style="font-size:12.5px" text-anchor="start">network protocol / transport</text>
+</svg>

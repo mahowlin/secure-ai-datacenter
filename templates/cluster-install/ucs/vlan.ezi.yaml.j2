@@ -1,0 +1,41 @@
+{# Target-native Easy-IMM VLAN policy — full replacement
+   Rendered by render-ucs.py from NetworkCatalog + OCPCluster
+
+   domain_vlans are FI-only (auto_allow_on_uplinks: true, not on server vNICs).
+   vlans (vlan_union) go on both domain and server policies.
+
+   Template variables:
+     target       — target-repo convention references
+     domain_vlans — sorted domain-only VLANs (e.g. VLAN 1, 134)
+     vlans        — sorted list of ResolvedNetwork from vlan_union
+#}
+---
+{{ target.org }}:
+  policies:
+    vlan:
+      - name: {{ target.dom_vlan_policy }}
+        vlans:
+{% for net in domain_vlans %}
+          - name: {{ net.name | slugify | replace("-", "_") }}_{{ net.vlan }}
+            vlan_list: "{{ net.vlan }}"
+{% if net.native %}
+            native_vlan: true
+{% endif %}
+            auto_allow_on_uplinks: true
+            multicast_policy: {{ target.multicast_policy }}
+{% endfor %}
+{% for net in vlans %}
+          - name: {{ net.name | slugify | replace("-", "_") }}_{{ net.vlan }}
+            vlan_list: "{{ net.vlan }}"
+            auto_allow_on_uplinks: true
+            multicast_policy: {{ target.multicast_policy }}
+{% endfor %}
+
+      - name: {{ target.srv_vlan_policy }}
+        vlans:
+{% for net in vlans %}
+          - name: {{ net.name | slugify }}
+            vlan_list: "{{ net.vlan }}"
+            auto_allow_on_uplinks: false
+            multicast_policy: {{ target.multicast_policy }}
+{% endfor %}

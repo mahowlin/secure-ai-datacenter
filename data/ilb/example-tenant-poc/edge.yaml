@@ -1,0 +1,26 @@
+apiVersion: cilium.io/v2
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: ilb-example-tenant-poc-vip-pool
+spec:
+  blocks:
+    - cidr: 198.18.11.19/32
+  serviceSelector:
+    matchLabels:
+      loadbalancer.isovalent.com/vip-name: example-tenant-a-ilb-poc-echo-eb60bd44abdg-vip-be96671e7ccg
+---
+apiVersion: isovalent.com/v1
+kind: IsovalentBGPAdvertisement
+metadata:
+  name: ilb-example-tenant-poc-advertisement
+  labels:
+    advertise: control-plane-ingress-example-tenant-a-kube-api-peering
+spec:
+  advertisements:
+    - advertisementType: Service
+      selector:
+        matchLabels:
+          loadbalancer.isovalent.com/vip-name: example-tenant-a-ilb-poc-echo-eb60bd44abdg-vip-be96671e7ccg
+      service:
+        addresses:
+          - LoadBalancerIP

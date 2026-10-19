@@ -1,0 +1,68 @@
+{# OCP install-config.yaml — target-native for the cluster-install templates
+   Rendered by render-ocp.py from ResolvedOCPCluster + ResolvedDefaults
+
+   Template variables:
+     cluster    — ResolvedOCPCluster
+     defaults   — ResolvedDefaults
+     mn_cidr    — machine network CIDR string
+     image_digest_sources — platform and receipt-bound release image mirrors
+#}
+apiVersion: v1
+metadata:
+  name: {{ cluster.name }}
+baseDomain: {{ cluster.base_domain }}
+networking:
+  networkType: {{ cluster.network_type }}
+  clusterNetwork:
+{% for cn in defaults.ocp_cluster_network %}
+  - cidr: {{ cn.cidr }}
+    hostPrefix: {{ cn.hostPrefix }}
+{% endfor %}
+  serviceNetwork:
+{% for sn in defaults.ocp_service_network %}
+  - {{ sn }}
+{% endfor %}
+  machineNetwork:
+  - cidr: {{ mn_cidr }}
+{% if cluster.mode == "compact" %}
+platform:
+  baremetal:
+    apiVIPs:
+    - {{ cluster.api_vip }}
+    ingressVIPs:
+    - {{ cluster.ingress_vip }}
+pullSecret: '''PULL_SECRET_PLACEHOLDER'''
+sshKey: SSH_KEY_PLACEHOLDER
+compute:
+- name: worker
+  replicas: 0
+controlPlane:
+  name: master
+  replicas: 3
+{% elif cluster.mode == "sno" %}
+platform:
+  none: {}
+pullSecret: '''PULL_SECRET_PLACEHOLDER'''
+sshKey: SSH_KEY_PLACEHOLDER
+compute:
+- name: worker
+  replicas: 0
+controlPlane:
+  name: master
+  replicas: 1
+{% endif %}
+{% if cluster.registry_trust_policy == "additional-ca" %}
+additionalTrustBundlePolicy: Always
+additionalTrustBundle: |
+  REGISTRY_CA_PLACEHOLDER
+{% endif %}
+{% if image_digest_sources %}
+imageDigestSources:
+{% for ids in image_digest_sources %}
+- source: {{ ids.source }}
+  mirrors:
+{% for mirror in ids.mirrors %}
+  - {{ mirror }}
+{% endfor %}
+{% endfor %}
+{% endif %}

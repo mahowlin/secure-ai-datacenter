@@ -1,0 +1,56 @@
+endpointNetworks:
+  example-tenant-a-endpoints:
+    description: example-tenant-a test endpoint VM subnet.
+    vlan: auto
+    cidr: 198.18.12.64/26
+    gateway: 198.18.12.65
+    aci:
+      tenant: example-tenant-a
+      vmmDomain: hx-infra-vmm
+  tenant-b-endpoints:
+    description: tenant-workloads test endpoint VM subnet.
+    vlan: auto
+    cidr: 198.18.14.64/26
+    gateway: 198.18.14.65
+    aci:
+      tenant: tenant-workloads
+      vmmDomain: hx-infra-vmm
+fabricNetworks:
+  example-tenant-a-n5k-ospf-lab-core:
+    description: example-tenant-a N5K OSPF to Lab Core transit network.
+    vlan: 2115
+    ospf:
+      areaId: 0.0.0.200
+      areaType: regular
+      interfacePolicy: ospf-p2p
+      exportRouteControlEnforcement: true
+      defaultRoutes:
+      - 0.0.0.0/0
+      interfacePort: 15
+      nodeInterfaceIPs:
+        103: 198.18.15.1/31
+        104: 198.18.15.3/31
+    aci:
+      tenant: example-tenant-a
+      routerIds:
+        103: 103.15.0.1
+        104: 104.15.0.1
+  tenant-b-n5k-ospf-lab-core:
+    description: tenant-workloads N5K OSPF to Lab Core transit network.
+    vlan: 2116
+    ospf:
+      areaId: 0.0.0.200
+      areaType: regular
+      interfacePolicy: ospf-p2p
+      exportRouteControlEnforcement: true
+      defaultRoutes:
+      - 0.0.0.0/0
+      interfacePort: 15
+      nodeInterfaceIPs:
+        103: 198.18.16.1/31
+        104: 198.18.16.3/31
+    aci:
+      tenant: tenant-workloads
+      routerIds:
+        103: 103.16.0.1
+        104: 104.16.0.1

@@ -1,0 +1,42 @@
+# Merge into LocalRegistry.spec after replacing every REPLACE value.
+# This is an unselected input template, NOT a qualified or deployable release BOM.
+cacheProduction:
+  mode: hosted-cache
+  inventory: {path: data/clusters/REPLACE/selected-cache-inventory.json, sha256: REPLACE}
+  # readiness is added by the owning pipeline after successful reader verification.
+  # readiness: {path: _runtime/selected-cache-readiness.json, sha256: REPLACE}
+  siteRegistry: registry.example.com:5000
+  pullRegistry: images.example-management.example.com:443
+  syncRegistry: hcp-registry-sync.hcp-image-cache.svc:5000
+  namespace: oc-mirror-system
+  imageSet: hosted-production-images
+  mirrorTarget: hosted-production-cache
+  repositoryPrefix: hosted-content
+  # Distinct refs; credential values remain private. Server-side custody is site owned.
+  readerSecretRef: example-hcp-registry-pull
+  writerSecretRef: hosted-production-writer
+  siteWriterSecretRef: site-producer-writer
+  caConfigMap: hosted-production-trusted-ca
+  producerTrust: {mode: system}
+  # For a self-signed/private CA, use its reviewed PUBLIC PEM and exact hash:
+  # producerTrust: {mode: additional-ca, path: trust/site.pem, sha256: REPLACE}
+  runtimePrerequisites:
+    readerSecretUID: REPLACE
+    readerSecretResourceVersion: REPLACE
+    dnsEvidence: REPLACE
+    tlsEvidence: REPLACE
+  releaseLookup: preceding-registry
+  maxRoots: 1024
+  maxAgeSeconds: 900
+  concurrency: 1
+  batchSize: 1
+  maxRetries: 3
+  pollInterval: 0s
+  checkExistInterval: 1h
+  resources:
+    manager:
+      requests: {cpu: 100m, memory: 256Mi}
+      limits: {cpu: '1', memory: 1Gi}
+    worker:
+      requests: {cpu: 100m, memory: 256Mi}
+      limits: {cpu: '1', memory: 1Gi}

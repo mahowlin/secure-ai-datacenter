@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="1005" viewBox="0 0 1100 1005" role="img" aria-labelledby="title description">
+<title id="title">Management cluster construct before a hosted tenant is created</title>
+<desc id="description">The management OpenShift cluster contains Argo CD, OpenShift Virtualization, MultiCluster Engine with HyperShift, and the NMState and Cilium network platform. Together their APIs and controllers establish the prerequisites for HostedCluster and NodePool desired state. Tenant runtime internals are intentionally shown in the following tenant drill-down instead of duplicated here.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="1005" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Management cluster construct before a hosted tenant is created</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Four management areas provide GitOps, virtual-machine, hosted-control-plane and network capabilities.</text>
+<g id="zone-management">
+<rect x="20" y="105" width="1060" height="860" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-gitops">
+<rect x="145" y="160" width="810" height="235" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-platform">
+<rect x="30" y="425" width="1040" height="255" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-handoff">
+<rect x="145" y="720" width="810" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 350 365 L 350 415 L 210 415 L 210 475" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 550 365 L 550 475" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 750 365 L 750 415 L 890 415 L 890 475" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 210 650 L 210 710 L 390 710 L 390 770" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 550 650 L 550 770" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 890 650 L 890 710 L 710 710 L 710 770" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-management">
+<rect x="32" y="114" width="604.0" height="55" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Management OpenShift cluster boundary</text>
+<text x="40" y="158" class="zone-note" style="font-size:14.0px" text-anchor="start">Internal tenant runtime is intentionally deferred to the tenant drill-down.</text>
+</g>
+<g id="zone-label-gitops">
+<rect x="157" y="169" width="221.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="165" y="191" class="zone-title" style="font-size:18.0px" text-anchor="start">Desired-state owner</text>
+</g>
+<g id="zone-label-platform">
+<rect x="42" y="434" width="437.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="50" y="456" class="zone-title" style="font-size:18.0px" text-anchor="start">Installed namespaces, operands and APIs</text>
+</g>
+<g id="zone-label-handoff">
+<rect x="157" y="729" width="448.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="165" y="751" class="zone-title" style="font-size:18.0px" text-anchor="start">High-level handoff to tenant realization</text>
+</g>
+</g>
+<g id="nodes">
+<g id="gitops">
+<rect x="170" y="210" width="760" height="155" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="186" y="239" class="node-title" style="font-size:18.0px" text-anchor="start">openshift-gitops namespace</text>
+<text x="187" y="265" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="265" class="node-line" style="font-size:15.0px" text-anchor="start">Argo CD Applications + sync waves</text>
+<text x="187" y="288" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="288" class="node-line" style="font-size:15.0px" text-anchor="start">management and remote cluster targets</text>
+<text x="187" y="311" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="311" class="node-line" style="font-size:15.0px" text-anchor="start">desired-state ordering; readiness stays controller-owned</text>
+</g>
+<g id="cnv">
+<rect x="55" y="475" width="310" height="175" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="71" y="504" class="node-title" style="font-size:18.0px" text-anchor="start">openshift-cnv</text>
+<text x="72" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">HyperConverged operand</text>
+<text x="72" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">KubeVirt + CDI controllers</text>
+<text x="72" y="576" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="91" y="576" class="node-line" style="font-size:15.0px" text-anchor="start">VM + DataVolume APIs</text>
+</g>
+<g id="mce">
+<rect x="395" y="475" width="310" height="175" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="411" y="504" class="node-title" style="font-size:18.0px" text-anchor="start">multicluster-engine</text>
+<text x="412" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="431" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">MultiClusterEngine operand</text>
+<text x="412" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="431" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">enables HyperShift controllers</text>
+<text x="412" y="576" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="431" y="576" class="node-line" style="font-size:15.0px" text-anchor="start">HostedCluster + NodePool APIs</text>
+</g>
+<g id="network">
+<rect x="735" y="475" width="310" height="175" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="751" y="504" class="node-title" style="font-size:18.0px" text-anchor="start">Network platform</text>
+<text x="752" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="771" y="530" class="node-line" style="font-size:15.0px" text-anchor="start">openshift-nmstate + Cilium</text>
+<text x="752" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="771" y="553" class="node-line" style="font-size:15.0px" text-anchor="start">NNCP, NAD + CiliumConfig</text>
+<text x="752" y="576" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="771" y="576" class="node-line" style="font-size:14.9px" text-anchor="start">prepares host + cluster networking</text>
+</g>
+<g id="handoff">
+<rect x="170" y="770" width="760" height="155" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="186" y="799" class="node-title" style="font-size:18.0px" text-anchor="start">Tenant lifecycle handoff</text>
+<text x="187" y="825" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="825" class="node-line" style="font-size:15.0px" text-anchor="start">HostedCluster + NodePool desired state</text>
+<text x="187" y="848" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="848" class="node-line" style="font-size:15.0px" text-anchor="start">CNV, MCE + network APIs required</text>
+<text x="187" y="871" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="206" y="871" class="node-line" style="font-size:15.0px" text-anchor="start">tenant realization continues in the next view</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="207.5" y="391.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="280" y="410" class="edge-label" style="font-size:12.5px" text-anchor="middle">operator + operand</text>
+<rect x="477.5" y="391.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="550" y="410" class="edge-label" style="font-size:12.5px" text-anchor="middle">operator + operand</text>
+<rect x="766.25" y="391.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="820" y="410" class="edge-label" style="font-size:12.5px" text-anchor="middle">platform apps</text>
+<rect x="268.75" y="686.5" width="62.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="300" y="705" class="edge-label" style="font-size:12.5px" text-anchor="middle">VM APIs</text>
+<rect x="515.0" y="686.5" width="70.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="550" y="705" class="edge-label" style="font-size:12.5px" text-anchor="middle">HCP APIs</text>
+<rect x="716.25" y="686.5" width="167.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="800" y="705" class="edge-label" style="font-size:12.5px" text-anchor="middle">network prerequisites</text>
+</g>
+<line x1="40" y1="966" x2="76" y2="966" stroke="#4C6FFF" stroke-width="3"/>
+<text x="86" y="971" class="legend" style="font-size:12.5px" text-anchor="start">desired state / artifact</text>
+<line x1="290.0" y1="966" x2="326.0" y2="966" stroke="#7A5AF8" stroke-width="3"/>
+<text x="336.0" y="971" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+</svg>

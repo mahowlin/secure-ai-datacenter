@@ -1,0 +1,39 @@
+{
+  "repository": "mariusbertram/oc-mirror-operator",
+  "commit": "eea10842d7048b61304151ee0b63d2e3b46d6846",
+  "version": "v0.1.7",
+  "bundleImage": "quay.io/operatorhubio/oc-mirror@sha256:7460257327d45be9efb916e97c4b5b763a9fa588541f9f5909991acc987ac33a",
+  "license": "Apache-2.0",
+  "files": [
+    {
+      "path": "bundle/manifests/oc-mirror.clusterserviceversion.yaml",
+      "sha256": "77bf6e5c5eae8d5b1e56e7f42da5dca55edc8a675b5c19858f9fd29e307c9a00",
+      "sourceKind": "bundle",
+      "sourcePath": "manifests/oc-mirror.clusterserviceversion.yaml"
+    },
+    {
+      "path": "bundle/manifests/oc-mirror-manager-pod-rolebinding_rbac.authorization.k8s.io_v1_rolebinding.yaml",
+      "sha256": "f6146ea82cc4698d1ac6d97ce01afcee855e628c7f063f562685ec49856d96f1",
+      "sourceKind": "bundle",
+      "sourcePath": "manifests/oc-mirror-manager-pod-rolebinding_rbac.authorization.k8s.io_v1_rolebinding.yaml"
+    },
+    {
+      "path": "bundle/manifests/oc-mirror-worker-pod-rolebinding_rbac.authorization.k8s.io_v1_rolebinding.yaml",
+      "sha256": "bdfd714abc07e1132e1634933588e1ff3ee937792c4995a9d2f151f1d114b377",
+      "sourceKind": "bundle",
+      "sourcePath": "manifests/oc-mirror-worker-pod-rolebinding_rbac.authorization.k8s.io_v1_rolebinding.yaml"
+    },
+    {
+      "path": "bundle/metadata/annotations.yaml",
+      "sha256": "5822d808a4febad3a160d577c5bf9b3dcc082b3e6a3c0bb8643be5f39907250c",
+      "sourceKind": "bundle",
+      "sourcePath": "metadata/annotations.yaml"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "4f2a3c79a20690142b5d53a609d9b4746f36a2c9f90aeb6d7d85cd0e3e957c02",
+      "sourceKind": "git",
+      "sourcePath": "LICENSE"
+    }
+  ]
+}

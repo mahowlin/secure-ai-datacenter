@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="722" viewBox="0 0 800 722" role="img" aria-labelledby="title description">
+<title id="title">Configuration and reconciliation</title>
+<desc id="description">Configuration and reconciliation. Conceptual example; configuration detail is linked from the owning README.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#5E6C84"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:600 18px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="800" height="722" fill="#F7F9FC"/>
+
+
+<g id="zone-management-host">
+<rect x="20" y="452" width="370" height="250" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5"/>
+</g>
+<g id="zone-tenant-cluster">
+<rect x="410" y="452" width="370" height="250" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5"/>
+</g>
+<g id="connections">
+<path d="M 185 88 L 185 120 L 280 120 L 280 152" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 615 88 L 615 120 L 520 120 L 520 152" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 400 224 L 400 282" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 270 354 L 270 440 L 205 440 L 205 486" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 530 354 L 530 440 L 595 440 L 595 486" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 205 558 L 205 610" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 595 558 L 595 610" fill="none" stroke="#5E6C84" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-management-host">
+<rect x="32" y="461" width="232.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="483" class="zone-title" style="font-size:18.0px" text-anchor="start">Management OpenShift</text>
+</g>
+<g id="zone-label-tenant-cluster">
+<rect x="422" y="461" width="264.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="430" y="483" class="zone-title" style="font-size:18.0px" text-anchor="start">Nested tenant OpenShift</text>
+</g>
+</g>
+<g id="nodes">
+<g id="input">
+<rect x="20" y="16" width="330" height="72" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="36" y="45" class="node-title" style="font-size:18.0px" text-anchor="start">Datacenter configuration</text>
+<text x="36" y="71" class="node-line" style="font-size:18.0px" text-anchor="start">Generated roots + site overlays</text>
+</g>
+<g id="library">
+<rect x="450" y="16" width="330" height="72" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="466" y="45" class="node-title" style="font-size:18.0px" text-anchor="start">Reusable resources</text>
+<text x="466" y="71" class="node-line" style="font-size:18.0px" text-anchor="start">Application bases + Helm charts</text>
+</g>
+<g id="repo">
+<rect x="160" y="152" width="480" height="72" rx="14" fill="#E8F2FF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="181" class="node-title" style="font-size:18.0px" text-anchor="start">secure-ai-gitops</text>
+<text x="176" y="207" class="node-line" style="font-size:18.0px" text-anchor="start">Reviewed repository / revision / path</text>
+</g>
+<g id="argo">
+<rect x="160" y="282" width="480" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="176" y="311" class="node-title" style="font-size:18.0px" text-anchor="start">Argo CD on management</text>
+<text x="176" y="337" class="node-line" style="font-size:18.0px" text-anchor="start">Reads Applications + renders sources</text>
+</g>
+<g id="management">
+<rect x="40" y="486" width="330" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="515" class="node-title" style="font-size:18.0px" text-anchor="start">Management API</text>
+<text x="56" y="541" class="node-line" style="font-size:18.0px" text-anchor="start">Platform services + HCP lifecycle</text>
+</g>
+<g id="tenant">
+<rect x="430" y="486" width="330" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="446" y="515" class="node-title" style="font-size:18.0px" text-anchor="start">Tenant APIs</text>
+<text x="446" y="541" class="node-line" style="font-size:18.0px" text-anchor="start">Guest CNI + policy + workloads</text>
+</g>
+<g id="nested">
+<rect x="40" y="610" width="330" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="56" y="639" class="node-title" style="font-size:18.0px" text-anchor="start">Control planes + worker VMs</text>
+<text x="56" y="665" class="node-line" style="font-size:18.0px" text-anchor="start">HyperShift pods + KubeVirt VMs</text>
+</g>
+<g id="apps">
+<rect x="430" y="610" width="330" height="72" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="446" y="639" class="node-title" style="font-size:18.0px" text-anchor="start">Tenant Kubernetes objects</text>
+<text x="446" y="665" class="node-line" style="font-size:18.0px" text-anchor="start">Services + Pods + PVCs</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="117.5" y="403.5" width="175.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="205" y="422" class="edge-label" style="font-size:12.5px" text-anchor="middle">management destination</text>
+<rect x="481.25" y="403.5" width="227.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="595" y="422" class="edge-label" style="font-size:12.5px" text-anchor="middle">registered tenant destination</text>
+</g>
+</svg>

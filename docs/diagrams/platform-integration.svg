@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1065" viewBox="0 0 900 1065" role="img" aria-labelledby="title description">
+<title id="title">Secure OpenShift platform on bare metal</title>
+<desc id="description">Compact profile: fabric, networking, storage, hosted workloads and configuration delivery. Declared example architecture, not observed deployment. Labels and adjacent ownership tables are the text alternative.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="900" height="1065" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Secure OpenShift platform on bare metal</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Compact profile: fabric, networking, storage, hosted workloads and configuration delivery.</text>
+<g id="zone-fabric">
+<rect x="20" y="205" width="860" height="150" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-ocp">
+<rect x="20" y="480" width="860" height="500" rx="18" fill="#FFFFFF" fill-opacity="0.25" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 175 151 L 175 260" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 750 151 L 750 260" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 180 326 L 180 390" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 475 326 L 475 390" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 760 151 L 885 151 L 885 563 L 840 563" fill="none" stroke="#4C6FFF" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-delivery)"/>
+<path d="M 180 456 L 10 456 L 10 703 L 60 703" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 475 456 L 475 530" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 305 563 L 330 563 L 330 703 L 360 703" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M 590 703 L 625 703 L 625 293 L 590 293" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 475 736 L 475 790" fill="none" stroke="#147D92" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="12 5 3 5"/>
+<path d="M 750 895 L 750 736" fill="none" stroke="#147D92" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="12 5 3 5"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-fabric">
+<rect x="32" y="214" width="124.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="236" class="zone-title" style="font-size:18.0px" text-anchor="start">ACI fabric</text>
+</g>
+<g id="zone-label-ocp">
+<rect x="32" y="489" width="232.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="511" class="zone-title" style="font-size:18.0px" text-anchor="start">Management OpenShift</text>
+</g>
+</g>
+<g id="nodes">
+<g id="services">
+<rect x="30" y="85" width="290" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="46" y="114" class="node-title" style="font-size:18.0px" text-anchor="start">Site services</text>
+<text x="46" y="140" class="node-line" style="font-size:16.0px" text-anchor="start">DNS · time · image sources</text>
+</g>
+<g id="git">
+<rect x="650" y="85" width="220" height="66" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="666" y="114" class="node-title" style="font-size:18.0px" text-anchor="start">GitHub</text>
+<text x="666" y="140" class="node-line" style="font-size:15.3px" text-anchor="start">reviewed desired state</text>
+</g>
+<g id="leaf-m">
+<rect x="70" y="260" width="220" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="86" y="289" class="node-title" style="font-size:18.0px" text-anchor="start">Management leaves</text>
+<text x="86" y="315" class="node-line" style="font-size:16.0px" text-anchor="start">103 / 104</text>
+</g>
+<g id="leaf-t">
+<rect x="360" y="260" width="230" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="376" y="289" class="node-title" style="font-size:18.0px" text-anchor="start">Tenant BGP leaves</text>
+<text x="376" y="315" class="node-line" style="font-size:16.0px" text-anchor="start">101 / 102</text>
+</g>
+<g id="apic">
+<rect x="660" y="260" width="180" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="676" y="289" class="node-title" style="font-size:18.0px" text-anchor="start">APIC</text>
+<text x="676" y="315" class="node-line" style="font-size:16.0px" text-anchor="start">ACI as code</text>
+</g>
+<g id="bond0">
+<rect x="70" y="390" width="220" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="86" y="419" class="node-title" style="font-size:17.4px" text-anchor="start">bond0 · management</text>
+<text x="86" y="445" class="node-line" style="font-size:15.0px" text-anchor="start">VLAN 2101 · default route</text>
+</g>
+<g id="bond1">
+<rect x="360" y="390" width="230" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="376" y="419" class="node-title" style="font-size:16.5px" text-anchor="start">bond1 · tenant trunk</text>
+<text x="376" y="445" class="node-line" style="font-size:16.0px" text-anchor="start">VLAN 2113 / 2114</text>
+</g>
+<g id="hcp">
+<rect x="60" y="530" width="245" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="559" class="node-title" style="font-size:18.0px" text-anchor="start">MCE / HyperShift</text>
+<text x="76" y="585" class="node-line" style="font-size:15.2px" text-anchor="start">hosted control-plane pods</text>
+</g>
+<g id="bgp">
+<rect x="360" y="530" width="230" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="376" y="559" class="node-title" style="font-size:18.0px" text-anchor="start">Isovalent Cilium</text>
+<text x="376" y="585" class="node-line" style="font-size:16.0px" text-anchor="start">CNI · policy · BGP</text>
+</g>
+<g id="argo">
+<rect x="660" y="530" width="180" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="676" y="559" class="node-title" style="font-size:18.0px" text-anchor="start">Argo CD</text>
+<text x="676" y="585" class="node-line" style="font-size:15.0px" text-anchor="start">management + guests</text>
+</g>
+<g id="core">
+<rect x="60" y="670" width="245" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="699" class="node-title" style="font-size:18.0px" text-anchor="start">Management services</text>
+<text x="76" y="725" class="node-line" style="font-size:16.0px" text-anchor="start">API · DNS · registry</text>
+</g>
+<g id="guest">
+<rect x="360" y="670" width="230" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="376" y="699" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted OpenShift</text>
+<text x="376" y="725" class="node-line" style="font-size:16.0px" text-anchor="start">KubeVirt worker VMs</text>
+</g>
+<g id="observe">
+<rect x="660" y="670" width="180" height="66" rx="14" fill="#E6F4FC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="676" y="699" class="node-title" style="font-size:13.7px" text-anchor="start">Hubble / Timescape</text>
+<text x="676" y="725" class="node-line" style="font-size:15.0px" text-anchor="start">flow observability</text>
+</g>
+<g id="storage">
+<rect x="60" y="790" width="530" height="66" rx="14" fill="#FFF2DC" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="819" class="node-title" style="font-size:18.0px" text-anchor="start">Portworx CSI</text>
+<text x="76" y="845" class="node-line" style="font-size:16.0px" text-anchor="start">physical disks → shared persistent volumes</text>
+</g>
+<g id="base">
+<rect x="60" y="895" width="780" height="66" rx="14" fill="#FFF0EF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="76" y="924" class="node-title" style="font-size:18.0px" text-anchor="start">OpenShift Container Platform + Isovalent Cilium</text>
+<text x="76" y="950" class="node-line" style="font-size:16.0px" text-anchor="start">three physical servers · declared NICs · UCS integration optional</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="95.0" y="196.5" width="160.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="175" y="215" class="edge-label" style="font-size:12.5px" text-anchor="middle">DNS / NTP / registry</text>
+<rect x="696.25" y="196.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="750" y="215" class="edge-label" style="font-size:12.5px" text-anchor="middle">fabric config</text>
+<rect x="141.25" y="346.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="180" y="365" class="edge-label" style="font-size:12.5px" text-anchor="middle">VLAN 2101</text>
+<rect x="421.25" y="346.5" width="107.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="475" y="365" class="edge-label" style="font-size:12.5px" text-anchor="middle">tagged uplink</text>
+<rect x="727.5" y="456.5" width="145.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="800" y="475" class="edge-label" style="font-size:12.5px" text-anchor="middle">application config</text>
+<rect x="66.25" y="601.5" width="137.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="135" y="620" class="edge-label" style="font-size:12.5px" text-anchor="middle">node + API access</text>
+<rect x="457.0" y="483.5" width="36" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="475" y="502" class="edge-label" style="font-size:12.5px" text-anchor="middle">BGP</text>
+<rect x="275.0" y="613.5" width="100.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="325" y="632" class="edge-label" style="font-size:12.5px" text-anchor="middle">API / tunnel</text>
+<rect x="560.0" y="616.5" width="130.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="625" y="635" class="edge-label" style="font-size:12.5px" text-anchor="middle">direct guest BGP</text>
+<rect x="440.0" y="749.5" width="70.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="475" y="768" class="edge-label" style="font-size:12.5px" text-anchor="middle">PVC / PV</text>
+<rect x="703.75" y="801.5" width="92.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="750" y="820" class="edge-label" style="font-size:12.5px" text-anchor="middle">flow export</text>
+</g>
+<line x1="40" y1="1005" x2="74" y2="1005" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/><text x="84" y="1010" font-size="14" fill="#344563">network protocol / transport</text><line x1="470" y1="1005" x2="504" y2="1005" stroke="#4C6FFF" stroke-width="3"/><text x="514" y="1010" font-size="14" fill="#344563">desired state / artifact</text><line x1="40" y1="1032" x2="74" y2="1032" stroke="#7A5AF8" stroke-width="3"/><text x="84" y="1037" font-size="14" fill="#344563">API / controller contract</text><line x1="470" y1="1032" x2="504" y2="1032" stroke="#147D92" stroke-width="3" stroke-dasharray="12 5 3 5"/><text x="514" y="1037" font-size="14" fill="#344563">telemetry / storage</text></svg>

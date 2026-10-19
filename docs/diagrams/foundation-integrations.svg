@@ -1,0 +1,146 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="990" viewBox="0 0 1100 990" role="img" aria-labelledby="title description">
+<title id="title">UCS integration variant: infrastructure boundaries</title>
+<desc id="description">The example site integrates with ACI, UCS and OpenShift host networking. Management-hosted control-plane pods and KubeVirt worker VMs are separate consumers. The registry, the file server and object storage share one service host.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="990" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">UCS integration variant: infrastructure boundaries</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Routing, VLAN, vNIC and host contracts reach two distinct hosted-cluster runtime substrates.</text>
+<g id="zone-physical">
+<rect x="20" y="105" width="1060" height="250" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-runtime">
+<rect x="145" y="435" width="810" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-services">
+<rect x="265" y="710" width="570" height="250" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 270 245 L 300 245" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 535 245 L 565 245" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 800 245 L 830 245" fill="none" stroke="#00875A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="10 6"/>
+<path d="M 900 325 L 900 390 L 350 390 L 350 485" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 950 325 L 950 430 L 750 430 L 750 485" fill="none" stroke="#7A5AF8" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrow-api)"/>
+<path d="M 550 760 L 550 705 L 350 705 L 350 650" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+<path d="M 550 760 L 550 705 L 750 705 L 750 650" fill="none" stroke="#D96C00" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 5" marker-end="url(#arrow-supply)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-physical">
+<rect x="32" y="114" width="383.2" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Physical network and compute chain</text>
+</g>
+<g id="zone-label-runtime">
+<rect x="157" y="444" width="253.6" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="165" y="466" class="zone-title" style="font-size:18.0px" text-anchor="start">Hosted-cluster runtime</text>
+</g>
+<g id="zone-label-services">
+<rect x="277" y="719" width="178.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="285" y="741" class="zone-title" style="font-size:18.0px" text-anchor="start">Shared services</text>
+</g>
+</g>
+<g id="nodes">
+<g id="core">
+<rect x="35" y="165" width="235" height="160" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="51" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">Example site core</text>
+<text x="52" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">northbound routing</text>
+<text x="52" y="243" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="71" y="243" class="node-line" style="font-size:14.9px" text-anchor="start">tenant external prefixes</text>
+<text x="52" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="71" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">site-owned upstream protocol</text>
+</g>
+<g id="aci">
+<rect x="300" y="165" width="235" height="160" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="316" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">ACI fabric</text>
+<text x="317" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">tenant, VRF and L3Out</text>
+<text x="317" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">floating SVI and BGP</text>
+<text x="317" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="336" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">physical domain and AAEP</text>
+</g>
+<g id="ucs">
+<rect x="565" y="165" width="235" height="160" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="581" y="194" class="node-title" style="font-size:17.4px" text-anchor="start">Optional UCS profiles</text>
+<text x="582" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="601" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">VLAN and ENG policy</text>
+<text x="582" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="601" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">LAN connectivity</text>
+<text x="582" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="601" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">management + tenant vNICs</text>
+</g>
+<g id="host">
+<rect x="830" y="165" width="235" height="160" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="846" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">OpenShift host</text>
+<text x="847" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="866" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">bond0 management</text>
+<text x="847" y="243" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="866" y="243" class="node-line" style="font-size:14.9px" text-anchor="start">bond1 tenant transport</text>
+<text x="847" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="866" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">NMState interfaces</text>
+</g>
+<g id="control">
+<rect x="180" y="485" width="340" height="165" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="196" y="514" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted control-plane pods</text>
+<text x="197" y="540" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="216" y="540" class="node-line" style="font-size:15.0px" text-anchor="start">management pod network</text>
+<text x="197" y="563" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="216" y="563" class="node-line" style="font-size:15.0px" text-anchor="start">API and controller services</text>
+<text x="197" y="586" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="216" y="586" class="node-line" style="font-size:15.0px" text-anchor="start">no tenant worker NIC</text>
+</g>
+<g id="workers">
+<rect x="580" y="485" width="340" height="165" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="596" y="514" class="node-title" style="font-size:18.0px" text-anchor="start">KubeVirt worker VMs</text>
+<text x="597" y="540" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="616" y="540" class="node-line" style="font-size:15.0px" text-anchor="start">root volume and VM lifecycle</text>
+<text x="597" y="563" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="616" y="563" class="node-line" style="font-size:15.0px" text-anchor="start">Multus worker NIC</text>
+<text x="597" y="586" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="616" y="586" class="node-line" style="font-size:15.0px" text-anchor="start">become hosted-cluster nodes</text>
+</g>
+<g id="service-vm">
+<rect x="300" y="760" width="500" height="170" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="316" y="789" class="node-title" style="font-size:18.0px" text-anchor="start">Shared service host</text>
+<text x="317" y="815" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="815" class="node-line" style="font-size:15.0px" text-anchor="start">configured registry</text>
+<text x="317" y="838" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="838" class="node-line" style="font-size:15.0px" text-anchor="start">HTTP file server</text>
+<text x="317" y="861" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="861" class="node-line" style="font-size:15.0px" text-anchor="start">object-storage container</text>
+<text x="317" y="884" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="884" class="node-line" style="font-size:15.0px" text-anchor="start">shared DNS and NTP dependencies</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="577.5" y="366.5" width="85.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="620" y="385" class="edge-label" style="font-size:12.5px" text-anchor="middle">hosts pods</text>
+<rect x="811.25" y="406.5" width="77.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="850" y="425" class="edge-label" style="font-size:12.5px" text-anchor="middle">hosts VMs</text>
+<rect x="366.25" y="681.5" width="167.5" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="450" y="700" class="edge-label" style="font-size:12.5px" text-anchor="middle">platform dependencies</text>
+</g>
+<line x1="40" y1="951" x2="76" y2="951" stroke="#00875A" stroke-width="3" stroke-dasharray="10 6"/>
+<text x="86" y="956" class="legend" style="font-size:12.5px" text-anchor="start">network protocol / transport</text>
+<line x1="320.0" y1="951" x2="356.0" y2="951" stroke="#7A5AF8" stroke-width="3"/>
+<text x="366.0" y="956" class="legend" style="font-size:12.5px" text-anchor="start">API / controller contract</text>
+<line x1="577.5" y1="951" x2="613.5" y2="951" stroke="#D96C00" stroke-width="3" stroke-dasharray="4 5"/>
+<text x="623.5" y="956" class="legend" style="font-size:12.5px" text-anchor="start">software supply</text>
+</svg>

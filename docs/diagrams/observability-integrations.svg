@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="965" viewBox="0 0 1100 965" role="img" aria-labelledby="title description">
+<title id="title">Multi-cluster observability integrations</title>
+<desc id="description">Management Hubble logs use Vector and the Timescape push API. Hosted clusters use exporters that write cluster-prefixed objects to object storage on the shared service host. Timescape ingestion reads both paths and indexes them before the query interface can use them.</desc>
+<defs>
+<marker id="arrow-delivery" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#4C6FFF"/></marker>
+<marker id="arrow-protocol" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00875A"/></marker>
+<marker id="arrow-api" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7A5AF8"/></marker>
+<marker id="arrow-supply" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#D96C00"/></marker>
+<marker id="arrow-telemetry" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#147D92"/></marker>
+<marker id="arrow-trust" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#C93756"/></marker>
+<style>
+.heading{font:700 30px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.subheading{font:500 17px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.zone-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#42526E}
+.zone-note{font:500 14px system-ui,-apple-system,sans-serif;fill:#6B778C}
+.node-title{font:700 18px system-ui,-apple-system,sans-serif;fill:#172B4D}
+.node-line{font:500 15px system-ui,-apple-system,sans-serif;fill:#344563}
+.edge-label{font:650 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+.badge{font:700 11.5px system-ui,-apple-system,sans-serif;fill:#5E6C84}
+.legend{font:600 12.5px system-ui,-apple-system,sans-serif;fill:#344563}
+</style>
+</defs>
+<rect width="1100" height="965" fill="#F7F9FC"/>
+<text x="36" y="46" class="heading" text-anchor="start">Multi-cluster observability integrations</text>
+<text x="36" y="78" class="subheading" text-anchor="start">Management data is pushed; hosted data is stored in RustFS and read before it reaches Timescape queries.</text>
+<g id="zone-management">
+<rect x="20" y="105" width="800" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-hosted">
+<rect x="20" y="405" width="800" height="245" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-ingest">
+<rect x="810" y="105" width="270" height="545" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="zone-query">
+<rect x="325" y="705" width="450" height="220" rx="18" fill="#FFFFFF" fill-opacity="0.72" stroke="#C7D1E0" stroke-width="1.5" stroke-dasharray="8 6"/>
+</g>
+<g id="connections">
+<path d="M 270 242 L 300 242" fill="none" stroke="#147D92" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="12 5 3 5" marker-end="url(#arrow-telemetry)"/>
+<path d="M 535 242 L 565 242" fill="none" stroke="#147D92" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="12 5 3 5" marker-end="url(#arrow-telemetry)"/>
+<path d="M 800 242 L 820 242 L 820 340 L 835 340" fill="none" stroke="#147D92" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="12 5 3 5" marker-end="url(#arrow-telemetry)"/>
+<path d="M 270 542 L 300 542" fill="none" stroke="#147D92" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="12 5 3 5" marker-end="url(#arrow-telemetry)"/>
+<path d="M 535 542 L 565 542" fill="none" stroke="#C93756" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="2 5" marker-end="url(#arrow-trust)"/>
+<path d="M 800 542 L 820 542 L 820 445 L 835 445" fill="none" stroke="#147D92" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="12 5 3 5" marker-end="url(#arrow-telemetry)"/>
+<path d="M 952 500 L 952 680 L 550 680 L 550 755" fill="none" stroke="#147D92" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="12 5 3 5" marker-end="url(#arrow-telemetry)"/>
+</g>
+<g id="zone-labels">
+<g id="zone-label-management">
+<rect x="32" y="114" width="318.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Management-cluster push path</text>
+</g>
+<g id="zone-label-hosted">
+<rect x="32" y="414" width="340.0" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="40" y="436" class="zone-title" style="font-size:18.0px" text-anchor="start">Per-hosted-cluster object path</text>
+</g>
+<g id="zone-label-ingest">
+<rect x="822" y="114" width="188.79999999999998" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="830" y="136" class="zone-title" style="font-size:18.0px" text-anchor="start">Common ingestion</text>
+</g>
+<g id="zone-label-query">
+<rect x="337" y="714" width="264.4" height="33" rx="6" fill="#FFFFFF" fill-opacity="0.97"/>
+<text x="345" y="736" class="zone-title" style="font-size:18.0px" text-anchor="start">Query and investigation</text>
+</g>
+</g>
+<g id="nodes">
+<g id="parent">
+<rect x="35" y="165" width="235" height="155" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="51" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">Management Cilium</text>
+<text x="52" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">Hubble flow logs</text>
+<text x="52" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">Kubernetes events</text>
+<text x="52" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="266" class="node-line" style="font-size:15.0px" text-anchor="start">connection logs</text>
+</g>
+<g id="parent-vector">
+<rect x="300" y="165" width="235" height="155" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="316" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">Management Vector</text>
+<text x="317" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">reads hostPath logs</text>
+<text x="317" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="243" class="node-line" style="font-size:15.0px" text-anchor="start">adds cluster identity</text>
+<text x="317" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="336" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">uses an HTTP push sink</text>
+</g>
+<g id="push">
+<rect x="565" y="165" width="235" height="155" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="581" y="194" class="node-title" style="font-size:18.0px" text-anchor="start">Timescape push API</text>
+<text x="582" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="601" y="220" class="node-line" style="font-size:15.0px" text-anchor="start">credentialed HTTP</text>
+<text x="582" y="243" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="601" y="243" class="node-line" style="font-size:14.9px" text-anchor="start">newline-delimited data</text>
+<text x="582" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="601" y="266" class="node-line" style="font-size:14.9px" text-anchor="start">management-cluster path</text>
+</g>
+<g id="tenant">
+<rect x="35" y="465" width="235" height="155" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="51" y="494" class="node-title" style="font-size:18.0px" text-anchor="start">Each hosted Cilium</text>
+<text x="52" y="520" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="520" class="node-line" style="font-size:15.0px" text-anchor="start">Hubble flow logs</text>
+<text x="52" y="543" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="543" class="node-line" style="font-size:15.0px" text-anchor="start">Kubernetes events</text>
+<text x="52" y="566" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="71" y="566" class="node-line" style="font-size:15.0px" text-anchor="start">connection logs</text>
+</g>
+<g id="exporters">
+<rect x="300" y="465" width="235" height="155" rx="14" fill="#FFF4D6" stroke="#7A869A" stroke-width="1.6"/>
+<text x="316" y="494" class="node-title" style="font-size:18.0px" text-anchor="start">Hosted exporters</text>
+<text x="317" y="520" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="520" class="node-line" style="font-size:15.0px" text-anchor="start">hubble-k8s-exporter</text>
+<text x="317" y="543" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="336" y="543" class="node-line" style="font-size:15.0px" text-anchor="start">Vector S3 exporter</text>
+<text x="317" y="566" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="336" y="566" class="node-line" style="font-size:14.9px" text-anchor="start">cluster-specific prefix</text>
+</g>
+<g id="object">
+<rect x="565" y="465" width="235" height="155" rx="14" fill="#F1F3F5" stroke="#7A869A" stroke-width="1.6"/>
+<text x="581" y="494" class="node-title" style="font-size:18.0px" text-anchor="start">RustFS storage</text>
+<text x="582" y="520" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="601" y="520" class="node-line" style="font-size:15.0px" text-anchor="start">shared service host</text>
+<text x="582" y="543" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="601" y="543" class="node-line" style="font-size:15.0px" text-anchor="start">saif-timescape bucket</text>
+<text x="582" y="566" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="601" y="566" class="node-line" style="font-size:14.9px" text-anchor="start">hubble-events/&lt;cluster&gt;/</text>
+</g>
+<g id="ingestion">
+<rect x="835" y="285" width="235" height="215" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="851" y="314" class="node-title" style="font-size:17.8px" text-anchor="start">Timescape ingestion</text>
+<text x="852" y="340" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="871" y="340" class="node-line" style="font-size:15.0px" text-anchor="start">accepts push API data</text>
+<text x="852" y="363" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="871" y="363" class="node-line" style="font-size:15.0px" text-anchor="start">reads RustFS objects</text>
+<text x="852" y="386" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="871" y="386" class="node-line" style="font-size:15.0px" text-anchor="start">three object patterns</text>
+<text x="852" y="409" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="871" y="409" class="node-line" style="font-size:14.9px" text-anchor="start">restores tenant identity</text>
+<text x="852" y="432" class="node-line" style="font-size:14.9px" text-anchor="start">•</text>
+<text x="871" y="432" class="node-line" style="font-size:14.9px" text-anchor="start">indexes multi-cluster data</text>
+</g>
+<g id="timescape">
+<rect x="360" y="755" width="380" height="150" rx="14" fill="#F2ECFF" stroke="#7A869A" stroke-width="1.6"/>
+<text x="376" y="784" class="node-title" style="font-size:18.0px" text-anchor="start">Hubble Timescape query and UI</text>
+<text x="377" y="810" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="396" y="810" class="node-line" style="font-size:15.0px" text-anchor="start">queries only ingested data</text>
+<text x="377" y="833" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="396" y="833" class="node-line" style="font-size:15.0px" text-anchor="start">preserves the source cluster</text>
+<text x="377" y="856" class="node-line" style="font-size:15.0px" text-anchor="start">•</text>
+<text x="396" y="856" class="node-line" style="font-size:15.0px" text-anchor="start">supports multi-cluster investigation</text>
+</g>
+</g>
+<g id="connection-labels">
+<rect x="700.0" y="656.5" width="100.0" height="20.5" rx="5" fill="#FFFFFF" fill-opacity="0.97" stroke="#D8DEE8" stroke-width="0.8"/>
+<text x="750" y="675" class="edge-label" style="font-size:12.5px" text-anchor="middle">indexed data</text>
+</g>
+<line x1="40" y1="926" x2="76" y2="926" stroke="#147D92" stroke-width="3" stroke-dasharray="12 5 3 5"/>
+<text x="86" y="931" class="legend" style="font-size:12.5px" text-anchor="start">telemetry / storage</text>
+<line x1="252.5" y1="926" x2="288.5" y2="926" stroke="#C93756" stroke-width="3" stroke-dasharray="2 5"/>
+<text x="298.5" y="931" class="legend" style="font-size:12.5px" text-anchor="start">trust / credential boundary</text>
+</svg>
