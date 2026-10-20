@@ -1,6 +1,6 @@
 # Simplified cluster inputs — foundation proposal
 
-**Status:** Design for review; no renderer, schema or deployment changes.
+**Status:** Input design under review; necessary renderer changes authorized. This branch currently contains documentation only, with no renderer, schema or deployment changes.
 
 **Baseline:** Secure AI Datacenter `85c9684ef894683ddbcebfb4da075637079a916a`.
 
@@ -13,6 +13,12 @@ This file describes **what to build**: the cluster software, server hardware, ho
 Each server's `bonds.bond0` block shows its physical NICs and switch ports, the bond configuration, and the IP address assigned directly to that bond. `vlanInterfaces` describes additional Linux interfaces created on the same bond. Shared network allocations are declared once in this file.
 
 In this example, the management address is on `bond0` itself. ACI places that traffic in VLAN 1701; the host does not create `bond0.1701`. The additional peering address is on `bond0.2111`, which carries VLAN 2111 traffic. The default route stays on `bond0`. The bonds use active-backup on independent ACI access ports; existing supported LACP/vPC configurations retain their own explicit mode and attachment facts.
+
+### Cluster and network ownership
+
+Management networking, including its ACI attachment intent, stays in `cluster.yaml`. Tenant guest networking stays in optional `tenants.yaml`, alongside that tenant's configuration. There is no separate network file to maintain. A PrivNet tenant selects a management-owned network or service by its real name; it does not copy its VLAN, bond or controller configuration. Guest-specific Multus networking and BGP stay with the tenant that owns them.
+
+The renderer reads these declarations directly and joins the actual relationships into its existing resolved model. Compute, Fabric and GitOps output formats are implementation details. Update the rendering implementation where necessary; do not make customers author an intermediate format, an index, another profile layer or downstream copies to fit existing code.
 
 ### Software selection
 
@@ -45,11 +51,11 @@ services:
   - 198.19.3.189
   ntp:
   - 198.19.49.151
-fabric:
-  generate: true
-  pod: 1
-  asn: 64512
 networks:
+  fabric:
+    generate: true
+    pod: 1
+    asn: 64512
   management:
     vlan: 1701
     cidr: 192.0.2.0/24
@@ -77,7 +83,7 @@ networks:
           address: 198.18.11.2
           routerID: 10.255.104.1
     bgp:
-      localASN: 64711
+      clusterASN: 64711
 hosts:
 - name: bm-node-1
   bootDiskSerial: EXAMPLE-BOOT-0001
@@ -141,9 +147,20 @@ hosts:
           leaf: 104
           port: eth1/3
 ```
-`fabric.generate: true` requests ACI configuration output; it does not connect to APIC or apply anything. `fabric.pod`, `fabric.asn`, leaf ports, tenants and VRFs are deployment facts used in the generated configuration.
+`networks.fabric.generate: true` requests ACI configuration output; it does not connect to APIC or apply anything. `networks.fabric.pod` and `networks.fabric.asn` are common fabric facts. The individual network entries describe their VLANs, subnets, ACI tenants/VRFs and peer interfaces. Fabric configuration stays within the network hierarchy in the same cluster file.
 
-The peering network declares the cluster's local ASN; the ACI ASN and leaf addresses supply the other side. The starter establishes the BGP neighbours only. It has no application VIPs to advertise yet and does not use BGP to replace the host's default route. Those ordinary starter choices are maintained policy, not customer switches named `advertisements: none` or `importRoutes: false`. Later service declarations supply the addresses they need published; importing routes is a deliberate supported routing-policy extension when actually required.
+### Why the ASNs differ
+
+An autonomous system number identifies one side of a BGP connection. This example uses **external BGP (eBGP)** between the OpenShift/Cilium cluster and ACI:
+
+| Side | Its own ASN | Expected neighbour ASN |
+|---|---|---|
+| ACI fabric | `64512` from `networks.fabric.asn` | `64711` from the attached cluster |
+| OpenShift/Cilium cluster | `64711` from `networks.service-peering.bgp.clusterASN` | `64512` from ACI |
+
+These are two intentionally different routing domains, not mismatched copies of one number. The renderer produces the reciprocal settings on each side from these two declarations. In the generated Isovalent CR, the cluster ASN becomes `localASN` and the ACI ASN becomes `peerASN`. The example numbers are site design facts, not universal defaults. A same-AS design would be iBGP and needs its own explicit supported routing policy; it is not achieved by treating these two fields as duplicates.
+
+ The starter establishes the BGP neighbours only. It has no application VIPs to advertise yet and does not use BGP to replace the host's default route. Those ordinary starter choices are maintained policy, not customer switches named `advertisements: none` or `importRoutes: false`. Later service declarations supply the addresses they need published; importing routes is a deliberate supported routing-policy extension when actually required.
 
 The complete example is 111 non-comment lines, including physical leaf-port facts and the additional VLAN interface. Customer authoring is one file; `tenants.yaml` is optional later. No copied defaults, templates, schemas or private-file manifest is needed.
 
@@ -376,7 +393,7 @@ This is an INITIAL-INSTALL comparison of intended configurations, not evidence o
 ## 6. Minimal implementation work, source/evidence and review boundary
 
 At Datacenter 85c9684ef894683ddbcebfb4da075637079a916a:
-- Existing resolver -> new single cluster input normalizer directly into shared resolved objects; legacy mode stays separate, mixed authorities rejected. No old-format generated intermediate. Resource-specific defaults/versioned policy extracted, effective review produced once.
+- Update the existing resolver to read inline `cluster.yaml`/`tenants.yaml` networking directly into its resolved objects, including `networks.fabric`. Resolve named management/tenant relationships there. Legacy input support remains a separate compatibility read path, never a required intermediate customer format. No extra network catalogue file, adapter framework or authoring layer is introduced to preserve the old renderer interface. Use maintained defaults for ordinary policy and produce the effective review once.
 - templates/cluster-install/openshift/agent-config.yaml.j2 currently renders ONLY a common management bond. It needs per-host declared bond members and selected tagged children for this example, preserving base IPv4/default route. Compute staging validator must recognize/reject only supported selected attachments and retain manifest/private-enrichment checks.
 - scripts/render-aci.py::_management_attachments currently requires distinct management/tenant ports and rejects duplicate ports. Implement one unioned access attachment per physical port with both domains; do not bypass its rejection or emit competing policies. _interface_profile_ctx currently uses global ACI MTU and forces BFD/as_override/peer-AS bypass; this example requires network MTU 1500 and explicit selected policy. Also remove HCP-only selection dependency for these foundation network objects. Templates/aci/management.yml.j2, management-domains.yml.j2, interface-attachments.yml.j2, access-policies.yml.j2, tenant.yml.j2 supply current NAC shapes.
 - scripts/gitops_renderer/management.py::_render_prerequisites_bgp is currently tied to HCP networking/advertisements and hardcoded operational settings. Reuse its documented CR shapes from normalized foundation attachments; no fake HCP objects/selected VIPs to make it run. Pull only touched operational policy into maintained defaults. Keep the optional BGP delivery boundary explicit; no Argo bootstrap invention.
@@ -387,4 +404,4 @@ Red Hat 4.19 Agent-based installer documents bond plus VLAN networkConfig/base-i
 
 Self-review: single input; NIC-to-port/bond/network/address trace local to each host; shared allocation declared once;6 unique leaf ports with one policy-group owner; native vs tagged semantics explicit; managed ACI object correspondence supplied; native default preserved; sessions-only BGP without off-link/service/import exceptions; all Isovalent fields tied to pinned docs; exact release evidence gap and current renderer limitations disclosed. Representative outputs are hand-authored design examples only. Only scratch YAML/address/reference/change-consistency checks performed; no platform render/installer/terraform plan/API validation/live test. Required implementation gates remain deterministic actual render/artifact manifest/target comparison, positive and conflict tests for joins, schema/Compute/Fabric validators and reviewed deployment ownership.
 
-Tenant clusters (`tenants.yaml`), advanced worker multi-NIC/IPv6, lab backport and WET output migration are later scopes. This branch contains the foundation design only; implementation and publication of the resulting platform changes require separate agreement.
+Tenant clusters (`tenants.yaml`), advanced worker multi-NIC/IPv6, lab backport and WET output migration are later scopes. The Beekeeper has authorized necessary renderer changes to implement this simplified interface. The changes on this proposal branch remain documentation only; source implementation must meet the stated checks and repository review gates. Production rollout and main-branch publication are separate actions.
