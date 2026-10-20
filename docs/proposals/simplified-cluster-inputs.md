@@ -8,8 +8,21 @@
 
 ## Overview
 
-Read a server's bonds.bond0 block: it contains its NIC identities and leaf ports, actual bond mode/primary, untagged management address and optional tagged peering address. Each attached network is one direct meaningful name in this SAME file. That shared network contains its allocation and corresponding ACI intent once. There is no separate hostNetworking map, per-node peering-IP map, physical-inventory file or index to reconstruct the link.
-Three active-backup bonds use independent ACI access ports, NOT an undeclared cross-leaf LACP/vPC. Native management VLAN 1701 carries node/API/apps/bootstrap and the single default route. Tagged VLAN 2111 establishes an optional directly connected enterprise BGP session set only. No advertised VIP, imported route, off-link service range or forwarding workaround is taught by this example. Removing service-peering and each bond's tagged block leaves the native-management-only model. A standalone site may also select existing/external fabric without ACI generation; this snapshot deliberately selects MANAGED ACI to show correspondence.
+This file describes **what to build**: the cluster software, server hardware, host interfaces and corresponding ACI configuration. It generates configuration files. Connection details and credentials used to install or apply them belong to the downstream pipelines.
+
+Each server's `bonds.bond0` block shows its physical NICs and switch ports, the bond configuration, and the IP address assigned directly to that bond. `vlanInterfaces` describes additional Linux interfaces created on the same bond. Shared network allocations are declared once in this file.
+
+In this example, the management address is on `bond0` itself. ACI places that traffic in VLAN 1701; the host does not create `bond0.1701`. The additional peering address is on `bond0.2111`, which carries VLAN 2111 traffic. The default route stays on `bond0`. The bonds use active-backup on independent ACI access ports; existing supported LACP/vPC configurations retain their own explicit mode and attachment facts.
+
+### Software selection
+
+`cluster.software` specifies the **OpenShift and Isovalent software versions to install**. It is not a release of this repository or a pipeline version. The maintained compatibility catalogue resolves that pair into the exact component images, installer and CLife manifests/checksums. The customer does not copy that catalogue or maintain image digests. An unlisted or ambiguous pair is an error, not permission to guess dependencies. The example pair remains render-only evidence, not a new runtime-support claim.
+
+### Image sources and execution inputs
+
+The ordinary example needs no `images` section. Maintained software policy supplies the upstream image sources. Pull credentials and trusted CA material are supplied by the Compute installation pipeline. For a site mirror, Airgap owns the destination mappings and produces the reviewed mirror contract/receipts; configuration generation consumes that non-secret contract when selected and records its source. Do not copy the same registry paths into `cluster.yaml`. Unusual repository layouts remain explicit in the owning mirror configuration.
+
+APIC address, username, credentials, CA files and remote state belong to the Fabric pipeline. Pull secrets, SSH keys and local private-file paths belong to the Compute pipeline. They are not inputs to offline configuration generation.
 
 ## 1. Complete proposed cluster.yaml
 
@@ -21,7 +34,9 @@ cluster:
   name: demo-mgmt
   baseDomain: example.com
   deployment: compact
-  release: saif-ocp-4.19-cilium-1.19.7-stable
+  software:
+    openshift: 4.19.21
+    isovalent: 1.19.7
   apiVIP: 192.0.2.20
   ingressVIP: 192.0.2.21
 services:
@@ -30,16 +45,8 @@ services:
   - 198.19.3.189
   ntp:
   - 198.19.49.151
-images:
-  delivery: connected
-  trust: additional-ca
-  repositories:
-    openshiftRelease: registry.example.com:5000/openshift/release-images
-    openshiftContent: registry.example.com:5000/openshift/release
 fabric:
-  ownership: managed
-  apic: https://apic.example.invalid
-  username: site-automation-user
+  generate: true
   pod: 1
   asn: 64512
 networks:
@@ -71,8 +78,6 @@ networks:
           routerID: 10.255.104.1
     bgp:
       localASN: 64711
-      advertisements: none
-      importRoutes: false
 hosts:
 - name: bm-node-1
   bootDiskSerial: EXAMPLE-BOOT-0001
@@ -81,11 +86,11 @@ hosts:
     bond0:
       mode: active-backup
       primary: eno1
-      native:
-        network: management
-        address: 192.0.2.10
-      tagged:
-        service-peering: 198.18.11.10
+      network: management
+      address: 192.0.2.10
+      vlanInterfaces:
+      - network: service-peering
+        address: 198.18.11.10
       members:
         eno1:
           mac: 02:00:5e:00:53:00
@@ -101,11 +106,11 @@ hosts:
     bond0:
       mode: active-backup
       primary: eno1
-      native:
-        network: management
-        address: 192.0.2.11
-      tagged:
-        service-peering: 198.18.11.11
+      network: management
+      address: 192.0.2.11
+      vlanInterfaces:
+      - network: service-peering
+        address: 198.18.11.11
       members:
         eno1:
           mac: 02:00:5e:00:53:02
@@ -121,11 +126,11 @@ hosts:
     bond0:
       mode: active-backup
       primary: eno1
-      native:
-        network: management
-        address: 192.0.2.12
-      tagged:
-        service-peering: 198.18.11.12
+      network: management
+      address: 192.0.2.12
+      vlanInterfaces:
+      - network: service-peering
+        address: 198.18.11.12
       members:
         eno1:
           mac: 02:00:5e:00:53:04
@@ -135,34 +140,32 @@ hosts:
           mac: 02:00:5e:00:53:05
           leaf: 104
           port: eth1/3
-privateFiles:
-  pullSecret: private/pull-secret.json
-  sshPublicKey: private/ocp-install.pub
-  registryCA: private/registry-ca.pem
-  apicPassword: private/apic-password
-  apicCA: private/apic-ca.pem
 ```
-This is 125 non-comment lines including managed-fabric/leaf-port facts and optional tagged peering. It intentionally spends lines keeping each physical-to-logical attachment understandable. No new percentage reduction claim comparing this larger managed-ACI scope with the old standalone scope. Customer uses one file rather than the copied cluster/network/default/release tree; usability and architectural consistency are the acceptance criteria. tenants.yaml remains optional later, absent here. No template/schema copy into the customer directory.
+`fabric.generate: true` requests ACI configuration output; it does not connect to APIC or apply anything. `fabric.pod`, `fabric.asn`, leaf ports, tenants and VRFs are deployment facts used in the generated configuration.
 
-Required service prerequisites: api.demo-mgmt.example.com and api-int resolve to192.0.2.20; *.apps.demo-mgmt.example.com resolves to192.0.2.21; time/DNS/image services reachable through192.0.2.1; entitled registry and official CLife access; matching installer/hardware support; no existing IP/MAC/port ownership conflict. These are preflight observations, not constants silently assumed by the resolver. Actual host NIC names correspond to declared MACs; BMC/media boot stays site-owned. APIC password/CA and pull-secret/SSH/registry-CA are private references, never generated browser/public data. Managed ACI apply uses the owning pipeline and private trust mechanism with TLS verification enabled.
+The peering network declares the cluster's local ASN; the ACI ASN and leaf addresses supply the other side. The starter establishes the BGP neighbours only. It has no application VIPs to advertise yet and does not use BGP to replace the host's default route. Those ordinary starter choices are maintained policy, not customer switches named `advertisements: none` or `importRoutes: false`. Later service declarations supply the addresses they need published; importing routes is a deliberate supported routing-policy extension when actually required.
+
+The complete example is 111 non-comment lines, including physical leaf-port facts and the additional VLAN interface. Customer authoring is one file; `tenants.yaml` is optional later. No copied defaults, templates, schemas or private-file manifest is needed.
+
+**Downstream installation prerequisites:** DNS records for `api.demo-mgmt.example.com` and `api-int.demo-mgmt.example.com` resolve to `192.0.2.20`; `*.apps.demo-mgmt.example.com` resolves to `192.0.2.21`. The site provides reachable DNS, time and image services, matching hardware and the existing upstream ACI objects. Execution pipelines check those prerequisites, trust and entitlement before rollout. Offline generation validates declared topology without contacting APIC, a registry or a cluster.
 
 ## 2. One readable resolved result (illustrative, not current-renderer output)
 
-| Server | Physical attachment -> Linux bond | Native management | Tagged peering | Route/BGP |
+| Server | Physical attachment -> Linux bond | Address on the bond | Additional VLAN interface | Route/BGP |
 |---|---|---|---|---|
 | bm-node-1 | eno1 MAC...00 -> pod1/leaf103 eth1/1; eno2 MAC...01 -> leaf104 eth1/1; both bond0, active-backup primary eno1 | bond0=192.0.2.10/24, untagged1701 | bond0.2111=198.18.11.10/28 | default via192.0.2.1 on bond0; AS64711 -> leaf103 .1 and104 .2 AS64512 |
 | bm-node-2 | eno1 MAC...02 -> leaf103 eth1/2; eno2 MAC...03 -> leaf104 eth1/2; both bond0, active-backup primary eno1 | bond0=192.0.2.11/24, untagged1701 | bond0.2111=198.18.11.11/28 | same native default; peering source.11 |
 | bm-node-3 | eno1 MAC...04 -> leaf103 eth1/3; eno2 MAC...05 -> leaf104 eth1/3; both bond0, active-backup primary eno1 | bond0=192.0.2.12/24, untagged1701 | bond0.2111=198.18.11.12/28 | same native default; peering source.12 |
-All host IP interfaces MTU 1500; API/appsVIPs .20/.21 belong to the native management subnet. Native VLAN is a switch/EPG property; NO bond0.1701 interface. The tagged network adds only a connected198.18.11.0/28 route, no second default. BGP creates 6 sessions, advertisements none/import disabled; it does not enable forwarding or program an extra Linux default route merely by establishing a session.
+All host IP interfaces MTU 1500; API/appsVIPs .20/.21 belong to the native management subnet. Native VLAN is a switch/EPG property; NO bond0.1701 interface. The tagged network adds only a connected198.18.11.0/28 route, no second default. BGP defines six neighbour sessions. This starter publishes no application addresses and leaves the host default route unchanged. Session establishment and route publication are different parts of the configuration.
 
 Effective policy is shown beside this result, not a requirement to open defaults:
 - Compact:3 control-plane/workload nodes, 0 separate workers; bm-node-1 rendezvous192.0.2.10; all nodes rolemaster.
-- Maintained Cilium base matches the reviewed starter: tunnel/VXLAN4789, kube-proxy replacement, CNI paths and cluster-pool policy; pod10.192.0.0/14 /23 blocks, service172.19.0.0/16. Exact extracted policy and provenance visible, override required on conflict/overlap.
+- Maintained Cilium base matches the reviewed starter: tunnel/VXLAN4789, kube-proxy replacement, CNI paths and cluster-pool policy; pod10.192.0.0/14 /23 blocks, service172.19.0.0/16. Exact extracted policy and provenance are visible; an override is required on conflict/overlap.
 - Active-backup option miimon100 comes from maintained policy; primary and member identities are customer facts. No LACP settings.
 - Naming policy derives BD-management, OpenShift/management EPG, demo-mgmt-hosts physical domain/AAEP, demo-mgmt-hosts-vlans pool and corresponding access policy group/profile names. Derived names and policy revision appear in the result; customer can override legitimate pre-existing identity collisions explicitly.
 - Both VLANs in the same access pool; SAME AAEP/access policy group owns a given physical port. Physical/routed domains attached through that group. No competing management and tenant policy group assignment.
 - Optional BGP uses IPv4 unicast, reviewed5/9/3 timers, no BFD/GR or route-import feature selected for this simple example, no advertisements. Those operational choices live in explicit versioned policy, not renderer literals. Enterprise BGP enablement is release-checked; do not copy unrelated EGW/GatewayAPI feature approvals.
-- Selected release resolves recorded OCP4.19.21/Cilium1.19.7 pinned images and CLife archive/checksum. Current release data is render-only evidence and lacks a complete trusted OCP payload-digest record: obtaining/verifying that record, matching release architecture and exact installed/chart feature prerequisites are IMPLEMENTATION/PREPARATION prerequisites. No guessed payload digest, entitlement or release qualification. Site repository mappings select destinations only; receipt/content must match the single release authority.
+- Selected release resolves recorded OCP4.19.21/Cilium1.19.7 pinned images and CLife archive/checksum. Current release data is render-only evidence and lacks a complete trusted OCP payload-digest record: obtaining/verifying that record, matching release architecture and exact installed/chart feature prerequisites are IMPLEMENTATION/PREPARATION prerequisites. No guessed payload digest, entitlement or release qualification. When a site mirror is selected, its Airgap-owned mapping and receipt/content must match the selected software pair; those paths are not repeated in this file.
 
 ## 3. Representative corresponding outputs — all ILLUSTRATIVE TARGET OUTPUT, not rendered by current code
 
@@ -219,7 +222,7 @@ networkConfig:
       next-hop-interface: bond0
       table-id: 254
 ```
-Compute install-config machineNetwork=192.0.2.0/24, API192.0.2.20, ingress192.0.2.21; no service-peering address becomes an API VIP, machineNetwork or default gateway. Metadata/image mappings/raw manifest and private enrichment remain existing execution boundaries. Do not create a Day2 controller that also owns/reset this shared bond: initial interface ownership is the Agent network config. Later updates require a separately supported procedure.
+Compute install-config machineNetwork=192.0.2.0/24, API192.0.2.20, ingress192.0.2.21; no service-peering address becomes an API VIP, machineNetwork or default gateway. Metadata/image mappings/raw manifest and downstream private enrichment remain existing execution boundaries. Do not create a Day2 controller that also owns/reset this shared bond: initial interface ownership is the Agent network config. Later updates require a separately supported procedure.
 
 Representative NAC-ACI managed management tenant excerpt (same key shape as existing templates/aci/management.yml.j2):
 ```yaml
@@ -335,11 +338,23 @@ No advertisement object with that label is generated, and preflight rejects exis
 
 | Customer required facts | Ordinary explicit maintained defaults | Exceptions and impact |
 |---|---|---|
-| Cluster name/domain, compact selection, reviewed release | Derived resource names, roles, pod/service ranges and Cilium operational settings; all shown resolved | Name/domain/CIDRs initial-install contract; CIDR override required on conflict. Upgrades follow supported upgrade flow, not ISO replay |
+| Cluster name/domain, compact selection, OpenShift + Isovalent versions | Derived resource names, roles, pod/service ranges and Cilium operational settings; all shown resolved | Name/domain/CIDRs initial-install contract; CIDR override required on conflict. Upgrades follow supported upgrade flow, not ISO replay |
 | Per-host disk, MACs, OS NIC names, bond membership/mode/primary, port attachment | miimon100; no LACP in this access-port case | Supported bond-policy overrides explicit. LACP requires actual matching port-channel/vPC facts; not inferred from two links. NIC/bond changes installation/migration sensitive |
-| Native/tagged allocation, host addresses, gateway, MTU, ASNs and actual leaf/router/SVI addresses | Prefix/interface-name derivation and ordinary BGP timers; no guessed addressing | VLAN/address/VRF/ASN changes affect linked Linux/ACI/BGP owners; initial install or coordinated released migration. No safe-live-update promise |
-| Managed APIC target/identity/private trust and actual commissioned objects | Deterministic physical/routed domain/AAEP/access/profile naming; explicit protocol/security policy | Existing identities may be deliberately overridden; collisions/dual port ownership fail. Native/routed domain merge needed for shared ports |
-| Real DNS/NTP, image destinations/delivery/trust and private references | One maintained selected release/image/source catalogue; no customer payload/version duplication | Public trust/upstream-connected mapping optional when applicable; mirrors need real receipts. Secrets stay private. Image/trust update needs relevant runtime rollout |
+| Shared VLAN allocations, addresses on bonds and VLAN interfaces, gateway, MTU, ASNs and actual leaf/router/SVI addresses | Prefix/interface-name derivation and ordinary BGP timers; no guessed addressing | VLAN/address/VRF/ASN changes affect linked Linux/ACI/BGP owners; initial install or coordinated released migration. No safe-live-update promise |
+| ACI output selection and actual fabric/tenant/VRF/attachment facts | Deterministic physical/routed domain/AAEP/access/profile naming; explicit protocol/security policy | Existing identities may be deliberately overridden; collisions/dual port ownership fail. Native/routed domain merge needed for shared ports |
+| Real DNS/NTP endpoints | Maintained software/image-source catalogue; no customer image-path duplication | Site mirrors are declared once in Airgap. Connection variables, credentials and trust material stay with the executing pipeline. Image/trust updates need the owning runtime rollout |
+
+### Downstream ownership
+
+| Owner | Inputs supplied there |
+|---|---|
+| Datacenter configuration generation | Cluster intent, topology, selected software pair and maintained defaults; an optional non-secret mirror contract from Airgap |
+| Compute installation pipeline | Pull secret, SSH key, registry CA, installer access and site boot/runtime settings |
+| Fabric deployment pipeline | APIC URL, username/password, trusted CA and Terraform state settings |
+| Airgap mirror workflow | Registry destinations, exceptional repository layouts, authentication and verified mirror receipts |
+| GitOps/runtime owners, when selected | Reconciliation credentials and runtime Secret references |
+
+Generated desired configuration and manifests stay separate from executable private enrichment. This proposal does not require moving downstream execution settings into a new central configuration file.
 
 **Bond-mode compatibility:** Active-backup is this example’s explicit choice, not a new universal default. Existing valid `802.3ad` compositions retain their mode, members, options and actual port-channel/vPC facts for the supported execution adapter. Missing or unsupported mode-to-port-policy combinations fail before render/apply; the tool must never convert them to active-backup or discard topology. Options default from the selected mode: `primary` is active-backup specific; LACP rate/hash settings apply only to `802.3ad` where supported. No blind option carryover or newly implied managed-ACI capability.
 
@@ -365,7 +380,7 @@ At Datacenter 85c9684ef894683ddbcebfb4da075637079a916a:
 - templates/cluster-install/openshift/agent-config.yaml.j2 currently renders ONLY a common management bond. It needs per-host declared bond members and selected tagged children for this example, preserving base IPv4/default route. Compute staging validator must recognize/reject only supported selected attachments and retain manifest/private-enrichment checks.
 - scripts/render-aci.py::_management_attachments currently requires distinct management/tenant ports and rejects duplicate ports. Implement one unioned access attachment per physical port with both domains; do not bypass its rejection or emit competing policies. _interface_profile_ctx currently uses global ACI MTU and forces BFD/as_override/peer-AS bypass; this example requires network MTU 1500 and explicit selected policy. Also remove HCP-only selection dependency for these foundation network objects. Templates/aci/management.yml.j2, management-domains.yml.j2, interface-attachments.yml.j2, access-policies.yml.j2, tenant.yml.j2 supply current NAC shapes.
 - scripts/gitops_renderer/management.py::_render_prerequisites_bgp is currently tied to HCP networking/advertisements and hardcoded operational settings. Reuse its documented CR shapes from normalized foundation attachments; no fake HCP objects/selected VIPs to make it run. Pull only touched operational policy into maintained defaults. Keep the optional BGP delivery boundary explicit; no Argo bootstrap invention.
-- Existing release catalogue supplies selected Cilium pins/CLife checksum but not complete qualified payload evidence. Verify exact OCP digest/archive/chart feature/schema prerequisites before implementation release; preserve source-based vs documented vs installed claims.
+- The maintained compatibility/release catalogue resolves the explicit software pair into selected Cilium pins/CLife checksum, but currently lacks complete qualified payload evidence. Verify exact OCP digest/archive/chart feature/schema prerequisites before implementation release; preserve source-based vs documented vs installed claims.
 
 Local IEP docs at 02157c287639c55707d32f42397e214ae3653354: docs/configuration-guide/networking/bgp/advertise-routes-over-bgp.rst (enterprise enable, OSS disable); concepts/cluster-config.rst (localASN/peers/nodeSelector and one-config-per-node); concepts/peer-config.rst (transport.sourceInterface one eligible address/family, IPv4 families/selectors/timers); concepts/general.rst (operator owns IsovalentBGPNodeConfig). These support the fields shown; this snapshot is newer/general documentation, not proof of selected1.19.7 feature approval. No route-import preview fields used. Exact selected chart/source check remains a prerequisite rather than invented product behavior.
 Red Hat 4.19 Agent-based installer documents bond plus VLAN networkConfig/base-iface/id: https://docs.redhat.com/en/documentation/openshift_container_platform/4.19/html-multi/installing_an_on-premise_cluster_with_the_agent-based_installer/installation-config-parameters-agent (official documentation; discovered20Oct). This establishes syntax, not installed Cilium/ACI interoperability.
